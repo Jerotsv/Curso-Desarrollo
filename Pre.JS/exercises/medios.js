@@ -12,16 +12,46 @@ console.log(removeLastFirst('Patata'));
 
 
 // 2. Escribe una función que reciba una palabra y revise si es un palíndromo.
+    
+    //Opción Jero
+     function isPalindrome(word){
+        return word === word.split('').reverse().join('')
+     }
+     console.log(isPalindrome('radar'));
+     console.log(isPalindrome('hola'));
+
+    // //Opción Chat gpt
+    // function esPalindromo(palabra) {
+    //     // Convertimos la palabra a minúsculas para evitar problemas de mayúsculas
+    //     // y eliminamos espacios o caracteres no alfanuméricos
+    //     let palabraLimpia = palabra.toLowerCase().replace(/[^a-z0-9]/g, '');
+        
+    //     // Comparamos la palabra limpia con su versión invertida
+    //     if (palabraLimpia === palabraLimpia.split('').reverse().join('')) {
+    //       console.log(`"${palabra}" es un palíndromo`);
+    //       return true;
+    //     } else {
+    //       console.log(`"${palabra}" no es un palíndromo`);
+    //       return false;
+    //     }
+    //   }
+      
+    //   // Ejemplo de uso
+    //   esPalindromo("anilina");             // "anilina" es un palíndromo
+    //   esPalindromo("Hola");                // "Hola" no es un palíndromo
+    //   esPalindromo("A man a plan a canal Panama"); // "A man a plan a canal Panama" es un palíndromo
 
 // 3. Crea una función que cuente las vocales que contiene una palabra dada por parámetros.
 
 
 const countVocals = function(value=('')) {
-
+    
+    const lowerValue = value.toLowerCase()
     let accumulator = 0
-    const vocals = ['a', 'e', 'i', 'o', 'u', 'á', 'é', 'í', 'ó', 'ú', 'ü']
-    for (let i = 0; i < value.length; i++) {
-        const item = value[i].toLocaleLowerCase();
+    const vocals = 'aeiouáéíóúü'
+
+    for (let i = 0; i < lowerValue.length; i++) {
+        const item = lowerValue[i]
         accumulator += vocals.includes(item)
         //if (vocals.includes(item)) {
         //  accumulator++
@@ -33,19 +63,72 @@ const countVocals = function(value=('')) {
 console.log(countVocals('El Murciélago verde')); //8
 
 
-
-
-
-
 // 4. Crea una función que verifique si una cadena de texto recibida por parámetros es un pangrama (contiene todas las letras del abecedario).
+
+
+ 
+
 
 // 5. Escribe una función que compruebe si una cadena de texto contiene todas las vocales.
 
+function containAllVocals(text) {
+    const lowerText = text.toLowerCase()
+    const vocals = 'aeiou'
+    for (let vocal of vocals) {
+        
+        if (!lowerText.includes(vocal)) {
+            return false
+        }
+    }
+return true
+
+}
+
+console.log(containAllVocals('Hola'));
+console.log(containAllVocals('Ei hola mamut'));
+
+
 // 6. Crea una función que realice una cuenta atrás desde un número recibido por parámetros.
+
+function countDown(numero) {
+    for (let i = numero; i >= 0; i--) {
+        console.log(i); 
+    }
+}
+
+
+countDown(8); 
 
 // 7. Escribe una función que reciba por parámetros el año de nacimiento, y calcule la edad de la persona.
 
 // 8. Crea una función que reciba la edad de una persona por parámetros y verifique si es mayor de edad. Imprime por consola un string con el resultado.
+
+// function checkIfAdult(age) {
+//     if (age >= 18) {
+//         console.log("La persona es mayor de edad");
+//         return true;
+//     } else {
+//         console.log("La persona es menor de edad");
+//         return false;
+//     }
+// }
+
+// checkIfAdult(20); 
+// checkIfAdult(16); 
+
+
+const checkIfAdult = function(age) {
+    if (age >= 18) {
+        console.log("La persona es mayor de edad");
+        return true;
+    } else {
+        console.log("La persona es menor de edad");
+        return false;
+    }
+}
+
+checkIfAdult(20); 
+checkIfAdult(16); 
 
 // 9. Crea una función que simule el lanzamiento de un dado e imprime por consola el resultado cada vez que se ejecuta.
 
