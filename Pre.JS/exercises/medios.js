@@ -219,23 +219,63 @@ checkIfAdult(16);
 
 // 9. Crea una función que simule el lanzamiento de un dado de 12 caras e imprime por consola el resultado cada vez que se ejecuta.
 
+function rollDice() {
+    const result = Math.trunc(Math.random() * 12 + 1);
+    console.log(`El resultado del lanzamiento es: ${result}`);
+    return result
+}
+
+rollDice()
+
 // 10. Crea una función que reciba un año por parámetros y compruebe e imprima por consola si el año es bisiesto o no.
 
 // 11. Escribe una función que simula el juego piedra, papel y tijera. Recibirá como parámetro una opción (piedra, papel o tijera) en forma de string. La máquina, elegirá automáticamente una opción aleatoria. Imprime por consola ambas elecciones y en caso de ganar el jugador un mensaje de victoria, y en caso de perder uno de derrota.
 
-function renderStonePaperScissors(option = '') {
+function renderStonePaperScissors(userRoll = '') {
+    const rolls = ['piedra', 'papel', 'tijeras'];
+    if (!rolls.includes(userRoll)) {
+        console.log('Tirada inválida');
+        return;
+    }
+    const rollNumber = Math.round(Math.random() * 2);
+    const machineRoll = rolls[rollNumber];
 
-    const rolls = ['piedra', 'papel', 'tijera']
-    const roll = Math.round(Math.random() * 2)
+    let winner = 'user';
+    if (userRoll === machineRoll) {
+        winner = 'empate';
+    } else if (userRoll === 'piedra') {
+        if (machineRoll === 'papel') {
+            winner = 'machine';
+        }
+        //machineRoll = 'tijeras'
+    } else if (userRoll === 'papel') {
+        if (machineRoll === 'tijeras') {
+            winner = 'machine';
+        }
+        //machineRoll = 'piedra'
+    } else {
+        // (userRoll = 'tijera')
+        if (machineRoll === 'piedra') {
+            winner = 'machine';
+        }
+        //machineRoll = 'papel'
+    }
 
-
-
-    console.log('Tu opción' option);
-    console.log('La opción de la IA', roll);
-    console.log('Resultado');
-
-
+    console.log('Tu opción (user)', userRoll);
+    console.log('Opción de la maquina', machineRoll);
+    console.log('Result', winner);
 }
+
+function playStonePaperScissors() {
+    const rolls = ['piedra', 'papel', 'tijeras'];
+    const rollNumber = Math.round(Math.random() * 2);
+    renderStonePaperScissors(rolls[rollNumber]);
+}
+
+playStonePaperScissors();
+
+
+
 
 // 12. La serie de Fibonacci es un problema matemático que realiza la suma de los dos números anteriores para generar el siguiente. Crea una función que imprima por consola la serie de Fibonacci sin superar un número introducido por el usuario. El usuario debe ser preguntado por este número al iniciar la aplicación.
 
@@ -247,3 +287,14 @@ function renderStonePaperScissors(option = '') {
 
 // 16. Crea una funcion que sume todos los numeros de un array.
 
+function sumaNumbers() {
+    let accumulator = 0;
+    for (let i = 0; i < arguments.length; i++) {
+        accumulator += arguments[i];
+    }
+    return accumulator;
+}
+
+// totalArray([1,3,4,5,6,7])
+
+console.log(sumaNumbers(1, 4, 5, 6, 7, 8));
