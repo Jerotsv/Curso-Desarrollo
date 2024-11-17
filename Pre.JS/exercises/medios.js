@@ -229,6 +229,17 @@ rollDice()
 
 // 10. Crea una función que reciba un año por parámetros y compruebe e imprima por consola si el año es bisiesto o no.
 
+function isLeapYear (year){
+    if ((year % 4 === 0 && year % 100 !==0) || (year % 400 === 0)) {
+        console.log(`${year} es un año bisiesto`);
+    } else {
+        console.log(`${year} no es un año bisiesto`);
+    }
+}
+
+isLeapYear(2024)
+isLeapYear(2023)
+
 // 11. Escribe una función que simula el juego piedra, papel y tijera. Recibirá como parámetro una opción (piedra, papel o tijera) en forma de string. La máquina, elegirá automáticamente una opción aleatoria. Imprime por consola ambas elecciones y en caso de ganar el jugador un mensaje de victoria, y en caso de perder uno de derrota.
 
 function renderStonePaperScissors(userRoll = '') {
@@ -275,15 +286,67 @@ function playStonePaperScissors() {
 playStonePaperScissors();
 
 
-
-
 // 12. La serie de Fibonacci es un problema matemático que realiza la suma de los dos números anteriores para generar el siguiente. Crea una función que imprima por consola la serie de Fibonacci sin superar un número introducido por el usuario. El usuario debe ser preguntado por este número al iniciar la aplicación.
+
+function generatorFibonacci(userNumber) {
+    let fib = [0, 1]
+
+    for (let i = 2; ; i++) {
+        let next = fib[i - 1] + fib[i - 2];
+        if (next > userNumber) break
+        fib.push(next)
+    }
+
+    console.log(`Serie de fibonacci hasta ${userNumber};`, fib.join(', '));
+}
+    
+const limit = 200   
+generatorFibonacci(limit);
+
+
 
 // 13. Escribe una función generadora de nombres de usuario aleatorios, a partir de dos grupos de palabras dadas. Estos grupos de palabras pueden estar agrupados en arrays. (nombres=['Hugo', 'Luis'], apellidos=['Duro', 'Fabiano']). Retorna un nombre de usuario aleatorio con nombre, apellido y un número aleatorio del 1 al 100. (Por ejemplo -> 'Pepe Pérez 87'.)
 
+function generatorUserName(names, lastNames) {
+    const name = names[Math.floor(Math.random() * names.length)]
+
+    const lastName = lastNames[Math.floor(Math.random() * lastNames.length)]
+
+    const number = Math.floor(Math.random() * 100) + 1
+
+    return `${name} ${lastName} ${number}`
+    
+}
+
+const names = ['Pepe', 'Jose', 'Jero', 'Luis', 'Victor', 'Irene', 'Andrea']
+const lastNames = ['Perez', 'Sanchez', 'Merino', 'Tostado', 'Lopez', 'Gonzalez', 'Haro']
+console.log(generatorUserName(names, lastNames));
+
 // 14. Crea una función calculadora de propinas. Debe recibir el total de la cuenta y el porcentaje de propina deseado, con ello deberá calcular e imprimir por consola la cuenta, la propina que corresponde a la cuenta introducida, y el total a pagar. Redondea a dos decimales.
 
+function calculateTip(totalAccount, percentageTip) {
+    const tip = (totalAccount * percentageTip) / 100
+    const totalPay = totalAccount + tip
+
+    console.log(`Cuenta: ${totalAccount.toFixed(2)}€`);
+    console.log(`Propina: ${percentageTip}%: ${tip.toFixed(2)}€`);
+    console.log(`Total: ${totalPay.toFixed(2)}€`);
+}
+
+calculateTip(120.45, 15)
+
 // // 15. Escribe una función que calcule el descuento aplicado a un precio. La función recibirá el precio y el descuento del artículo en venta, con ellos deberá calcular e imprimir por consola el precio, el descuento y el total del precio una vez aplicado el descuento. Redondea a dos decimales.
+
+function calculateDiscount(price, discountPercentage) {
+    const discountAmount = (price * discountPercentage) / 100
+    const finalPrice = price - discountAmount
+
+    console.log(`Precio: ${price.toFixed(2)}€`);
+    console.log(`Descuento: ${discountPercentage}%: ${discountAmount.toFixed(2)}€`);
+    console.log(`Precio final: ${finalPrice.toFixed(2)}€`);
+}
+0
+calculateDiscount(200,35)
 
 // 16. Crea una funcion que sume todos los numeros de un array.
 
