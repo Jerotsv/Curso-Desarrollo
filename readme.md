@@ -1,6 +1,6 @@
-Curso de desarrollo de aplicaciones con tecnología web
+# Curso de desarrollo de aplicaciones con tecnología web
 
-INFO PROFESOR: 
+## INFO PROFESOR:
 
 Alejandro Cerezo Lasne alce65@hotmail.es
 
@@ -8,8 +8,7 @@ https://www.linkedin.com/in/alejandrocerezo/
 
 https://github.com/alce65
 
-
-INFO COORDINADORA:
+## INFO COORDINADORA:
 
 Claudia
 
