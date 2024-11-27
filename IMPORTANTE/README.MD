@@ -23,3 +23,7 @@ Debemos tener estos 4 ficheros: readme.md, .gitignore, .package.json y .editorco
 ---
 
 Una vez tengamos esto debemos crear el fichero INDEX.HTML, que debe estar en la carpeta raíz para poder usar GitHub como hosting
+
+## PREGUNTAS EXAMEN
+
+Que significa HTML: Lenguaje de marcas de hipertexto (Hypertext Markup Language)
