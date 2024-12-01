@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ejercicios de CSS">
+  <title>Cascada CSS - Aprendiendo CSS</title>
+  <link rel="shortcut icon" href="favicon.svg" type="image/svg+xml">
+  <style>
+    #p1 {
+      color: chartreuse;
+    }
+
+    .level1 {
+      color: green;
+    }
+
+    [id="p1"] {
+      color: crimson;
+    }
+
+    p {
+      color: blue !important;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Cascada CSS</h1>
+  </header>
+  <p style="color: darkmagenta;" id="p1" class="level1">Soy un parrafo</p>
+  <div>
+    <a href="#uno">Un sitio </a>
+  </div>
+  <div>
+    <a href="#dos">Otro sitio</a>
+  </div>
+  <div>
+    <a href="#tres">Otro sitio...</a>
+  </div>
+</body>
+
+</html>

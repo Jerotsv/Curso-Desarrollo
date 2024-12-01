@@ -1,0 +1,32 @@
+a:hover::before {
+    content: '👍';
+}
+
+section {
+    position: relative;
+}
+
+section::after {
+    content: '';
+    background-color: rgba(137, 43, 226, 0.32);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+}
+
+:is(summary, li)::marker {
+    color: brown;
+    font-size: 1.3rem;
+}
+
+section {
+    display: none;
+}
+
+section:target {
+    display: block;
+    border: 2px solid gainsboro;
+}

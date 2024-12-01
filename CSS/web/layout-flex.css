@@ -1,0 +1,42 @@
+body {
+    background-color: bisque;
+}
+
+header,
+footer,
+section {
+    border: 1px solid gray;
+    div {
+        margin: 2rem;
+        border: 1px solid;
+        text-align: center;
+        border-radius: 10px;
+    }
+}
+
+header,
+footer {
+    min-height: 20vh;
+}
+
+.section-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 60vh;
+    align-items: stretch;
+}
+
+section {
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: 30%;
+}
+
+section:nth-of-type(2) {
+    flex-grow: 1;
+}
+
+img {
+    float: right;
+    margin: 1rem;
+}
