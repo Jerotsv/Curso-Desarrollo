@@ -27,3 +27,5 @@ Una vez tengamos esto debemos crear el fichero INDEX.HTML, que debe estar en la 
 ## PREGUNTAS EXAMEN
 
 Que significa HTML: Lenguaje de marcas de hipertexto (Hypertext Markup Language)
+Que es root: Una pseudoclase
+A que hace referencia root: A la etiqueta HTML y se usa por que tiene mayor
