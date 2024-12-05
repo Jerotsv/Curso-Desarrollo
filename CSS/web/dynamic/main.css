@@ -46,8 +46,8 @@ body {
 
 .three-balls-section {
     --space: 10rem;
-    --base-delay: 0.5s;
-    --interval: 0.5s;
+    --base-delay: 1s;
+    --interval: 1s;
 
     margin-top: 6rem;
 
