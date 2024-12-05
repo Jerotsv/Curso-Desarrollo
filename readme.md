@@ -42,7 +42,15 @@ La MDN (Mozilla Developer Network) es el sitio oficial de Mozilla para la docume
 
 Página de aprendizaje de HTML, CSS, JS, etc...
 
+### https://bentogrids.com/
+
+Página de ejemplos de grids
+
 ## PAGINAS WEB INTERESANTES CSS
+
+### https://www.recursoscosmicos.com/
+
+Página que contiene todo lo necesario para aprender, encontrar, trabajar y buscar cosas relacionadas con css
 
 ### https://css-tricks.com/
 
@@ -73,3 +81,9 @@ Coger fuentes de texto
 ### https://fontawesome.com/
 
 Font Awesome le da iconos escalables que instantáneamente se pueden personalizar, tanto en tamaño, color, sombra, y todo lo relacionado a CSS. Font Awesome no depende de los tamaños de pantallas. Por lo tanto, no se equivocará a diferencia de otras fuentes de iconos.
+
+## PERSONAS INTERESANTES
+
+### https://codepen.io/carmenansio
+
+Persona que sabe mucho de css y tiene un codepen con ejemplos muy chulos
