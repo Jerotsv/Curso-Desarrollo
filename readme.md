@@ -2,11 +2,11 @@
 
 ## INFO PROFESOR:
 
-Alejandro Cerezo Lasne alce65@hotmail.es
+- Alejandro Cerezo Lasne alce65@hotmail.es
 
-https://www.linkedin.com/in/alejandrocerezo/
+- https://www.linkedin.com/in/alejandrocerezo/
 
-https://github.com/alce65
+- https://github.com/alce65
 
 ## INFO COORDINADORA PRÁCTICAS:
 
@@ -18,35 +18,40 @@ claudia.mendez@cas-training.com
 
 ## PAGINAS WEB INTERESANTES GENERAL
 
-### https://www.w3.org/
+- https://www.w3.org/
+  Estándares de la web
 
-Estándares de la web
+- https://validator.w3.org/
+  Página para validar los estándares de la web
 
-### https://validator.w3.org/
+- https://manz.dev/
+  Web de cursos gratuitos para aprender CSS, HTML, JS y conceptos
 
-Página para validar los estándares de la web
+- https://caniuse.com/
+  Herramienta para comprobar compatibilidades
 
-### https://manz.dev/
+- https://developer.mozilla.org/en-US/
+  La MDN (Mozilla Developer Network) es el sitio oficial de Mozilla para la documentación de estándares web, es un recurso para desarrolladores donde tienen muchos documentos sobre diferentes tecnologías web, como HTML5, JavaScript, CSS etc... Es muy util porque puedes aprender todos esos lenguajes.
 
-Web de cursos gratuitos para aprender CSS, HTML, JS y conceptos
-
-### https://caniuse.com/
-
-Herramienta para comprobar compatibilidades
-
-### https://developer.mozilla.org/en-US/
-
-La MDN (Mozilla Developer Network) es el sitio oficial de Mozilla para la documentación de estándares web, es un recurso para desarrolladores donde tienen muchos documentos sobre diferentes tecnologías web, como HTML5, JavaScript, CSS etc... Es muy util porque puedes aprender todos esos lenguajes.
-
-### https://web.dev/?hl=es-419
-
-Página de aprendizaje de HTML, CSS, JS, etc...
+- https://web.dev/?hl=es-419
+  Página de aprendizaje de HTML, CSS, JS, etc...
 
 ## PAGINAS WEB INTERESANTES CSS
 
-### https://css-tricks.com/
+- https://css-tricks.com/
+  Información sobre todo lo relacionado con CSS
 
-Información sobre todo lo relacionado con CSS
+- [CSS Grid Generator](https://cssgrid-generator.netlify.app/)
+  Herramienta para generar un layout con CSS Grid.
+
+- [Grid samples](https://bentogrids.com/)
+  Ejemplos de grid
+
+- [CSS Flexbox Generator](https://the-echoplex.net/flexyboxes/)
+  Herramienta para generar un layout con CSS Flexbox.
+
+- [CSS Gradient Generator](https://cssgradient.io/)
+  Herramienta para generar gradientes con CSS.
 
 ## PAGINAS WEB INTERESANTES HTML
 
@@ -54,22 +59,34 @@ Información sobre todo lo relacionado con CSS
 
 ## PAGINAS WEB IMAGENES y TEXTO
 
-### https://placehold.jp/en.html
+- https://placehold.jp/en.html
+  Generador de imágenes vacías para ver como queda su espacio en la web
 
-Generador de imágenes vacías para ver como queda su espacio en la web
+- https://cloudinary.com/
+  Manipulación de tamaños de fotos por comandos
 
-### https://cloudinary.com/
+- https://www.photopea.com/
+  Editor de fotos online
 
-Manipulación de tamaños de fotos por comandos
+- https://fonts.google.com/
+  Herramienta para añadir fuentes a tu proyecto web.
 
-### https://www.photopea.com/
+- https://fontawesome.com/
+  Font Awesome le da iconos escalables que instantáneamente se pueden personalizar, tanto en tamaño, color, sombra, y todo lo relacionado a CSS. Font Awesome no depende de los tamaños de pantallas. Por lo tanto, no se equivocará a diferencia de otras fuentes de iconos.
 
-Editor de fotos online
+- [SVG Viewer](https://www.svgviewer.dev/)
+  Herramienta para obtener y visualizar archivos SVG.
 
-### https://fonts.google.com/
+- [Favicon Generator](https://www.favicon-generator.org/)
+  Herramienta para generar favicons.
 
-Coger fuentes de texto
+  - [Unsplash](https://unsplash.com/)
+    Herramienta para encontrar imágenes de alta calidad y libres de derechos de autor.
 
-### https://fontawesome.com/
+## COLORES
 
-Font Awesome le da iconos escalables que instantáneamente se pueden personalizar, tanto en tamaño, color, sombra, y todo lo relacionado a CSS. Font Awesome no depende de los tamaños de pantallas. Por lo tanto, no se equivocará a diferencia de otras fuentes de iconos.
+- [Adobe Color](https://color.adobe.com/create)
+  Herramienta para generar paletas de colores.
+
+- [Coolors](https://coolors.co/)
+  Herramienta para generar paletas de colores.
