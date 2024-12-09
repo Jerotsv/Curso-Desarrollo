@@ -1,0 +1,111 @@
+body {
+    background-color: bisque;
+    margin: 10rem;
+}
+
+.object {
+    width: 20px;
+    height: 20px;
+    border: 1px solid gainsboro;
+    /* transition-property: all;
+    transition-duration: 2s;
+    transition-delay: 1s;
+    transition-timing-function: cubic-bezier(0.5, 0, 0.5, 1); */
+    /* transition: all 2s 1s cubic-bezier(0.5, 0, 0.5, 1); */
+
+    /* animation-name: sample;
+    animation-duration: 2s;
+    animation-delay: 1s;
+    animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1); 
+    animation-iteration-count: 4;
+    animation-direction: alternate;
+    animation-fill-mode: both;
+    */
+    animation: sample 2s cubic-bezier(0.5, 0, 0.5, 1) 0.2s infinite alternate
+        both;
+}
+
+.ball-section {
+    --space: 5rem;
+
+    margin-top: 4rem;
+    .ball {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgb(95, 89, 198);
+        background: radial-gradient(
+            circle,
+            rgb(77, 69, 221) 0%,
+            rgb(14, 75, 87) 100%
+        );
+        animation: move 4s cubic-bezier(0.5, 0, 0.5, 1);
+        animation-fill-mode: both;
+    }
+}
+
+.three-balls-section {
+    --space: 10rem;
+    --base-delay: 1s;
+    --interval: 1s;
+
+    margin-top: 6rem;
+
+    .ball {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgb(95, 89, 198);
+        background: radial-gradient(
+            circle,
+            rgb(120, 19, 28) 0%,
+            rgb(97, 60, 78) 100%
+        );
+
+        transform: translate(var(--space));
+    }
+
+    .ball:nth-of-type(1) {
+        transition: transform var(--interval) var(--base-delay);
+    }
+    .ball:nth-of-type(2) {
+        transition: transform var(--interval)
+            calc(var(--base-delay) + var(--interval));
+    }
+    .ball:nth-of-type(3) {
+        transition: transform var(--interval)
+            calc(var(--base-delay) + 2 * var(--interval));
+    }
+}
+
+@keyframes sample {
+    0% {
+        background-color: brown;
+    }
+    50% {
+        background-color: chartreuse;
+    }
+    100% {
+        transform: scale(3) rotate(45deg);
+        background-color: blue;
+    }
+}
+
+@keyframes move {
+    25% {
+        transform: translate(var(--space), 0rem);
+        rotate: (90deg);
+    }
+    50% {
+        transform: translate(var(--space), var(--space));
+        rotate: (90deg);
+    }
+    75% {
+        transform: translate(0rem, var(--space));
+        rotate: (90deg);
+    }
+    100% {
+        transform: translateY(0rem, 0rem);
+        rotate: (90deg);
+    }
+}

@@ -178,19 +178,56 @@ dialog {
         }
     }
 
-    .main-img {
-        float: right;
-        padding-inline-start: 1rem;
-        width: 50%;
+    .section-principios {
+        .intro-wrapper {
+            display: flex;
+            gap: 1rem;
+
+            & > div {
+                /* width: 40%; */
+                flex-basis: 40%;
+            }
+            & > img {
+                /* width: 60%; */
+                flex-basis: 60%;
+            }
+        }
+
+        /* .main-img {
+            float: right;
+            padding-inline-start: 1rem;
+            width: 50%;
+            } */
+
+        .articles-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-rows: 1fr auto 1fr;
+            gap: 1.5rem;
+
+            article {
+                grid-row: span 3;
+
+                display: grid;
+                grid-template-rows: subgrid;
+                /*  1fr auto 1fr;  */
+            }
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            background-color: brown;
+            color: bisque;
+            border: none;
+            margin-block: 1rem;
+            appearance: none;
+        }
     }
 
-    .articles-wrapper {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.5rem;
-    }
-    .final-content {
-        columns: 2;
+    .section-finales {
+        .final-content {
+            columns: 2;
+        }
     }
 }
 
