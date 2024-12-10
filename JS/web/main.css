@@ -1,0 +1,21 @@
+header {
+    padding-block: 1rem;
+    background-color: #a5a5a5;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+main {
+    margin: 1rem 2rem;
+}
+
+menu {
+    display: flex;
+    list-style: none;
+    button {
+        appearance: none;
+        border: none;
+        padding: 0.5rem 1rem;
+    }
+}

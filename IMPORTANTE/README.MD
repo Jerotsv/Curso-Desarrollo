@@ -26,6 +26,7 @@ Una vez tengamos esto debemos crear el fichero INDEX.HTML, que debe estar en la 
 
 ## PREGUNTAS EXAMEN
 
-Que significa HTML: Lenguaje de marcas de hipertexto (Hypertext Markup Language)
-Que es root: Una pseudoclase
-A que hace referencia root: A la etiqueta HTML y se usa por que tiene mayor
+-   Que significa HTML: Lenguaje de marcas de hipertexto (Hypertext Markup Language)
+-   Que es root: Una pseudoclase
+-   A que hace referencia root: A la etiqueta HTML y se usa por que tiene mayor
+-   Que es el DOM (Document Object Model): El DOM es la conexión entre el navegador y el código JavaScript, y te permite modificar la página web en tiempo real para crear experiencias interactivas y dinámicas.
