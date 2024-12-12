@@ -2,6 +2,7 @@ import { countWords, generatePassword } from './tools.js';
 
 console.log('Soy main');
 
-console.log(countWords('Hola amigo'));
+const sentence = 'Hola';
+console.log('Words', countWords(sentence));
 
-console.log(generatePassword(11));
+console.log(generatePassword(13));
