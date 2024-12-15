@@ -1,0 +1,27 @@
+[
+    {
+        "statement": "JavaScript fue inventado en 1995",
+        "answer": "true",
+        "explicación": "Brendan Eich creó JS en Netscape en 1995. La versión inicial del lenguaje fue escrita en solo 10 días."
+    },
+    {
+        "statement": "Los strings (cadenas) en JS son valores editables",
+        "answer": "false",
+        "explicación": "En JavaScript, los strings son valores inmutables, lo que significa que no se pueden editar; sin embargo, se pueden reemplazar con nuevos strings diferentes."
+    },
+    {
+        "statement": "1 + 1 === 2",
+        "answer": "true",
+        "explicación": "El operador más da la suma de dos números."
+    },
+    {
+        "statement": "'1' + '1' === '2'",
+        "answer": "false",
+        "explicación": "El operador más concatena (une) strings, por lo que '1' + '1' === '11'."
+    },
+    {
+        "statement": "typeof ['J', 'S'] === 'array'",
+        "answer": "false",
+        "explicación": "Los arrays tienen el tipo 'object'. En JS, todo es un tipo de dato primitivo (por ejemplo, 'string', 'number') o un objeto. Los arrays son un tipo de objeto con algunas propiedades especiales."
+    }
+]
