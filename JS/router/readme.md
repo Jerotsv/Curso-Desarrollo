@@ -11,3 +11,23 @@
   - inicio
   - about
   - porfolio
+
+## Gestión de datos
+
+Create
+Read
+Update
+Delete
+
+### Entidades (Modelo)
+
+```TS
+
+type Task = {
+  id: string,
+  title: string,
+  owner: string,
+  isDone: boolean
+}
+
+```
