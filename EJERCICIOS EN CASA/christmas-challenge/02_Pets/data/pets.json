@@ -1,0 +1,30 @@
+[
+    {
+        "id": 1,
+        "name": "Firulais",
+        "raza": "Perro",
+        "isAdopted": false,
+        "dueno": null
+    },
+    {
+        "id": 2,
+        "name": "Miau",
+        "raza": "Gato",
+        "isAdopted": true,
+        "dueno": "Juan Pérez"
+    },
+    {
+        "id": 3,
+        "name": "Paco",
+        "raza": "Perro",
+        "isAdopted": false,
+        "dueno": null
+    },
+    {
+        "id": 4,
+        "name": "Luna",
+        "raza": "Gato",
+        "isAdopted": false,
+        "dueno": null
+    }
+]
