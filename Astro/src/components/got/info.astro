@@ -1,0 +1,26 @@
+---
+import type { Char } from '../../types/types';
+
+type Props = {
+    age: number;
+    isAlive: boolean;
+};
+
+const { age, isAlive } = Astro.props;
+---
+
+<div class="character__info">
+    <ul>
+        <li>Edad: {age} años</li>
+        <li>
+            Estado:
+            {
+                isAlive ? (
+                    <i class="fas fa-thumbs-up" />
+                ) : (
+                    <i class="fas fa-thumbs-down" />
+                )
+            }
+        </li>
+    </ul>
+</div>

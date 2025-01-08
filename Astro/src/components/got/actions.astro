@@ -1,0 +1,40 @@
+---
+import Button from "./button.astro";
+---
+
+<div>
+    <Button>habla</Button>
+    <Button>muere</Button>
+</div>
+
+<style>
+    div {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        height: 90px;
+    }
+
+</style>
+<script>
+
+const die = () => {}
+const talk = () => {}
+
+const handleClick = (event: Event)  => {
+    const target = event.target as HTMLButtonElement;
+    
+    if (target.textContent === 'habla') {
+        talk();
+    } else {
+        die();
+    }
+    
+};
+
+const buttons = document.querySelectorAll('.action');
+buttons.forEach(button => button.addEventListener('click', handleClick));
+
+
+</script>
