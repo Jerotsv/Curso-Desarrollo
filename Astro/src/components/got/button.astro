@@ -1,4 +1,14 @@
-<button class="action">
+---
+import type { Char } from '../../types/types';
+
+type Props = {
+    character: Char;
+};
+
+const { character } = Astro.props;
+---
+
+<button class="action" data-character={JSON.stringify(character)}>
     <slot />
 </button>
 
@@ -20,7 +30,14 @@
         &:not(:disabled) {
             cursor: pointer;
         }
-        &:hover {
+
+        &:disabled {
+            color: #b0b0b0;
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        &:not(:disabled):hover {
             color: #212529;
         }
     }

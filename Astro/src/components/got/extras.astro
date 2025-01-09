@@ -1,37 +1,36 @@
 ---
-import type { Char } from '../../types/types'
+import type { Category } from '../../types/types';
 
 type Props = {
-    character: Char
-}
+    category: Category;
+};
 
-const {character: {
-    category, 
-    reignYears, 
-    adviseTo, 
-    serveLevel, 
-    servesTo, 
-    skillLevel, 
-    weapon } } = Astro.props
+const icons: Record<Category, string> = {
+    king: '👑',
+    fighter: '🗡',
+    adviser: '🎓',
+    squire: '🛡',
+};
+
+const { category } = Astro.props;
 ---
 
-<ul>
-    {
-        category === 'king' && 
-        <li>Años de reinado: {reignYears}</li>
+<div>
+    <i class="emoji">{icons[category]}</i>
+</div>
+
+<style>
+    div {
+        font-style: normal;
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        background-color: brown;
+        height: 2rem;
+        width: 2rem;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
-    {
-        category === 'fighter' &&  
-        <li>Arma: {weapon}</li>
-        <li>Destreza: {skillLevel}</li>
-    }
-    {
-        category === 'adviser' &&  
-        <li>Asesora a: {adviseTo?.name + ' ' + adviseTo?.family}</li>
-    }
-    {
-        category === 'squire' &&  
-        <li>Peloteo: {serveLevel}</li>
-        <li>Sirve a: {servesTo?.name + ' ' + servesTo?.family}</li>
-    }
-</ul>
+</style>

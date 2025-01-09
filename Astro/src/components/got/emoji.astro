@@ -1,29 +1,36 @@
 ---
-import type { Category } from '../../types/types'
-
+import type { Category } from '../../types/types';
 
 type Props = {
-    category: Category
-}
+    category: Category;
+};
 
-const icons: Record<string, string>  = {
+const icons: Record<Category, string> = {
     king: '👑',
     fighter: '🗡',
     adviser: '🎓',
-    squire: '🛡'
-}
+    squire: '🛡',
+};
 
-const {category} = Astro.props
+const { category } = Astro.props;
 ---
 
-
-<i class="emoji">{ icons[category] }</i>
+<div>
+    <i class="emoji">{icons[category]}</i>
+</div>
 
 <style>
-    i {
+    div {
         font-style: normal;
         position: absolute;
         right: 5px;
         top: 5px;
+        background-color: brown;
+        height: 2rem;
+        width: 2rem;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>
