@@ -1,0 +1,36 @@
+---
+import type { Category } from '../../types/types';
+
+type Props = {
+    category: Category;
+};
+
+const icons: Record<Category, string> = {
+    king: '👑',
+    fighter: '🗡',
+    adviser: '🎓',
+    squire: '🛡',
+};
+
+const { category } = Astro.props;
+---
+
+<div>
+    <i class="emoji">{icons[category]}</i>
+</div>
+
+<style>
+    div {
+        font-style: normal;
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        background-color: brown;
+        height: 2rem;
+        width: 2rem;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>

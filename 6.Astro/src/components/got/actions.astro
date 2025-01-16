@@ -1,0 +1,86 @@
+---
+import Button from './button.astro';
+import type { Char } from '../../types/types';
+
+type Props = {
+    character: Char;
+};
+
+const { character } = Astro.props;
+---
+
+<div>
+    <Button character={character}>habla</Button>
+    <Button character={character}>muere</Button>
+</div>
+
+<style>
+    div {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        height: 90px;
+    }
+</style>
+
+<script>
+    import type { Char } from '../../types/types';
+
+    const die = (character: Char) => {
+        const cardElement = document.querySelector(
+            `[data-id=${character.name}]`
+        ) as HTMLDivElement;
+        cardElement.querySelector('.alive')?.setAttribute('hidden', 'false');
+        cardElement.querySelector('.die')?.removeAttribute('hidden');
+        const imgElement = cardElement.querySelector('img') as HTMLImageElement;
+        const talkElement = cardElement.querySelectorAll('button')[0];
+        imgElement.classList.add('dead');
+        talkElement.setAttribute('disabled', '');
+    };
+
+    const talk = (character: Char) => {
+        const divElement = document.querySelector(
+            '.communications'
+        ) as HTMLDivElement;
+        divElement.classList.add('on');
+        const firstElementChild = divElement.firstElementChild;
+        if (!firstElementChild) return;
+        firstElementChild.textContent = character.message;
+        setTimeout(() => {
+            divElement.classList.remove('on');
+        }, 2000);
+    };
+
+    const handleClick = (event: Event) => {
+        const target = event.target as HTMLButtonElement;
+        const data = target.dataset.character as string;
+        const character: Char = JSON.parse(data);
+        console.log(target.textContent, character.name);
+        if (target.textContent?.trim() === 'habla') {
+            talk(character);
+        } else {
+            die(character);
+        }
+    };
+
+    const buttons = document.querySelectorAll('.action');
+    console.dir(buttons);
+    buttons.forEach((button) => button.addEventListener('click', handleClick));
+</script>
+
+<!-- <script define:vars={{ character }}>
+    // as-is in the final output HTML.
+    // The contents will not be processed, optimized, or bundled
+    // No es TS sino JS
+
+    const buttons = document.querySelectorAll('.action');
+    console.dir(buttons);
+    buttons.forEach((button) =>
+        button.addEventListener('click', (ev) => {
+            target = ev.target;
+            console.log(target);
+            console.log('define-var: character', character);
+        })
+    );
+</script> -->

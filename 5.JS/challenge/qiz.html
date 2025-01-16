@@ -1,0 +1,113 @@
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Quiz.js</title>
+  <style>
+    body {
+      margin: 1rem auto;
+      padding: 3rem;
+      font-family: sans-serif;
+    }
+
+    header {
+      width: 50%;
+      margin: 1em auto;
+    }
+
+    main {
+      min-width: 25rem;
+      max-width: 50%;
+      margin: 0px auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #statement {
+      border: 1px solid black;
+      border-radius: 0.5rem;
+      box-shadow: 5px 5px 5px gray;
+      padding: 1rem;
+      font-size: x-large;
+      text-align: center;
+      margin: 1rem 0px;
+      min-height: 2em;
+    }
+
+    #explanation {
+      padding: 1rem;
+      text-align: center;
+    }
+
+    #options {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    button {
+      padding: 0.5rem;
+      font-size: medium;
+      border-radius: 5px;
+    }
+
+    .correct {
+      background-color: lightgreen;
+    }
+
+    .incorrect {
+      background-color: lightpink;
+    }
+  </style>
+  <script src="./sample.js" type="module"></script>
+</head>
+
+<body>
+  <header>
+    <h1>Quiz.js</h1>
+    <p>Conoces JS? Demuéstralo!</p>
+  </header>
+
+  <main>
+    <div id="statement"></div>
+
+    <div id="options">
+      <button name="true" value="true">true</button>
+      <button name="false" value="false">false</button>
+    </div>
+
+    <div id="explanation"></div>
+  </main>
+</body>
+
+<script type="text/javascript">
+  // TODO 1: Declarar y asignar variables que apunten a los elementos correspondientes
+  // statementElement debe ser el div "statement"
+  // optionButtons debe ser todos los elementos dentro del div "options"
+  // explanationElement debe ser el div "explanation"
+
+  // TODO 2: Declarar y asignar una variable llamada fact
+  // Su valor debe ser un objeto con una declaración, respuesta verdadera/falsa y explicación
+
+  // TODO 3: Establecer el texto del elemento statement en la propiedad correspondiente del objeto fact
+
+  // TODO 4: Declarar funciones disable y enable para establecer o eliminar el atributo "disabled" de un elemento de botón dado
+  // disable(button) debe establecer el atributo "disabled" del elemento de botón en el valor ""
+  // enable(button) debe eliminar el atributo "disabled" del elemento de botón
+
+  // TODO 5: Declarar una función isCorrect que compare una suposición con la respuesta correcta
+  // isCorrect(guess) debe devolver true si la suposición coincide con la respuesta del hecho
+
+  // TODO 6A: Usar un bucle for para agregar un escucha de eventos de clic a cada uno de los optionButtons
+  // TODO 6B: Dentro de la función del controlador de eventos, mostrar la explicación del hecho estableciendo el texto del elemento de explicación
+
+  // TODO 7: Dentro de la función del controlador de eventos,
+  // Usar un bucle for para deshabilitar todos los botones de opción
+
+  // TODO 8: Dentro de la función del controlador de eventos,
+  // Obtener el valor supuesto del botón clicado
+  // Usar una condición para comparar la suposición con la respuesta del hecho
+  // y agregar la clase "correct"/"incorrect" según corresponda
+</script>
+
+</html>
