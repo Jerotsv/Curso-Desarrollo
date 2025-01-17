@@ -24,7 +24,7 @@ Debemos tener estos 4 ficheros: readme.md, .gitignore, .package.json y .editorco
 
 Una vez tengamos esto debemos crear el fichero INDEX.HTML, que debe estar en la carpeta raíz para poder usar GitHub como hosting
 
-## PREGUNTAS EXAMEN
+## PREGUNTAS EXAMEN MODULO 1
 
 -   Que significa HTML: Lenguaje de marcas de hipertexto (Hypertext Markup Language)
 -   Que es root: Una pseudoclase
@@ -37,3 +37,8 @@ Una vez tengamos esto debemos crear el fichero INDEX.HTML, que debe estar en la 
 -   Read
 -   Update
 -   Delete
+
+## PREGUNTAS EXAMEN MODULO 2
+
+-   Lo que hay a la derecha del = SIEMPRE es una expresión
+-   Una variable es un identificador asociado/asignado a un valor. Los identificadores los pintamos cuadrados y los valores en circulo.

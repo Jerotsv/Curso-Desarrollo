@@ -90,3 +90,9 @@ claudia.mendez@cas-training.com
 
 - [Coolors](https://coolors.co/)
   Herramienta para generar paletas de colores.
+
+## PAGINAS PARA DEPLOYING GRATUITO
+
+- https://www.netlify.com/
+
+- https://vercel.com/
