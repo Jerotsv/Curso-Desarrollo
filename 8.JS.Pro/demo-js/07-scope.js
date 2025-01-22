@@ -1,17 +1,17 @@
-function add(a, b) {
+function add(a = 0, b = 0) {
     const r = a + b;
+    const bad = y;
     return r;
 }
+
+const subtraction = function (a = 0, b = 0) {
+    const r = a - b;
+    return r;
+};
 
 console.log('Inicio');
 const x = 12;
 const y = 2;
-const z = add(x, y);
 
-const media = (...values) => {
-    // let total = 0;
-    // values.forEach(item => total += item);
-
-    const total = values.reduce((a, b) => a + b);
-    return total / values.length;
-};
+debugger;
+const z = add(x);
