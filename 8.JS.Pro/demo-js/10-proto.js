@@ -33,3 +33,11 @@ console.log(user.hasOwnProperty('teeth'));
 ({}).__proto__.taste = 'vanilla';
 
 console.log(user.taste);
+console.log(user.taste);
+{
+    const user2 = Object.assign(user); // {...user}
+    console.log(user2);
+    const user3 = Object.create(person); //__proto__ = person
+    console.log(user3.teeth);
+    user3.teeth = 33;
+}
