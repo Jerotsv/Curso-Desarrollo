@@ -43,6 +43,7 @@ title: TypeScript
     - [Control de flujo con tipos de unión](#control-de-flujo-con-tipos-de-unión)
   - [Tipos de intersección (intersection types)](#tipos-de-intersección-intersection-types)
   - [Unión v. intersección](#unión-v-intersección)
+  - [Aserción con tipos union](#aserción-con-tipos-union)
 - [Tipos propios (custom Types)](#tipos-propios-custom-types)
   - [Alias de tipos (type aliases)](#alias-de-tipos-type-aliases)
   - [Interfaces. Propiedades y funciones (métodos)](#interfaces-propiedades-y-funciones-métodos)
@@ -61,7 +62,10 @@ title: TypeScript
   - [Guardias de tipos (Guards). Operadores: instance of/ typeof](#guardias-de-tipos-guards-operadores-instance-of-typeof)
     - [Guardias de tipos integrados (build-in) en TypeScript](#guardias-de-tipos-integrados-build-in-en-typescript)
     - [El tipo never](#el-tipo-never)
-    - [Guardias de tipos definidos por el usuario. Operador is](#guardias-de-tipos-definidos-por-el-usuario-operador-is)
+    - [Guardias de tipos definidos por el usuario](#guardias-de-tipos-definidos-por-el-usuario)
+      - [Operador is](#operador-is)
+      - [Operadores assert - is](#operadores-assert---is)
+      - [Guardia de tipos con switch(true)](#guardia-de-tipos-con-switchtrue)
   - [Tipos recursivos](#tipos-recursivos)
 - [Clases](#clases)
   - [Definición de clases en ES6+](#definición-de-clases-en-es6)
@@ -73,6 +77,7 @@ title: TypeScript
     - [Clases abstractas](#clases-abstractas)
 - [Genéricos](#genéricos)
 - [Módulos y Namespaces](#módulos-y-namespaces)
+- [Mixins](#mixins)
 - [Decoradores](#decoradores)
 - [Configuraciones avanzadas](#configuraciones-avanzadas)
 
@@ -913,6 +918,38 @@ printEvenNumberUnder5(y); //✔️ Guaranteed to be in {2, 4}
 printNumber(y); //✔️ Guaranteed to be a number
 ```
 
+### Aserción con tipos union
+
+La aserción de tipos (type assertion) permite convertir un tipo de unión en uno de los tipos que lo componen, lo que puede ser útil en ciertos contextos.
+
+```typescript
+let x: string | number;
+x = 'abc';
+let y = (x as string).toUpperCase();
+```
+
+La aserción de tipos puede ser usada para convertir un tipo de unión en un tipo de intersección.
+
+```typescript
+let a: string | number;
+let b: string | boolean;
+let c = (a as string) & (b as string);
+```
+
+En el caso de las aserciones de tipos, TypeScript no puede garantizar que el valor sea del tipo que se está asumiendo, por lo que es necesario tener cuidado al usarlas.
+
+```typescript
+let x: string | number;
+let y = (x as string).toUpperCase(); // Error
+```
+
+En es contexto de las aserciones, el **operador de no nulo** `!`, que permite a TypeScript inferir que una variable no es `null` o `undefined` en un contexto específico.
+
+```typescript
+let x: string | null;
+let y = x!.toUpperCase();
+```
+
 ## Tipos propios (custom Types)
 
 Existen dos mecanismos en TypeScript para dar nombre a nuevos tipos, denominados **tipos propios**, que pueden ser importados y exportados entre diferentes módulos:
@@ -1424,6 +1461,16 @@ else if ('dateRange' in value) {
 }
 ```
 
+Por último, el nuevo operador `satisfies`de TypeScript 4.9 tiene cierta similitud con las aserciones de tipos, pero es más seguro ya que permite comprobar si valor corresponde a un tipo de unión pero sin modificar el tipo del valor, por ejemplo el que había sido inferido.
+
+```typescript
+type ID: string | number;
+const id = 'abc';
+if (id satisfies ID) {
+  console.log(id.toUpperCase());
+}
+```
+
 #### El tipo never
 
 Como vemos en el ejemplo anterior, el tipo `never` se usa para representar el tipo de valores que **nunca** se pueden obtener. En este caso, se usa en el contexto de las guardias de tipos para indicar que una variable no puede tener un valor determinado.
@@ -1442,7 +1489,9 @@ function infiniteLoop(): never {
 }
 ```
 
-#### Guardias de tipos definidos por el usuario. Operador is
+#### Guardias de tipos definidos por el usuario
+
+##### Operador is
 
 La guardia de tipos es una función que devuelve un valor booleano y se usa para **restringir** el tipo de una variable en función de una **condición**. El operador `is` se usa para definir la función como guardia de tipos en TypeScript y le indica al compilador que tipo debe inferir en caso de que el valor devuelto sea `true`.
 
@@ -1461,22 +1510,71 @@ if (isSuccess(response)) {
 }
 ```
 
-LA clave de la función usada como guardia es que las condiciones definidas para que devuelva true en tiempo de ejecución se ajusten al tipo definido mediante in en tiempo de compilación, es decir en el código.
+La clave de la función usada como guardia es que las condiciones definidas para que devuelva true en tiempo de ejecución se ajusten al tipo definido mediante in en tiempo de compilación, es decir en el código.
 
-Existe otra versión de las guardias vinculadas a funciones que. en lugar de ser boolean, pueden devover un error.
+Podemos entender la guardia con `is` como
 
-<!-- TODO completar y añadir el ejemplo -->
+- si la función devuelve true (if isSuccess returns true)
+- es seguro asumir que response es de tipo Success (response is a Success)
+
+##### Operadores assert - is
+
+Existe otra versión de las guardias vinculadas a funciones que, en lugar de ser boolean, pueden devover un error. Para ello se usan los operadores `asserts` e `is`.
 
 ```typescript
+interface CarLike {
+  make: string;
+  model: string;
+  year: number;
+}
 
+let maybeCar: any;
+function assertsIsCarLike(valueToTest: any): asserts valueToTest is CarLike {
+  if (
+    !(
+      valueToTest &&
+      typeof valueToTest === 'object' &&
+      'make' in valueToTest &&
+      typeof valueToTest['make'] === 'string' &&
+      'model' in valueToTest &&
+      typeof valueToTest['model'] === 'string' &&
+      'year' in valueToTest &&
+      typeof valueToTest['year'] === 'number'
+    )
+  )
+    throw new Error(`Value does not appear to be a CarLike${valueToTest}`);
+}
+assertsIsCarLike(maybeCar);
+maybeCar;
 ```
 
-Por último, en la versión n de TypesCript se incorpora la posibilidad de utilizar la estructura switch para crear una guardia de tipos.
+En cualquiera de los dos casos, la función de guardia puede ser un método static de una clase, de forma que tenga acceso a las variables privadas de las isntancias a la hora de hacer las comprobaciones.
 
-<!-- TODO completar y añadir el ejemplo -->
+##### Guardia de tipos con switch(true)
+
+Por último, en la versión 5.3 de TypesCript se incorpora la posibilidad de restringir el tipo (narrowing) con la estructura switch(true), que permite usar el operador instanceof en cada caso del switch.
 
 ```typescript
+class Fish {
+  swim(): void {}
+}
+class Bird {
+  fly(): void {}
+}
 
+let value = {} as any;
+switch (true) {
+  case value instanceof Bird:
+    value.fly();
+
+    let value: Bird;
+    break;
+  case value instanceof Fish:
+    value.swim();
+
+    let value: Fish;
+    break;
+}
 ```
 
 ### Tipos recursivos
@@ -1489,10 +1587,10 @@ type NestedNumbers = number | NestedNumbers[];
 
 const val: NestedNumbers = [3, 4, [5, 6, [7], 59], 221];
 
-if (typeof val !== 'number') {
-  val.push(41);
-  val.push([42]);
-  // val.push('this will not work'); //! No strings allowed
+if (typeof value !== 'number') {
+  value.push(41);
+  value.push([42]);
+  // value.push('this will not work'); //! No strings allowed
 }
 ```
 
@@ -1799,12 +1897,108 @@ class Employee extends Person {
 
 ## Genéricos
 
+Los genéricos nos permiten parametrizar tipos, lo que abre una gran oportunidad para reutilizar tipos ampliamente en un proyecto de TypeScript.
+
+Se utiliza la notación `<T>` para definir un tipo genérico, que se puede usar en lugar de cualquier tipo en la definición de una clase, interfaz, función o método. La T sería el nombre del tipo genérico, que se puede sustituir por cualquier otro nombre en PascalCase, aunque por convenio se usan le
+tras de la A a la Z, aunque comenzando generalmente por la T.
+
+```typescript
+const wrapInArray = <T>(input: T): T[] => [input];
+const wrappedString = wrapInArray('hello');
+// const wrappedString: string[]
+```
+
+Como hemos dicho se pueden usar para parametrizar un tipo tantos genéricos como sea necesario,
+
+```typescript
+const makeTupla = <T, U>(a: T, b: U): [T, U] => [a, b];
+const tupla = makeTupla('hello', 42);
+// const tupla: [string, number]
+```
+
+Se pueden usar en cualquier parte de la definición de la función.
+
+```typescript
+function listToDict<T>(
+  list: T[],
+  idGen: (arg: T) => string,
+): { [k: string]: T } {
+  const dict: { [k: string]: T } = {};
+  return dict;
+}
+```
+
+- \<T> a la derecha de listToDict significa que el tipo de esta función ahora está parametrizado en términos de un parámetro de tipo T (que puede cambiar en cada uso).
+- list: T[] como primer argumento significa que aceptamos una lista de T.
+- idGen: (arg: T) => string significa que aceptamos una función que toma un argumento de tipo T y devuelve un string.
+
+TypeScript inferirá qué es T, en cada uso, dependiendo del tipo de array que pasemos. Si usamos un string[], T será string, si usamos un number[], T será number.
+
+```typescript
+const dict = listToDict(['a', 'b', 'c'], (x) => x);
+// const dict: { [k: string]: string }
+```
+
+Opcionalmente, al invocar la función, se puede especificar el tipo de T, si no se quiere que TypeScript lo infiera.
+
+```typescript
+const dict = listToDict<string>(['a', 'b', 'c'], (x) => x);
+// const dict: { [k: string]: string }
+```
+
 ## Módulos y Namespaces
+
+## Mixins
+
+Los mixines son una forma de **reutilizar** el código en TypeScript, que permite **componer** clases a partir de **funcionalidades** que se pueden **reutilizar** en diferentes clases.
+
+```typescript
+function applyMixins(derivedCtor: any, baseCtors: any[]) {
+  baseCtors.forEach((baseCtor) => {
+    Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
+      Object.defineProperty(
+        derivedCtor.prototype,
+        name,
+        Object.getOwnPropertyDescriptor(baseCtor.prototype, name),
+      );
+    });
+  });
+}
+
+abstract class Persona {
+  public name: string;
+  saludar() {
+    console.log(`Hola soy ${this.name}`);
+  }
+}
+
+// tslint:disable-next-line: max-classes-per-file
+abstract class Animal2 {
+  public comida: string;
+  comer() {
+    console.log(`Estoy comiendo ${this.comida}`);
+  }
+}
+
+// tslint:disable-next-line: max-classes-per-file
+class Alumno implements Persona, Animal2 {
+  saludar: () => void;
+  comer: () => void;
+  constructor(
+    public name: string,
+    public curso: string,
+    public comida: string,
+  ) {}
+}
+
+applyMixins(Alumno, [Persona, Animal2]);
+
+let al = new Alumno('Pepe', 'TS', 'pizza');
+
+al.saludar();
+al.comer();
+```
 
 ## Decoradores
 
 ## Configuraciones avanzadas
-
-```
-
-```

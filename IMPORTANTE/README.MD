@@ -42,3 +42,25 @@ Una vez tengamos esto debemos crear el fichero INDEX.HTML, que debe estar en la 
 
 -   Lo que hay a la derecha del = SIEMPRE es una expresión
 -   Una variable es un identificador asociado/asignado a un valor. Los identificadores los pintamos cuadrados y los valores en circulo.
+-   MUY IMPORTANTE: 4 pilares de la programación orientada a objetos (OOP): Abstracción, Encapsulación, Herencia, Polimorfismo. **(LINEA 168 DE JS.PRO/DEMO-TS/INFO-TS/INFO.OOP.MD)**
+
+    1. Abstracción: Consiste en simplificar la complejidad, mostrando solo las características esenciales de un objeto y ocultando las detalles innecesarios. Ayuda a centrarse en lo que hace un objeto sin preocuparse por cómo lo hace
+
+    2. Encapsulación: Es el proceso de ocultar los detalles internos de un objeto y exponer solo la interfaz necesaria para interactuar con él. Así, puedes modificar el comportamiento interno de una clase sin afectar a otros componentes del sistema.
+
+    3. Herencia: La herencia permite crear nuevas clases ((subclase o clase derivada)) basadas en clases existentes (superclase o clase base). Se puede decir que una clase "**hija**" hereda propiedades y métodos de una clase "**padre**". Esto permite la **reutilización** de código y la **extensión** de funcionalidades, En TypeScript, se utiliza la palabra clave `extends` para indicar que una clase hereda de otra.
+
+    4. Polimorfismo: Permite que diferentes clases respondan al mismo mensaje (método) de diferentes maneras. Esto facilita la extensión de las funcionalidades de una clase sin necesidad de modificar el código existente
+
+-   MUY IMPORTANTE PARA EL USO DE LA HERENCIA:
+    La herencia debe usarse con cuidado para evitar diseños incorrectos o innecesariamente complicados. Algunas directrices importantes son:
+
+1. **Evitar la herencia para reutilización de código genérico**: Si solo necesitas reutilizar código, considera utilizar **composición** o **delegación** en lugar de herencia.
+
+2. **Diseño basado en relaciones "es-un"**: Utiliza herencia solo cuando exista una relación natural de "es-un" entre las clases. Ejemplo: Un `Dog` es un `Animal`.
+
+3. **Evitar herencias profundas**: Las jerarquías de herencia muy profundas pueden volverse difíciles de mantener. Prefiere herencias simples o jerárquicas limitadas.
+
+4. **Usar clases abstractas para comportamiento común**: Las clases abstractas pueden ser útiles para definir comportamientos comunes que deben ser implementados por las subclases.
+
+5. **Prefiere la composición sobre la herencia**: Este es un principio de diseño común (conocido como "favor composition over inheritance"). La composición permite crear relaciones "tiene-un" en lugar de "es-un" y es más flexible para cambios en el diseño.

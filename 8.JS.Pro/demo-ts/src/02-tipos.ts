@@ -82,3 +82,26 @@
 
     interface UserWithPet extends User, PetOwner {}
 }
+{
+    class User {
+        name: string;
+        age: number;
+        pets?: string[];
+        constructor(name: string, age: number, pets: string[] = []) {
+            this.name = name;
+            this.age = age;
+            this.pets = pets;
+        }
+    }
+
+    let user1: User;
+    let user2: User;
+
+    user1 = new User('Pepe', 22);
+    // Tipado estructural -> NO ES tipado nominal
+    user2 = { name: 'Juan', age: 32 };
+
+    console.log(user1, user2);
+    console.log(user1 instanceof User);
+    console.log(user2 instanceof User);
+}
