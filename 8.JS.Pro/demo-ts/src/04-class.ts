@@ -201,11 +201,119 @@ console.log(User.usersNumber);
         delete: (id: string) => Item;
     }
 
-    // class RepoNotesSQL implements Repository {}
+    class RepoNotesSQL implements Repository {
+        read() {
+            return [];
+        }
 
-    // class RepoNotesMongo implements Repository {}
+        readById(id: string) {
+            return {};
+        }
 
-    // const repo = new RepoNotesMongo();
+        create(data: PartialItem) {
+            return {};
+        }
 
-    // repo.read();
+        update(id: string, data: PartialItem) {
+            return {};
+        }
+
+        delete(id: string) {
+            return {};
+        }
+
+        generateSQL() {
+            return '';
+        }
+    }
+
+    class RepoNotesMongo implements Repository {
+        read() {
+            return [];
+        }
+
+        readById(id: string) {
+            return {};
+        }
+
+        create(data: PartialItem) {
+            return {};
+        }
+
+        update(id: string, data: PartialItem) {
+            return {};
+        }
+
+        delete(id: string) {
+            return {};
+        }
+    }
+
+    const repo: Repository = new RepoNotesMongo();
+
+    repo.read();
+    (repo as RepoNotesSQL).generateSQL();
+}
+// Interfaz/type como tipo de data
+{
+    interface User {
+        name: string;
+        age: number;
+    }
+
+    function foo(param: User) {
+        console.log(param.name, param.age);
+    }
+
+    const u = { name: 'Pepe', age: 23, c: 9 };
+    // foo({ name: 'Pepe', age: 23, c: 9 });
+    foo(u);
+}
+// Interfaz/type como implements
+{
+    type Person = {
+        name: string;
+        age: number;
+    };
+    class User implements Person {
+        constructor(
+            public name: string,
+            public age: number,
+            public address: string,
+        ) {}
+    }
+
+    const p: Person = new User('Pepe', 23, 'Calle Falsa 123');
+    (p as User).address;
+}
+{
+    class Animal {
+        makeSound(): void {
+            console.log('Animal makes a sound.');
+        }
+    }
+
+    class Dog extends Animal {
+        override makeSound(): void {
+            console.log('Dog barks.');
+        }
+        eat(): void {}
+    }
+    class Cat extends Animal {
+        override makeSound(): void {
+            console.log('Cat meows.');
+        }
+    }
+
+    let animal: Animal;
+
+    animal = new Dog();
+    console.log(animal instanceof Dog); // true
+    console.log(animal instanceof Animal); // true
+
+    animal.makeSound(); // Dog barks (enlace dinámico)
+    (animal as Dog).eat();
+
+    animal = new Cat();
+    animal.makeSound(); // Cat meows (enlace dinámico)
 }

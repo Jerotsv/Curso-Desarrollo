@@ -32,7 +32,7 @@ Description: Conceptos generales de Programación Orientada a Objetos (OOP) y su
   - [Visibilidad y uso de las variables de estado](#visibilidad-y-uso-de-las-variables-de-estado)
     - [Visibilidad de las variables de estado](#visibilidad-de-las-variables-de-estado)
   - [Referencias a objetos](#referencias-a-objetos)
-    - [Paso de referencias\\](#paso-de-referencias)
+    - [Paso de referencias](#paso-de-referencias)
   - [Persistencia de objetos](#persistencia-de-objetos)
   - [Optimización de memoria y recolección de basura (garbage collection)](#optimización-de-memoria-y-recolección-de-basura-garbage-collection)
     - [Optimización de memoria](#optimización-de-memoria)
@@ -44,7 +44,7 @@ Description: Conceptos generales de Programación Orientada a Objetos (OOP) y su
   - [Herencia múltiple](#herencia-múltiple)
   - [Clases abstractas](#clases-abstractas)
   - [Tipos de herencia](#tipos-de-herencia)
-  - [5. Polimorfismo y enlace dinámico (dynamic binding)](#5-polimorfismo-y-enlace-dinámico-dynamic-binding)
+  - [Polimorfismo y enlace dinámico (dynamic binding)](#polimorfismo-y-enlace-dinámico-dynamic-binding)
     - [Polimorfismo](#polimorfismo)
     - [Enlace dinámico (dynamic binding)](#enlace-dinámico-dynamic-binding)
   - [Directrices para el uso correcto de la herencia](#directrices-para-el-uso-correcto-de-la-herencia)
@@ -52,7 +52,7 @@ Description: Conceptos generales de Programación Orientada a Objetos (OOP) y su
 - [Modularidad](#modularidad)
   - [Librerías de Clases](#librerías-de-clases)
   - [Ámbito de Utilización de Nombres (Namespace)](#ámbito-de-utilización-de-nombres-namespace)
-    - [Namespace en TypeScript\*](#namespace-en-typescript)
+    - [Namespace en TypeScript](#namespace-en-typescript)
   - [Ventajas de la Utilización de Módulos o Paquetes](#ventajas-de-la-utilización-de-módulos-o-paquetes)
     - [Ventajas del Uso de Módulos o Paquetes:](#ventajas-del-uso-de-módulos-o-paquetes)
   - [Conclusión: Modularidad en OOP](#conclusión-modularidad-en-oop)
@@ -266,7 +266,7 @@ En este ejemplo, el almacenamiento interno de los elementos (el array items) est
 
 ### 3. Herencia
 
-La herencia permite crear nuevas clases ((subclase o clase derivada)) basadas en clases existentes (superclase o clase base). Se puede decir que una clase "**hija**" hereda propiedades y métodos de una clase "**padre**". Esto permite la **reutilización** de código y la **extensión** de funcionalidades, En TypeScript, se utiliza la palabra clave `extends` para indicar que una clase hereda de otra.
+La herencia permite crear nuevas clases (subclase o clase derivada) basadas en clases existentes (superclase o clase base). Se puede decir que una clase "**hija**" hereda propiedades y métodos de una clase "**padre**". Esto permite la **reutilización** de código y la **extensión** de funcionalidades, En TypeScript, se utiliza la palabra clave `extends` para indicar que una clase hereda de otra.
 
 ```typescript
 abstract class Animal {
@@ -749,7 +749,7 @@ car2.start(); // Honda is starting.
 
 En este ejemplo, `car2` no es una nueva instancia de `Car`, sino que es una referencia al mismo objeto que `car1`. Si se modifican los atributos de `car2`, también se modificarán en `car1`, ya que ambos hacen referencia al mismo objeto.
 
-#### Paso de referencias\
+#### Paso de referencias
 
 Cuando pasas un objeto como argumento a una función o método, lo que realmente se pasa es una **referencia** a ese objeto, no una copia del objeto.
 
@@ -794,8 +794,6 @@ console.log(deserializedPerson); // { name: 'Alice', age: 30 }
 ```
 
 Aquí, el objeto `person` se convierte en un formato de cadena JSON que puede almacenarse en un archivo o base de datos. Más tarde, este JSON puede convertirse nuevamente en un objeto utilizando la deserialización.
-
----
 
 ### Optimización de memoria y recolección de basura (garbage collection)
 
@@ -991,7 +989,7 @@ Existen diferentes tipos de herencia según la relación jerárquica entre las c
 
 5. **Herencia híbrida**: Es una combinación de dos o más tipos de herencia. Este tipo de herencia no se suele utilizar en lenguajes que no soportan herencia múltiple directa.
 
-### 5. Polimorfismo y enlace dinámico (dynamic binding)
+### Polimorfismo y enlace dinámico (dynamic binding)
 
 #### Polimorfismo
 
@@ -1128,7 +1126,7 @@ En este ejemplo, `MathUtils` y `GeometryUtils` son parte de una posible librerí
 
 Cuando los programas crecen y tienen múltiples clases y funciones, es importante controlar el **ámbito de utilización de nombres** para evitar conflictos. Dos elementos en un programa no deberían tener el mismo nombre si están en diferentes contextos, y aquí es donde entran en juego los **namespaces** o **módulos**.
 
-#### Namespace en TypeScript\*
+#### Namespace en TypeScript
 
 ```typescript
 namespace MathOperations {

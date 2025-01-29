@@ -56,7 +56,6 @@ serieOrder: 4
     -   [Clases en ES6](#clases-en-es6)
     -   [Accessors: getters y setters](#accessors-getters-y-setters)
     -   [JS y la programación orientada a objetos](#js-y-la-programación-orientada-a-objetos)
-        -   [Relaciones entre clases](#relaciones-entre-clases)
 
 ## Funciones
 
@@ -1362,14 +1361,3 @@ Los objetos en JS son tan flexibles como los objetos literales, y permiten la cr
 Además una diferencia de JS respecto a otros lenguajes de programación es la falta de **clases abstractas** e **interfaces**. Ello dificulta la abstracción y el polimorfismo basado en interfaces, la creación de jerarquías de clases y la aplicación de determinados patrones habituales en OOP.
 
 Una de las formas de abordar estas limitaciones es el uso de **TypeScript**, un **super-conjunto de JS** que añade tipado estático y características de OOP como objetos mucho menos manipulables, clases abstractas e interfaces, y que se compila a JS.
-
-#### Relaciones entre clases
-
--   Asociación (——): la relación entre dos unidades separadas. Se busca el punto en común entre las entidades y se establecen vínculos entre ellas. La asociación permite realizar conexiones lógicas a través de una referencia continua.
-
--   Composición / Agregación (composición): las clases perteneces a otra, la construyen. son dos subconjuntos de la asociación;
-
-    -   Agregación (—◁▷): una clase es parte de otra clase (composición **débil**). Los componentes pueden ser compartidos por varios compuestos (de la misma asociación de agregación o de varias asociaciones de agregación distintas). La destrucción del compuesto no conlleva la destrucción de los componentes. Habitualmente se da con mayor frecuencia que la composición.
-    -   Composición (—◀▶): supone que la vida de la clase contenida debe coincidir con la vida de la clase contenedor. Los componentes constituyen una parte del objeto compuesto. De esta forma, los componentes no pueden ser compartidos por varios objetos compuestos. La supresión del objeto compuesto conlleva la supresión de los componentes.
-
-<https://www.seas.es/blog/informatica/agregacion-vs-composicion-en-diagramas-de-clases-uml/>
