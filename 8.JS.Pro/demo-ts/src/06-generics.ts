@@ -63,7 +63,7 @@
 
 {
 }
-
+// Generics with classes
 {
     class Box<T> {
         content: T;
@@ -82,4 +82,27 @@
 
     console.log(numberBox.getContent()); // 123
     console.log(stringBox.getContent()); // Hello
+}
+// Generics with 2 types
+{
+    const makeTuple = <T, U>(a: T, b: U): [T, U] => [a, b];
+    const tuple = makeTuple<string, number>('hello', 42);
+    //     ^?
+    // const tuple: [string, number]
+}
+{
+    type User = {
+        name: string;
+        age: number;
+        pets: string[];
+        job?: string;
+    };
+
+    type PartialUser = Partial<User>;
+    type RequiredUser = Required<User>;
+    type ReadonlyUser = Readonly<User>;
+    type PickUser = Pick<User, 'name' | 'age'>;
+    type OmitUser = Omit<User, 'job'>;
+
+    const partialUser: Partial<User> = { name: 'Pepe' };
 }

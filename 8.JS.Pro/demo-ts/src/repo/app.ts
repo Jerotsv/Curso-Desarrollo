@@ -1,8 +1,15 @@
 // DESARROLLO DEL CÓDIGO
 
 // Creamos la interfaz ODM genérica
+// ODM (Object Document Mapper) es un patrón de diseño que
+// mapea objetos de datos en documentos de base de datos
+
 // Modelando los métodos CRUD de un repositorio de datos
 // Simplificando la forma en que los llevaría a cabo un ORM
+
+// Debemos considerar si la collection será:
+// parámetro de los métodos CRUD
+// propiedad de la clase ORM y por tanto del constructor
 
 // En types.d.ts
 
@@ -24,20 +31,10 @@
 
 // En types.d.ts
 
-// // Creamos una clase que implementa la interfaz Repository
-// import { RepoItemFile } from './repo-item-file';
+// Creamos una clase que implementa la interfaz Repository
+import { RepoItemFile } from './repo-item-file';
 
-// // Instanciamos la clase y leemos los datos
+// Instanciamos la clase y leemos los datos
 
-// const repo = new RepoItemFile();
-// console.log(repo.read());
-
-type WithId = { id: string };
-
-export interface TypeORM<T extends WithId> {
-    read: () => T[];
-    readById: (id: T['id']) => T;
-    create: (data: Omit<T, 'id'>) => T;
-    updateById: (id: T['id'], data: Partial<T>) => T;
-    deleteById: (id: T['id']) => T;
-}
+const repo = new RepoItemFile();
+console.log(repo.read());

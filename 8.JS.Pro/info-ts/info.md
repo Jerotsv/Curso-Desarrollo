@@ -76,6 +76,7 @@ title: TypeScript
     - [Sobre-escritura (overriding) de métodos](#sobre-escritura-overriding-de-métodos)
     - [Clases abstractas](#clases-abstractas)
 - [Genéricos](#genéricos)
+  - [Utilidades de tipos](#utilidades-de-tipos)
 - [Módulos y Namespaces](#módulos-y-namespaces)
 - [Mixins](#mixins)
 - [Decoradores](#decoradores)
@@ -1220,7 +1221,7 @@ Existen diferentes **consultas de tipos**, que permiten extraer tipos de valores
   fooKey = 'baz';
   ```
 
-- **tipos de acceso indexado**. A partir de untipo /interfaz se puede acceder a una de sus propiedades mediante el uso de la **notación de corchetes**, para usarla como tipo
+- **tipos de acceso indexado**. A partir de un tipo /interfaz se puede acceder a una de sus propiedades mediante el uso de la **notación de corchetes**, para usarla como tipo
 
   ```typescript
   type User = {
@@ -1339,15 +1340,15 @@ type MessageHandler = (evt: MessageEvent) => void;
 
 function handleMainEvent(
   elem: HTMLFormElement,
-  handler: FormSubmitHandler,
+  handler: FormSubmitHandler
 ): void;
 function handleMainEvent(
   elem: HTMLIFrameElement,
-  handler: MessageHandler,
+  handler: MessageHandler
 ): void;
 function handleMainEvent(
   elem: HTMLFormElement | HTMLIFrameElement,
-  handler: FormSubmitHandler | MessageHandler,
+  handler: FormSubmitHandler | MessageHandler
 ) {}
 
 const myFrame = document.getElementsByTagName('iframe')[0];
@@ -1787,10 +1788,7 @@ En TypeScript se pueden declarar propiedades de parámetros en el constructor de
 
 ```typescript
 class Person {
-  constructor(
-    public name: string,
-    private age: number,
-  ) {}
+  constructor(public name: string, private age: number) {}
 }
 ```
 
@@ -1834,10 +1832,7 @@ Este mismo código, añadiendo los tipos adecuados, es válido en TypeScript.
 
 ```typescript
 class Person {
-  constructor(
-    public name: string,
-    public age: number,
-  ) {}
+  constructor(public name: string, public age: number) {}
 
   greet() {
     return `Hola, soy ${this.name} y tengo ${this.age} años`;
@@ -1845,11 +1840,7 @@ class Person {
 }
 
 class Employee extends Person {
-  constructor(
-    name: string,
-    age: number,
-    public salary: number,
-  ) {
+  constructor(name: string, age: number, public salary: number) {
     super(name, age);
   }
 
@@ -1869,10 +1860,7 @@ Además, en TypeScript se pueden definir **métodos abstractos** en las supercla
 
 ```typescript
 abstract class Person {
-  constructor(
-    public name: string,
-    public age: number,
-  ) {}
+  constructor(public name: string, public age: number) {}
 
   abstract greet(): string;
   eat() {
@@ -1881,11 +1869,7 @@ abstract class Person {
 }
 
 class Employee extends Person {
-  constructor(
-    name: string,
-    age: number,
-    public salary: number,
-  ) {
+  constructor(name: string, age: number, public salary: number) {
     super(name, age);
   }
 
@@ -1921,7 +1905,7 @@ Se pueden usar en cualquier parte de la definición de la función.
 ```typescript
 function listToDict<T>(
   list: T[],
-  idGen: (arg: T) => string,
+  idGen: (arg: T) => string
 ): { [k: string]: T } {
   const dict: { [k: string]: T } = {};
   return dict;
@@ -1946,6 +1930,43 @@ const dict = listToDict<string>(['a', 'b', 'c'], (x) => x);
 // const dict: { [k: string]: string }
 ```
 
+### Utilidades de tipos
+
+En TypeScript se pueden usar **utilidades de tipos** para manipular tipos, que permiten realizar operaciones comunes en la definición de tipos, como la creación de tipos a partir de otros tipos, la combinación de tipos, la extracción de propiedades de un tipo, la transformación de un tipo en otro tipo, etc.
+
+Las principales utilidades de tipos son:
+
+- `Partial<T>`: convierte todas las propiedades de un tipo en opcionales.
+- `Required<T>`: convierte todas las propiedades de un tipo en obligatorias.
+- `Readonly<T>`: convierte todas las propiedades de un tipo en de solo lectura.
+- `Record<K, T>`: crea un tipo con propiedades de tipo T, cuyas claves son de tipo K.
+- `Pick<T, K>`: crea un tipo con propiedades seleccionadas de un tipo T.
+- `Omit<T, K>`: crea un tipo con propiedades omitidas de un tipo T.
+- `Exclude<T, U>`: crea un tipo con propiedades de un tipo T que no están en un tipo U.
+- `Extract<T, U>`: crea un tipo con propiedades de un tipo T que están en un tipo U.
+- `NonNullable<T>`: crea un tipo con propiedades de un tipo T que no son nulas ni indefinidas.
+- `ReturnType<T>`: crea un tipo con el tipo de retorno de una función.
+- `InstanceType<T>`: crea un tipo con el tipo de instancia de una clase.
+
+```typescript
+type Person = {
+  name: string;
+  age: number;
+};
+
+type PartialPerson = Partial<Person>;
+type RequiredPerson = Required<Person>;
+type ReadonlyPerson = Readonly<Person>;
+type RecordPerson = Record<'id' | 'name', Person>;
+type PickPerson = Pick<Person, 'name'>;
+type OmitPerson = Omit<Person, 'age'>;
+type ExcludePerson = Exclude<string | number, number>;
+type ExtractPerson = Extract<string | number, number>;
+type NonNullablePerson = NonNullable<string | null>;
+type ReturnTypePerson = ReturnType<() => Person>;
+type InstanceTypePerson = InstanceType<typeof Person>;
+```
+
 ## Módulos y Namespaces
 
 ## Mixins
@@ -1959,7 +1980,7 @@ function applyMixins(derivedCtor: any, baseCtors: any[]) {
       Object.defineProperty(
         derivedCtor.prototype,
         name,
-        Object.getOwnPropertyDescriptor(baseCtor.prototype, name),
+        Object.getOwnPropertyDescriptor(baseCtor.prototype, name)
       );
     });
   });
@@ -1987,7 +2008,7 @@ class Alumno implements Persona, Animal2 {
   constructor(
     public name: string,
     public curso: string,
-    public comida: string,
+    public comida: string
   ) {}
 }
 

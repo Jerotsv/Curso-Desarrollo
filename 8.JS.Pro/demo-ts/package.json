@@ -6,6 +6,7 @@
     "scripts": {
         "build": "tsc -w",
         "test": "vitest",
+        "test:c": "vitest --coverage",
         "lint": "eslint ."
     },
     "keywords": [],
@@ -15,6 +16,7 @@
     "devDependencies": {
         "@eslint/js": "^9.18.0",
         "@types/node": "^22.12.0",
+        "@vitest/coverage-v8": "^2.1.8",
         "eslint": "^9.18.0",
         "globals": "^15.14.0",
         "prettier": "^3.4.2",

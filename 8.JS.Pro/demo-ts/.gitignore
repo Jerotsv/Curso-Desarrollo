@@ -1,0 +1,5 @@
+*.xls*
+.vscode
+node_modules
+dist
+coverage
