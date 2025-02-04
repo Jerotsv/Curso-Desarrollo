@@ -1,5 +1,5 @@
 import { ODMLite } from './odm-lite';
-import { readFromDisk, writeToDisk } from './helpers';
+import { readFile, writeFile } from 'node:fs/promises';
 import { vi } from 'vitest';
 
 type Item = {
@@ -7,7 +7,7 @@ type Item = {
     title: string;
 };
 
-vi.mock('./helpers');
+vi.mock('node:fs/promises');
 
 const ITEMS = [
     { id: '1', title: 'Item 1' },
@@ -23,13 +23,13 @@ describe('Given a instance of class ORMLite', () => {
     beforeEach(() => {
         odmLite = new ODMLite('file.json');
 
-        vi.mocked(readFromDisk).mockResolvedValue(
+        vi.mocked(readFile).mockResolvedValue(
             JSON.stringify({
                 items: ITEMS,
             }),
         );
 
-        vi.mocked(writeToDisk).mockImplementation(async () => {});
+        vi.mocked(writeFile).mockImplementation(async () => {});
     });
 
     test('Then it Should be defined', () => {
@@ -68,7 +68,7 @@ describe('Given a instance of class ORMLite', () => {
                 id: expect.any(String),
                 ...initialData,
             });
-            expect(writeToDisk).toHaveBeenCalledWith(
+            expect(writeFile).toHaveBeenCalledWith(
                 expect.any(String),
                 expect.stringContaining(initialData.title),
             );
@@ -85,7 +85,7 @@ describe('Given a instance of class ORMLite', () => {
                 id: id,
                 title: data.title,
             });
-            expect(writeToDisk).toHaveBeenLastCalledWith(
+            expect(writeFile).toHaveBeenLastCalledWith(
                 expect.any(String),
                 expect.stringContaining(data.title),
             );
@@ -106,7 +106,7 @@ describe('Given a instance of class ORMLite', () => {
             const id = '1';
             const item = await odmLite.deleteById(collection, id);
             expect(item).toStrictEqual(DB.items[0]);
-            expect(writeToDisk).toHaveBeenCalledWith(
+            expect(writeFile).toHaveBeenCalledWith(
                 expect.any(String),
                 expect.not.stringContaining(DB.items[0].title),
             );

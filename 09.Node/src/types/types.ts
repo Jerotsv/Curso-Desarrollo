@@ -26,3 +26,5 @@ export interface Repository<T> {
     update: (id: string, data: Partial<Omit<T, 'id'>>) => Promise<T>;
     delete: (id: string) => Promise<T>;
 }
+
+export type Note = { id: string; content: string };

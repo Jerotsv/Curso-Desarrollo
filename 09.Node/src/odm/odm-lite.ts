@@ -1,5 +1,5 @@
-import { readFromDisk, writeToDisk } from './helpers';
-import { TypeODM } from './types';
+import { readFile, writeFile } from 'node:fs/promises';
+import type { TypeODM } from '../types/types';
 
 export class ODMLite<T extends { id: string }> implements TypeODM<T> {
     file: string;
@@ -8,12 +8,12 @@ export class ODMLite<T extends { id: string }> implements TypeODM<T> {
     }
 
     private async readDB(): Promise<Record<string, T[]>> {
-        const txtData = await readFromDisk(this.file);
+        const txtData = await readFile(this.file, 'utf-8');
         return JSON.parse(txtData);
     }
 
     private writeDB(data: Record<string, T[]>): Promise<void> {
-        return writeToDisk(this.file, JSON.stringify(data));
+        return writeFile(this.file, JSON.stringify(data));
     }
 
     async read(collection: string): Promise<T[]> {
