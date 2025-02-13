@@ -100,3 +100,20 @@ claudia.mendez@cas-training.com
 ## PAGINAS WEB BIBLIOTECAS 3D Y MAS
 
 - https://www.vantajs.com
+
+## PAGINAS WEB/PROGRAMAS BACK
+
+- DBngin
+  Creación de servidores relacionales tanto SQL como POSTGRES
+
+- Clever Cloud: https://www.clever-cloud.com/
+  Plataforma de servidores MySQL remotos, entre otros servicios en la nube
+
+- MySQL Workbench
+  Workbench/Interfaz para servidores SQL
+
+- PgAdmin4
+  Workbench/Interfaz para servidores POSTGRES
+
+- SupaBase
+  Programa pra servidores POSTGRES en remoto
