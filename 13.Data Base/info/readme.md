@@ -21,6 +21,7 @@ title: SQL
       - [Primera Forma Normal](#primera-forma-normal)
       - [Segunda Forma Normal](#segunda-forma-normal)
       - [Tercera Forma Normal](#tercera-forma-normal)
+  - [Modelos gráficos E/R](#modelos-gráficos-er)
 - [MySQL](#mysql)
   - [Que es MySQL](#que-es-mysql)
   - [Características de MySQL](#características-de-mysql)
@@ -28,8 +29,13 @@ title: SQL
     - [Escalabilidad y límites](#escalabilidad-y-límites)
     - [Conectividad](#conectividad)
   - [Instalación](#instalación)
-  - [Tipos de datos](#tipos-de-datos)
   - [Aprendizaje del Lenguaje SQL](#aprendizaje-del-lenguaje-sql)
+  - [Tipos de tablas en MySQL](#tipos-de-tablas-en-mysql)
+    - [Motor MyISAM](#motor-myisam)
+    - [Motor InnoDB](#motor-innodb)
+    - [Motor HEAP](#motor-heap)
+    - [Motor NDB](#motor-ndb)
+  - [Tipos de datos](#tipos-de-datos)
 - [Lenguaje SQL: Definición de datos (DDL)](#lenguaje-sql-definición-de-datos-ddl)
   - [Conexión](#conexión)
   - [Información de las DB en el servidor](#información-de-las-db-en-el-servidor)
@@ -43,6 +49,12 @@ title: SQL
   - [Cambios en tablas ya creadas](#cambios-en-tablas-ya-creadas)
 - [Lenguaje SQL: control de datos (DCL)](#lenguaje-sql-control-de-datos-dcl)
 - [Lenguaje SQL: manipulación de datos (DML)](#lenguaje-sql-manipulación-de-datos-dml)
+  - [SELECT (Read)](#select-read)
+  - [INSERT (Create)](#insert-create)
+  - [UPDATE (Update)](#update-update)
+  - [DELETE (Delete)](#delete-delete)
+- [Advanced SQL](#advanced-sql)
+  - [Subqueries](#subqueries)
 - [SQL y ECMAScript (JavaScript)](#sql-y-ecmascript-javascript)
   - [Driver nativo para Node](#driver-nativo-para-node)
   - [ORM (Object–relational mapping)](#orm-objectrelational-mapping)
@@ -333,6 +345,8 @@ Si la información de la universidad se almacena en la tabla de candidatos, no h
 
 La mejor opción es crear una tabla separada de Universidades y vincularlo a la tabla candidatos con una llave de código de la universidad.
 
+### Modelos gráficos E/R
+
 ## MySQL
 
 ### Que es MySQL
@@ -353,7 +367,7 @@ Tradicionalmente se considera uno de los cuatro componentes del stack de desarro
 - MySQL
 - PHP
 
-Con estos stacks -> CRM basados en PHP (WordPress,Joomla, Drupal)
+Con estos stacks -> CRM basados en PHP (WordPress, Joomla, Drupal)
 
 Sitios web grandes y populares (Wikipedia)
 
@@ -431,15 +445,146 @@ Seguridad
   - cuenta root: password
   - añadir otra cuenta: All Hosts / Role: User Admin
 
-### Tipos de datos
-
 ### Aprendizaje del Lenguaje SQL
 
 [sqlBolt](https://sqlbolt.com/)
 
+### Tipos de tablas en MySQL
+
+MySQL incorpora "motores de almacenamiento", que nos permite seleccionar el tipo de almacenamiento interno de cada tabla
+
+- no afecta a la interacción del cliente con el servidor
+- los comandos SQL son los mismos
+- el cliente no necesita saber como se guardan los datos
+
+Hay una docena de motores de almacenamiento propios de MySQL, más los desarrollados por terceros.
+Los más conocidos son: MyISAM, InnoDB, HEAP, NDB.
+
+- **MyISAM**: formato estable, maduro y simple de manejar. Internamente admite tres posibilidades que gestiona directamente MySQL: Estáticas, Dinámicas y Comprimidas
+- **InnoDB**: formato más moderno, que soporta transacciones y bloqueos a nivel de fila, claves foráneas y recuperación frente a desastres.
+  Como inconvenientes: ocupan más espacio, su administración es más compleja (debido a sus índices), no soportan índices de texto completo…
+
+Ambos pueden coexistir en una misma DB, las primeras cuando se necesite la máxima eficacia y las segundas cuando interesa utilizar transacciones
+
+#### Motor MyISAM
+
+- No transaccional.
+- Bloqueos a nivel de tabla.
+- Muy rápido en lectura y escritura (excepto escrituras simultaneas en la misma tabla).
+- Bajo requerimiento de espacio en disco y memoria.
+- Los datos se guardan en disco: diferentes ficheros para la definición de la tabla, los datos y los índices.
+- Es el motor por defecto de MySQL.
+- Es una buena elección cuando necesitamos velocidad, y tenemos pocas modificaciones simultaneas de la tabla.
+
+#### Motor InnoDB
+
+- Transaccional. Permite deshacer transacciones a medias ("rollback"). Multiversionado
+- Bloqueos a nivel de registro
+- Restricciones en claves foráneas
+- Fácil recuperación de datos en caso de error.
+- Alta concurrencia más segura en escritura.
+- Los datos se guardan en un fichero para la definición de la tabla, y un "tablespace" para guardar conjuntamente datos e índices.
+- Necesita mas espacio en disco y memoria
+- Es una buena elección cuando necesitamos transacciones, restricciones en claves foráneas, o tenemos muchas escrituras simultaneas.
+- Multiversionado: cuando múltiples transacciones modifican registros, InnoDB mantiene aisladas las transacciones guardando para cada una de ellas un versión distinta de un mismo registro, a cada transacción la versión que le corresponde
+
+#### Motor HEAP
+
+- Los datos se guardan en memoria, utilizando algoritmos que hacen un uso óptimo de este medio.
+- Es muy, muy rápido.
+- Podemos crear una tabla HEAP a partir de una tabla en disco con:
+
+```sql
+CREATE TABLE nombre_tabla ENGINE=MEMORY
+SELECT * FROM nombre_tabla_disco;
+```
+
+- Es una buena elección cuando necesitamos realizar operaciones muy rápidas sobre conjuntos pequeños de datos
+
+#### Motor NDB
+
+- Es el motor de almacenamiento de los clúster de MySQL.
+- La base de datos esta repartida por los diferentes nodos del clúster.
+- Proporciona alta disponibilidad mediante redundancia.
+- Proporciona alto rendimiento mediante fragmentación de datos sobre los grupos de nodos.
+- Proporciona alta escalabilidad mediante la combinación de las dos características anteriores.
+- Los datos se guardan en memoria, pero los logs van a disco.
+- Es una buena elección cuando disponiendo de varios servidores necesitamos a la vez velocidad, transacciones y redundancia de datos; replicación síncrona; y resistencia a caídas de servidores
+
+### Tipos de datos
+
+- **numéricos**: INT, BIGINT, DECIMAL, FLOAT, DOUBLE
+- **cadena de caracteres**: CHAR, VARCHAR, TEXT
+- **fecha y hora**: DATE, TIME, DATETIME, TIMESTAMP
+- **binarios**: BINARY, VARBINARY, BLOB
+- **otros**: ENUM, SET, JSON
+
+La diferencia entre CHAR y VARCHAR es que CHAR almacena cadenas de longitud fija, mientras que VARCHAR almacena cadenas de longitud variable. Ademas el tamaño máximo de CHAR es de 255 caracteres, mientras que el de VARCHAR es de 65.535 caracteres. Además CHAR puede usarse sin indicar la longitud, en cuyo caso se asume 1.
+
+- **CHAR** (n?): 0-255 caracteres
+- **VARCHAR** (N): 0-65.535 caracteres
+- **TEXT**: 0-65.535 caracteres = VARCHAR(65.535)
+  - TYNYTEXT: 0-255 caracteres = CHAR(255)
+  - MEDIUMTEXT: 0-16.777.215 caracteres = VARCHAR(16.777.215)
+  - LONGTEXT: 0-4.294.967.295 caracteres = VARCHAR(4.294.967.295)
+
+En cuanto a los datos binarios, los tipos de datos BINARY y VARBINARY se utilizan para almacenar datos binarios, mientras que el tipo de datos BLOB se utiliza para almacenar datos binarios de gran tamaño.
+
+- **BINARY**: 0-255 bytes
+- **VARBINARY**: 0-65.535 bytes
+- **BLOB**: 0-65.535 bytes = VARBINARY(65.535)
+  - TYNYBLOB: 0-255 bytes = BINARY(255)
+  - MEDIUMBLOB: 0-16.777.215 bytes = VARBINARY(16.777.215)
+  - LONGBLOB: 0-4.294.967.295 bytes = VARBINARY(4.294.967.295)
+
+La diferencia entre los distintos tipos numéricos es la cantidad de bytes que se utilizan para almacenar el número y el rango de valores que se pueden almacenar.
+
+Para los números enteros, las posibilidades son
+
+- **INT** (n?): 4 bytes, rango de -2.147.483.648 a 2.147.483.647 -> enteros hasta 10 dígitos
+  - **BIGINT** (n?): 8 bytes, rango de -9.223.372.036.854.775.808 a 9.223.372.036.854.775.807 -> enteros hasta 19 dígitos
+  - TYNYINT (n?) 1 byte, rango de -128 a 127 -> enteros hasta 3 dígitos [**BOOL**, **BOOLEAN** son alias de TINYINT(1)]
+  - SMALLINT (n?): 2 bytes, rango de -32.768 a 32.767 -> enteros hasta 5 dígitos
+  - MEDIUMINT (n?): 3 bytes, rango de -8.388.608 a 8.388.607 -> enteros hasta 7 dígitos
+
+Para los números decimales, las posibilidades son
+
+- **FLOAT** (M,D): 4 bytes, 7 dígitos de precisión
+- **DOUBLE** (M,D): 8 bytes, 15 dígitos de precisión
+- **DECIMAL** (M,D): 65 dígitos, 30 decimales (decimales desempaquetados, en lugar de como coma flotante)
+
+Los ENUM y SET son tipos de datos que permiten almacenar una lista de valores. La diferencia entre ellos es que ENUM solo puede almacenar un valor de la lista, mientras que SET puede almacenar varios valores.
+
+- **ENUM**: 1 valor de una lista
+- **SET**: varios valores de una lista. Se almacenan como un número binario
+
+Los datos JSON son un tipo de datos que permite almacenar datos en formato JSON. Este tipo de datos es muy útil para almacenar datos no estructurados. Aparecieron en MySQL 5.7.8, acercando MySQL a las bases de datos NoSQL.
+
 ## Lenguaje SQL: Definición de datos (DDL)
 
-- lenguaje de definición de datos (**DDL**): CREATE, DROP, ALTER ...
+Lenguaje de definición de datos (**DDL**): CREATE, DROP, ALTER ...
+
+- Conexión: Shell v. Workbench (GUI)
+- Listado y Creación de bases de datos. Uso
+- Listado y descripción de tablas
+- Creación de tablas. Uso de IF NOT EXISTS
+  - Tipos de datos
+  - Restricciones
+    - NOT NULL
+    - UNIQUE
+    - DEFAULT
+    - CHECK
+    - AUTO_INCREMENT
+  - Claves primarias y foráneas
+    - PRIMARY KEY numérica
+    - PRIMARY KEY UUID
+    - FOREIGN KEY
+  - Named Constraints
+- Borrado de tablas (DROP)
+- Indexación
+- Modificación de tablas (ALTER)
+- Claves primarias y foráneas
+- Creación de índices
 
 ### Conexión
 
@@ -677,7 +822,7 @@ Una tabla releja las relaciones de unos usuarios con otros, como amigos o enemig
   )
 ```
 
-A posteriori, podemos decidir que un usuario no puede tener una relación consigo mismo, y para evitr que la tabla pueda reflejar esa situación, le añadimos una **CONSTRAIN**
+A posteriori, podemos decidir que un usuario no puede tener una relación consigo mismo, y para evitar que la tabla pueda reflejar esa situación, le añadimos una **CONSTRAIN**
 
 ```shell
   ALTER TABLE user_others
@@ -839,11 +984,207 @@ El mismo resultado se puede conseguir utilizando MODIFY
 
 ## Lenguaje SQL: control de datos (DCL)
 
-- lenguaje de control de accesos (**DCL**): GRANT, REVOKE...
+Lenguaje de control de accesos (**DCL**): GRANT, REVOKE...
 
 ## Lenguaje SQL: manipulación de datos (DML)
 
-- CRUD (**DML**): SELECT, INSERT, UPDATE, DELETE ...
+CRUD (**DML**): SELECT, INSERT, UPDATE, DELETE ...
+
+### SELECT (Read)
+
+- SELECT
+  - FROM
+  - WHERE (constraints and operators)
+
+Alias en tablas y campos
+
+```shell
+  SELECT
+    u.id AS user_id,
+    u.user_alias,
+    u.email,
+    u.first_name,
+    u.surname,
+    u.phone,
+    u.created_at,
+    u.modified_at
+  FROM
+    users AS u
+  WHERE
+    u.id = 1;
+```
+
+Filtrado y ordenación de resultados
+
+- ORDER BY .. ASC | DESC
+- LIMIT
+- OFFSET
+- DISTINCT
+- GROUP BY
+
+Ejemplo
+
+```shell
+  SELECT
+    u.id AS user_id,
+    u.user_alias,
+    u.email,
+    u.first_name,
+    u.surname,
+    u.phone,
+    u.created_at,
+    u.modified_at
+  FROM
+    users AS u
+  WHERE
+    u.id > 1
+  ORDER BY
+    u.id DESC
+  LIMIT 10
+  OFFSET 5;
+```
+
+JOIN: FROM t1 JOIN t2 ON t1.key = t2.key
+
+- INNER JOIN
+- LEFT JOIN
+- RIGHT JOIN
+- FULL JOIN
+
+- INNER JOIN: devuelve las filas en las que hay coincidencia en ambas tablas.
+- LEFT [OUTER] JOIN: devuelve todas las filas de la tabla izquierda, incluso cuando no hay coincidencia con la tabla derecha.
+- RIGHT [OUTER] JOIN: devuelve todas las filas de la tabla derecha, incluso cuando no hay coincidencia con la tabla izquierda.
+- FULL JOIN: devuelve las filas en las que hay coincidencia en al menos una de las tablas.
+- SELF JOIN: se utiliza para unir una tabla consigo misma, como si en realidad fueran dos tablas.
+- CARTESIAN JOIN: devuelve el producto cartesiano de un conlunto de registros de dos o mas tablas unidas
+
+Expresiones de comparación
+
+- =, <>, !=, >, <, >=, <=
+- BETWEEN .. AND
+- LIKE (case insensitive)
+- IN
+- IS NULL, IS NOT NULL
+- EXISTS
+- ANY, ALL
+- AND, OR, NOT
+
+- Caracteres comodines
+  - % -> cualquier cadena de caracteres
+  - \_ -> cualquier carácter
+
+```shell
+  SELECT
+    u.id AS user_id,
+    u.user_alias,
+    u.email,
+    u.first_name,
+    u.surname,
+    u.phone,
+    u.created_at,
+    u.modified_at
+  FROM
+    users AS u
+  WHERE
+    u.first_name LIKE 'A%'
+  ORDER BY
+    u.id DESC
+  LIMIT 10
+  OFFSET 5;
+```
+
+Funciones nativas del lenguaje
+
+- Funciones matemáticas
+- Funciones de agregación
+- Funciones de cadena
+- Funciones de fecha y hora
+
+Funciones de agregación
+
+- GROUP BY
+- COUNT()
+- SUM()
+- AVG()
+- MIN()
+- MAX()
+- FIRST()
+- LAST()
+- HAVING()
+
+### INSERT (Create)
+
+- INSERT INTO
+  - VALUES
+  - SET
+
+### UPDATE (Update)
+
+- UPDATE
+  - SET
+  - WHERE
+
+### DELETE (Delete)
+
+- DELETE FROM
+  - WHERE
+
+## Advanced SQL
+
+- Subqueries
+- Views
+- Stored Procedures and Functions
+- Triggers
+- Transactions
+- Indexes
+- Full-text search
+- JSON
+
+### Subqueries
+
+Una subquery es una sentencia SELECT que forma parte de otra sentencia SQL, habitualmente en un WHERE
+
+Se pueden incluir en SELECT, INSERT, UPDATE, DELETE, SET
+y DO.
+
+Siempre se indican entre paréntesis
+
+````shell
+  SELECT
+    u.id AS user_id,
+    u.user_alias,
+    u.email,
+    u.first_name,
+    u.surname,
+    u.phone,
+    u.created_at,
+    u.modified_at
+  FROM
+    users AS u
+  WHERE
+    u.id IN (SELECT id FROM user_others WHERE relation_type = 'friend');
+
+```shell
+  SELECT
+    u.id AS user_id,
+    u.user_alias,
+    u.email,
+    u.first_name,
+    u.surname,
+    u.phone,
+    u.created_at,
+    u.modified_at
+  FROM
+    users AS u
+  WHERE
+    u.id IN (SELECT id FROM user_others WHERE relation_type = 'friend');
+````
+
+Papel de las subqueries
+
+- Eliminar JOINS innecesarios
+- Incorporar el resultado de funciones a las condiciones de una sentencia SQL
+- Usado en aplicaciones, eliminar múltiples queries en los bucles
 
 ## SQL y ECMAScript (JavaScript)
 
