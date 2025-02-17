@@ -3,14 +3,17 @@ title: SQL
 ---
 
 - [Introducción](#introducción)
-  - [SQL (1974)](#sql-1974)
+  - [Bases de datos Relacionales (RDB)](#bases-de-datos-relacionales-rdb)
+    - [SQL (1974)](#sql-1974)
     - [Componentes de SQL](#componentes-de-sql)
     - [Estandarización](#estandarización)
     - [Sistemas de gestión de bases de datos relacionales (RDBMS)](#sistemas-de-gestión-de-bases-de-datos-relacionales-rdbms)
-- [Conceptos](#conceptos)
-  - [Bases de datos Relacionales (RDB)](#bases-de-datos-relacionales-rdb)
   - [Base de datos No Relacionales o NoSQL](#base-de-datos-no-relacionales-o-nosql)
-  - [Diseño de bases de datos](#diseño-de-bases-de-datos)
+    - [Historia de las Bases de Datos NoSQL](#historia-de-las-bases-de-datos-nosql)
+    - [Principales Ejemplos de Bases de Datos NoSQL](#principales-ejemplos-de-bases-de-datos-nosql)
+    - [Ventajas de las Bases de Datos NoSQL](#ventajas-de-las-bases-de-datos-nosql)
+    - [Desventajas de las Bases de Datos NoSQL](#desventajas-de-las-bases-de-datos-nosql)
+- [Conceptos básicos de bases de datos relacionales](#conceptos-básicos-de-bases-de-datos-relacionales)
   - [Modelos entidad/relación](#modelos-entidadrelación)
     - [Tipos de atributos](#tipos-de-atributos)
     - [Clave](#clave)
@@ -21,15 +24,19 @@ title: SQL
       - [Primera Forma Normal](#primera-forma-normal)
       - [Segunda Forma Normal](#segunda-forma-normal)
       - [Tercera Forma Normal](#tercera-forma-normal)
+  - [Diseño de bases de datos](#diseño-de-bases-de-datos)
   - [Modelos gráficos E/R](#modelos-gráficos-er)
+    - [Elementos en el modelo Entidad/Relación original](#elementos-en-el-modelo-entidadrelación-original)
+    - [Modelo entidad/relación extendido (ERE)](#modelo-entidadrelación-extendido-ere)
+    - [Modificaciones gráficas del modelo E/R](#modificaciones-gráficas-del-modelo-er)
 - [MySQL](#mysql)
   - [Que es MySQL](#que-es-mysql)
   - [Características de MySQL](#características-de-mysql)
     - [El principal objetivo de MySQL es velocidad y robustez](#el-principal-objetivo-de-mysql-es-velocidad-y-robustez)
     - [Escalabilidad y límites](#escalabilidad-y-límites)
     - [Conectividad](#conectividad)
+    - [Aprendizaje del Lenguaje SQL](#aprendizaje-del-lenguaje-sql)
   - [Instalación](#instalación)
-  - [Aprendizaje del Lenguaje SQL](#aprendizaje-del-lenguaje-sql)
   - [Tipos de tablas en MySQL](#tipos-de-tablas-en-mysql)
     - [Motor MyISAM](#motor-myisam)
     - [Motor InnoDB](#motor-innodb)
@@ -43,21 +50,58 @@ title: SQL
   - [Uso de una DB](#uso-de-una-db)
   - [Descripción de una tabla](#descripción-de-una-tabla)
   - [Creación de tablas](#creación-de-tablas)
-  - [Algunos ejemplos](#algunos-ejemplos)
+    - [Clave primaria o Primary Key](#clave-primaria-o-primary-key)
+    - [Restricciones a los campos](#restricciones-a-los-campos)
+    - [Foreign Key](#foreign-key)
+    - [Restricciones posteriores](#restricciones-posteriores)
+    - [Tablas de relación](#tablas-de-relación)
   - [Borrado de las tablas](#borrado-de-las-tablas)
   - [Indexación](#indexación)
   - [Cambios en tablas ya creadas](#cambios-en-tablas-ya-creadas)
 - [Lenguaje SQL: control de datos (DCL)](#lenguaje-sql-control-de-datos-dcl)
 - [Lenguaje SQL: manipulación de datos (DML)](#lenguaje-sql-manipulación-de-datos-dml)
   - [SELECT (Read)](#select-read)
+    - [JOIN](#join)
+    - [Expresiones de comparación](#expresiones-de-comparación)
+  - [Funciones nativas del lenguaje](#funciones-nativas-del-lenguaje)
+    - [Funciones de agregación](#funciones-de-agregación)
   - [INSERT (Create)](#insert-create)
   - [UPDATE (Update)](#update-update)
   - [DELETE (Delete)](#delete-delete)
 - [Advanced SQL](#advanced-sql)
   - [Subqueries](#subqueries)
+  - [Índices](#índices)
+  - [Views](#views)
+  - [Bloqueos y transactions](#bloqueos-y-transactions)
+    - [Bloqueos en Bases de Datos SQL](#bloqueos-en-bases-de-datos-sql)
+      - [Problemas de Concurrencia](#problemas-de-concurrencia)
+      - [Tipos de Bloqueos](#tipos-de-bloqueos)
+      - [Niveles de Bloqueo](#niveles-de-bloqueo)
+      - [Consideraciones Adicionales](#consideraciones-adicionales)
+    - [Transactions en MySQL](#transactions-en-mysql)
+      - [Propiedades ACID de las Transacciones](#propiedades-acid-de-las-transacciones)
+      - [Gestión de Transacciones en MySQL](#gestión-de-transacciones-en-mysql)
+      - [Niveles de Aislamiento](#niveles-de-aislamiento)
+      - [Ejemplo de Transacción](#ejemplo-de-transacción)
+  - [Procedimientos almacenados (Stored Procedures) y funciones (Functions) en MySQL](#procedimientos-almacenados-stored-procedures-y-funciones-functions-en-mysql)
+    - [Procedimientos Almacenados](#procedimientos-almacenados)
+      - [Características de los Procedimientos Almacenados](#características-de-los-procedimientos-almacenados)
+      - [Sintaxis Básica](#sintaxis-básica)
+      - [Ejemplo de Procedimiento Almacenado](#ejemplo-de-procedimiento-almacenado)
+    - [Funciones](#funciones)
+      - [Características de las Funciones](#características-de-las-funciones)
+      - [Sintaxis Básica de las funciones](#sintaxis-básica-de-las-funciones)
+      - [Ejemplo de Función](#ejemplo-de-función)
+    - [Diferencias entre Procedimientos Almacenados y Funciones](#diferencias-entre-procedimientos-almacenados-y-funciones)
+    - [Ventajas y Desventajas](#ventajas-y-desventajas)
+      - [Ventajas](#ventajas)
+      - [Desventajas](#desventajas)
+  - [Triggers](#triggers)
 - [SQL y ECMAScript (JavaScript)](#sql-y-ecmascript-javascript)
-  - [Driver nativo para Node](#driver-nativo-para-node)
-  - [ORM (Object–relational mapping)](#orm-objectrelational-mapping)
+  - [Opciones en Node.js para utilizar MySQL](#opciones-en-nodejs-para-utilizar-mysql)
+    - [Driver nativo para Node](#driver-nativo-para-node)
+    - [ORM (Object–relational mapping)](#orm-objectrelational-mapping)
+  - [Driver nativo MySQL con Node.js y TypeScript](#driver-nativo-mysql-con-nodejs-y-typescript)
 
 ## Introducción
 
@@ -69,7 +113,24 @@ title: SQL
       - Berkeley: INGRES --> Postgres, Sybase, Informix, NonStop SQL
   - SQL (Structured Query Language).
 
-### SQL (1974)
+### Bases de datos Relacionales (RDB)
+
+- **álgebra y el cálculo relacional** en base al **modelo relacional** de **Edgar Frank Codd** (1970)
+
+Desde el punto de vista más práctico
+
+- la información se organiza **TABLAS**
+- en ellas se distinguen la mínimas unidades significativas llamadas **campos**
+- los campos relativos a una determinada **entidad** se agrupa en sucesivos **registros**.
+- las tablas se relacionan entre si, en función de la información (i.e. los campos) que comparten
+  - las **relaciones** entre datos deben ser representadas explícitamente en esos mismos datos.
+
+Si representamos una tabla como una rejilla, al estilo de las hojas de cálculo
+
+- las filas son los registros
+- las columnas son los campos
+
+#### SQL (1974)
 
 - **lenguaje específico de dominio**, a veces se describe como un **lenguaje declarativo**
 - diseñado para administrar, y recuperar información de **sistemas de gestión de bases de datos relacionales** (RDBMS)
@@ -117,28 +178,13 @@ Públicos (Wikipedia)
 **HSQLDB** - Hsqldb.Org (2001) Licencia BSD
 **SmallSQL** - SmallSQL (abril de 2005) LGPL
 
-## Conceptos
-
-### Bases de datos Relacionales (RDB)
-
-- **álgebra y el cálculo relacional** en base al **modelo relacional** de **Edgar Frank Codd** (1970)
-
-Desde el punto de vista más práctico
-
-- la información se organiza **TABLAS**
-- en ellas se distinguen la mínimas unidades significativas llamadas **campos**
-- los campos relativos a una determinada **entidad** se agrupa en sucesivos **registros**.
-- las tablas se relacionan entre si, en función de la información (i.e. los campos) que comparten
-  - las **relaciones** entre datos deben ser representadas explícitamente en esos mismos datos.
-
-Si representamos una tabla como una rejilla, al estilo de las hojas de cálculo
-
-- las filas son los registros
-- las columnas son los campos
-
 ### Base de datos No Relacionales o NoSQL
 
-Es el caso de las **bases de datos documentales (DDB)** como **MongoDB**
+La alternativa a las relacionales son las bases de datos no relacionales, también conocidas como bases de datos NoSQL (Not Only SQL), especialmente las **bases de datos documentales (DDB)** como **MongoDB**.
+
+Son sistemas de gestión de bases de datos diseñados para manejar grandes volúmenes de datos no estructurados o semiestructurados. A diferencia de las bases de datos relacionales, que utilizan tablas y relaciones para organizar los datos, las bases de datos NoSQL utilizan diversos modelos de datos para almacenar y gestionar información.
+
+Es el caso de **MongoDB**.
 
 - la información se organiza **COLECCIONES**
 - las colecciones están formadas por una serie de **documentos**
@@ -147,45 +193,76 @@ Es el caso de las **bases de datos documentales (DDB)** como **MongoDB**
   - aunque en realidad es muy común que compartan una misma estructura
 - los documentes pueden establecer relaciones con documentos de otras colecciones
 
-### Diseño de bases de datos
+#### Historia de las Bases de Datos NoSQL
 
-Durante el desarrollo de un sistema de información, se han de modelar tanto los datos empleados por el sistema como los procesos que realizan tareas sobre esos datos
+El término "NoSQL" fue acuñado por Carlo Strozzi en 1998 para referirse a su base de datos ligera y open-source que no utilizaba SQL. Sin embargo, el concepto moderno de NoSQL surgió a finales de la década de 2000, impulsado por la necesidad de manejar grandes volúmenes de datos generados por aplicaciones web y servicios en línea. Empresas como Google, Amazon y Facebook necesitaban soluciones escalables y flexibles que las bases de datos relacionales tradicionales no podían proporcionar de manera eficiente.
 
-- Modelado de datos
-  - Representación gráfica del modelo de datos
-    - Modelos entidad/relación
-      - Diagramas E/R (clásico)
-      - Diagramas UML (Lenguaje Unificado de Modelado)
-      - Diagramas CASE\*Method
-      - Diagramas ORM (Object-Role Modeling)
-      - Diagramas IDEF1X
-  - Diccionario de datos
-- Modelado de procesos
-  - Diagramas de flujo de datos
-  - Diagramas de estados (autómatas finitos)
-  - Casos de uso
+En 2009, Johan Oskarsson organizó un evento llamado "NoSQL Meetup" en San Francisco, lo que ayudó a popularizar el término y a consolidar la comunidad alrededor de estas nuevas tecnologías. Desde entonces, las bases de datos NoSQL han ganado popularidad y se han convertido en una opción viable para muchas aplicaciones modernas.
+
+#### Principales Ejemplos de Bases de Datos NoSQL
+
+1. **MongoDB**: Base de datos orientada a documentos.
+   Almacena datos en documentos JSON-like llamados BSON (Binary JSON). Es conocida por su flexibilidad y escalabilidad.
+   Uso: Aplicaciones web, gestión de contenidos, análisis en tiempo real.
+
+2. #**Cassandra**: Base de datos de columnas amplias.
+   Diseñada para manejar grandes volúmenes de datos distribuidos en múltiples nodos sin un único punto de fallo.
+   Uso: Aplicaciones que requieren alta disponibilidad y escalabilidad, como sistemas de mensajería y análisis de big data.
+
+3. **Redis**: Base de datos en memoria de tipo clave-valor.
+   Almacena datos en estructuras de datos simples como cadenas, listas y conjuntos. Es extremadamente rápida debido a su almacenamiento en memoria.
+   Uso: Caching, sesiones de usuario, colas de mensajes.
+
+4. **Neo4j**: Base de datos orientada a grafos.
+   Almacena datos en nodos y relaciones, lo que permite consultas eficientes sobre relaciones complejas.
+   Uso: Redes sociales, recomendaciones, análisis de fraude.
+
+5. **Couchbase**: Base de datos orientada a documentos y clave-valor.
+   Combina características de bases de datos de documentos y clave-valor, con capacidades de sincronización y almacenamiento en memoria.
+   Uso: Aplicaciones móviles, comercio electrónico, aplicaciones en tiempo real.
+
+6. **DynamoDB** Base de datos clave-valor y de documentos.
+   Servicio de base de datos NoSQL gestionado por Amazon Web Services (AWS), conocido por su escalabilidad automática y bajo mantenimiento.
+   Uso: Aplicaciones web, IoT, análisis en tiempo real.
+
+#### Ventajas de las Bases de Datos NoSQL
+
+- **Escalabilidad**: Diseñadas para escalar horizontalmente, añadiendo más nodos a medida que crece la carga de trabajo.
+- **Flexibilidad**: Permiten almacenar datos no estructurados o semi-estructurados sin necesidad de un esquema fijo.
+- **Rendimiento**: Optimizadas para operaciones de lectura y escritura rápidas, especialmente en entornos distribuidos.
+- **Disponibilidad**: Muchas bases de datos NoSQL están diseñadas para ofrecer alta disponibilidad y tolerancia a fallos.
+
+#### Desventajas de las Bases de Datos NoSQL
+
+- **Consistencia**: Algunas bases de datos NoSQL sacrifican la consistencia en favor de la disponibilidad y la tolerancia a particiones, siguiendo el teorema CAP.
+- **Complejidad**: La gestión y el mantenimiento de sistemas distribuidos pueden ser complejos.
+- **Madurez**: Aunque han evolucionado rápidamente, algunas bases de datos NoSQL no tienen la misma madurez y soporte que las bases de datos relacionales.
+
+En resumen, las bases de datos NoSQL ofrecen una alternativa poderosa y flexible a las bases de datos relacionales tradicionales, especialmente en entornos que requieren manejar grandes volúmenes de datos no estructurados y necesitan escalabilidad y rendimiento.
+
+## Conceptos básicos de bases de datos relacionales
 
 ### Modelos entidad/relación
 
-- Entidades: Conceptos de interés: objetos, reales o abstractos, distinguibles de otros objetos.
+- **Entidades**: Conceptos de interés: objetos, reales o abstractos, distinguibles de otros objetos.
   - Los grupos de entidades con cualidades similares acerca de los cuales se almacena información se denominan tipos
-- Atributos: Características de las entidades: propiedades asociadas a un conjunto de entidades.
+- **Atributos**: Características de las entidades: propiedades asociadas a un conjunto de entidades.
   - Para cada atributo (representación de las propiedades de los objetos ), existe un conjunto de valores permitidos llamado dominio.
-- Relaciones: Conexiones o asociaciones: conexiones semánticas entre conjuntos de entidades.
+- **Relaciones**: Conexiones o asociaciones: conexiones semánticas entre conjuntos de entidades.
 
 #### Tipos de atributos
 
-- Atributos compuestos vs. Atributos simples (atómicos)
+- **Atributos compuestos** vs. **Atributos simples** (atómicos)
 
   - Los atributos compuestos se pueden dividir en componentes más pequeños con significado propio
   - e.g. dirección = calle + municipio + CP + provincia
 
-- Atributos mono-valuados vs. Atributos multi-valuados
+- Atributos mono-valuados vs. **Atributos multi-valuados**
 
   - Un atributo mono-valuado tiene un único valor para una entidad particular
   - e.g. el atributo hijos, será multi-valuado en numerosas entidades “persona”
 
-- Atributos almacenados vs. Atributos derivados
+- Atributos almacenados vs. **Atributos derivados**
 
   - en la base de dato almacenamos los atributos de partida (atributo almacenado), no los resultados que se derivan a partir de ellos (atributo derivado)
   - e.g. la edad de una persona [atributo derivado] se puede calcular (derivar) de su fecha de nacimiento [atributo almacenado]
@@ -204,14 +281,14 @@ Del escritor: (nombre, apellidos, fecha de nacimiento)
 
 En la practica, es habitual generar un atributo para que actúe como clave primaria
 
-- los RDBMS pueden generarlos de forma **auto-incremental** con tipo numérico
+- los R-DBMS pueden generarlos de forma **auto-incremental** con tipo numérico
 - se puede usar el estándar **UUID** (Universal Unique Identifier, Identificador único universal), un valor de 128 bits que se utiliza para identificar de forma única un objeto o entidad, frecuentemente usado en Internet . Dependiendo de los mecanismos específicos utilizados, se garantiza que un UUID será diferente o, al menos, es muy probable que sea diferente de cualquier otro UUID generado hasta el año 3400 d.C.
 
 #### Características de las relaciones
 
-Grado: Número de tipos de entidades que participan en la conexión, haciéndola binaria, terciaria…
+**Grado**: Número de tipos de entidades que participan en la conexión, haciéndola binaria, terciaria…
 
-Cardinalidad: Numero de elementos de un tipo que se conectan con un elemento de otro (restricción que se observa en el dominio del problema y que controla las ocurrencias de las relaciones).
+**Cardinalidad**: Numero de elementos de un tipo que se conectan con un elemento de otro (restricción que se observa en el dominio del problema y que controla las ocurrencias de las relaciones).
 
 - En el caso de las relaciones binarias (grado 2):
 
@@ -223,6 +300,10 @@ Cardinalidad: Numero de elementos de un tipo que se conectan con un elemento de 
       - cada nota tiene 1 autor
       - Relación Autor 1 ---- n Nota
   - Relaciones muchos a muchos (n:m) Es una conflictiva combinación de varias de las anteriores, por lo que suele romperse en la serie de relaciones 1:n que la componen
+
+**Modalidad**: Indica si la participación en una relación es obligatoria o opcional, es decir si la cardinalidad mínima es 0 o 1.
+
+Por ejemplo, un "Cliente" puede no haber realizado ninguna "Compra" (participación opcional).
 
 #### Clave y relaciones
 
@@ -345,7 +426,95 @@ Si la información de la universidad se almacena en la tabla de candidatos, no h
 
 La mejor opción es crear una tabla separada de Universidades y vincularlo a la tabla candidatos con una llave de código de la universidad.
 
+### Diseño de bases de datos
+
+Durante el desarrollo de un sistema de información, se han de modelar tanto los datos empleados por el sistema como los procesos que realizan tareas sobre esos datos
+
+- Modelado de datos
+  - Representación gráfica del modelo de datos
+    - Modelos entidad/relación
+      - Diagramas E/R (clásico)
+      - Diagramas UML (Lenguaje Unificado de Modelado)
+      - Diagramas CASE\*Method
+      - Diagramas ORM (Object-Role Modeling)
+      - Diagramas IDEF1X
+  - Diccionario de datos
+- Modelado de procesos
+  - Diagramas de flujo de datos
+  - Diagramas de estados (autómatas finitos)
+  - Casos de uso
+
 ### Modelos gráficos E/R
+
+Los diagramas entidad-relación (ER) son herramientas visuales utilizadas en el diseño y desarrollo de bases de datos. Estos diagramas ayudan a representar la estructura de los datos y las relaciones entre diferentes entidades en un sistema de información. Los diagramas ER se basan en el modelo entidad-relación, que describe cómo los datos se organizan y se relacionan en una base de datos relacional. Se realizán a partir de los plannteamientos presentados por Peter P. Chen en sus artículos de 1976 y 1977.
+
+Originalmente se trataba de **diagramas ER Lógicos**, que no incluye detalles de la implementación real en un sistema de gestión de bases de datos (DBMS). Ni siquiera pueden considerarse exclusivos de las bases de datos relacionales, ya que el concepto de relación en este esquema tiene poco que ver con la idea de relación expuesta por Codd en su modelo relacional. Por tanto los modelos ER se pueden aplicar a otros tipos de bases de datos, como las bases de datos orientadas a objetos o incluso las bases de datos no relacionales.
+
+Posteriormente otros autores han añadido mejoras a este modelo dando lugar a toda una serie de modelos basados en el modelo Entidad/Relación original. La más aceptada actualmente es el **modelo entidad/relación extendido (ERE)** que complementa algunas carencias del modelo original. No obstante las diversas variantes del modelo hacen que los esquemas que dibujan los profesionales no sigan un verdadero estándar y sean dispares, aunque hay ideas muy comunes a todos los “dialectos” del modelo entidad/relación.
+
+A partir de los diagramas ER lógicos, se pueden derivar **diagramas ER Físicos** que incluyen detalles específicos de la implementación, como los tipos de datos, las restricciones de integridad y las claves primarias y foráneas. Muy próximos a estos estarían los **diagramas de esquema de base de datos**, que muestran la estructura física de la base de datos, incluyendo tablas, columnas, índices y relaciones. Estos diagramas son útiles para la implementación real de la base de datos en un DBMS.
+
+Podemos encontrar herramientas de software que permiten la creación de diagramas ER, como **Microsoft Visio**, **Lucidchart**, **Draw.io**, **MySQL Workbench**, **Oracle SQL Developer**, **ER/Studio**, **Toad Data Modeler**, **DbSchema**, **Dia**, **PowerDesigner**, **ERwin Data Modeler**, **DeZign for Databases**, **DbVisualizer**, **Navicat Data Modeler**, **SQL Power Architect**, **SAP PowerDesigner**, **ER/Studio Data Architect**, **DbVisualizer**, **DbWrench**
+
+Paro obtener más información sobre el modelado de bases de datos, se pueden consultar las siguientes referencias
+
+- **Database Design for Mere Mortals** de Michael J. Hernandez
+- **Beginning Database Design: From Novice to Professional** de Clare Churcher
+- **Database Design and Relational Theory: Normal Forms and All That Jazz** de C.J. Date
+
+En cuanto a los detalles técnicos de los diagramas ER, se pueden consultar los siguientes enlaces
+
+- <https://jorgesanchez.net/manuales/gbd/entidad-relacion.html>
+- <https://www.ilerna.es/blog/modelo-entidad-relacion-base-datos>
+
+#### Elementos en el modelo Entidad/Relación original
+
+Los diagramas ER constan de varios elementos clave:
+
+1. **Entidades**: Representan objetos o conceptos del mundo real que tienen una existencia independiente y sobre los cuales se desea almacenar información. Por ejemplo, en un sistema de gestión de una biblioteca, las entidades podrían ser "Libro", "Autor", "Usuario", etc. Se representan con un rectángulo con el nombre de la entidad en su interior.
+
+2. **Atributos**: Son las propiedades o características de una entidad. Por ejemplo, una entidad "Libro" podría tener atributos como "Título", "ISBN", "Año de publicación", etc. Los atributos pueden ser de diferentes tipos:
+
+   - **Atributos simples**: No pueden dividirse en componentes más pequeños. Se representan con un óvalo unido a la entidad por una línea.
+   - **Atributos compuestos**: Pueden dividirse en componentes más pequeños. Se representan con un óvalo unido al atributo agrupador por una línea.
+   - **Atributos derivados**: Se calculan a partir de otros atributos. Se representan con un óvalo punteado unido a la entidad o al atributo del que se derivan por una línea.
+   - **Atributos clave**: Identifican de manera única a una entidad. Se representan subrayados.
+
+3. **Relaciones**: Representan las asociaciones entre entidades. Por ejemplo, una relación podría ser "Escribe", que asocia a un "Autor" con un "Libro". Las relaciones pueden tener atributos propios. Se representan con un rombo unido a las entidades que se relacionan por líneas.
+
+4. **Cardinalidad**: Indica el número de instancias de una entidad que pueden estar asociadas con instancias de otra entidad. Por ejemplo, en una relación "Escribe" entre "Autor" y "Libro", la cardinalidad podría ser "uno a muchos" si un autor puede escribir muchos libros, pero cada libro es escrito por un solo autor. Se representa con un número o un rango de números en los extremos de la línea de relación.
+
+5. **Tipos de relaciones**: La inclusión de las relaciones junto con su cardinalidad permite representar los tres tipos de relaciones ya mencionados:
+
+   - **Uno a uno (1:1)**: Una instancia de una entidad se relaciona con una instancia de otra entidad.
+   - **Uno a muchos (1:N)**: Una instancia de una entidad se relaciona con muchas instancias de otra entidad.
+   - **Muchos a muchos (M:N)**: Muchas instancias de una entidad se relacionan con muchas instancias de otra entidad.
+
+Los diagramas ER son útiles en la fase de diseño conceptual de una base de datos, ya que permiten visualizar y entender la estructura de los datos antes de implementarla en un sistema de gestión de bases de datos (DBMS).
+
+#### Modelo entidad/relación extendido (ERE)
+
+Se incluye la distinción entre dos tipos de entidades diferentes:
+
+- Entidad fuerte: Tiene una existencia independiente y no depende de otras entidades. Por ejemplo, "Cliente" en un sistema de ventas.
+- **Entidad débil**: Depende de otra entidad para su existencia. Por ejemplo, "Dirección" podría ser una entidad débil que depende de "Cliente".
+
+Las entidades débiles se representan con un doble rectángulo conectado por una línea con la entidad de la que dependen, mientras que las entidades fuertes se siguen representando con un rectángulo simple.
+
+**Generalización y especialización**: son dos procesos que permiten dar lugar a jerarquías de entidades.
+
+- La generalización agrupa entidades con características comunes en una entidad más general. Por ejemplo, "Vehículo" podría ser una generalización de "Coche" y "Motocicleta".
+- la especialización divide una entidad en subtipos más específicos. Por ejemplo, "Empleado" podría especializarse en "Gerente" y "Técnico".
+
+Herencia: En la especialización, las entidades hijas heredan los atributos y relaciones de la entidad padre. Por ejemplo, "Gerente" y "Técnico" heredarían atributos comunes de "Empleado".
+
+Representar jerarquías de entidades en un diagrama ER extendido, se utilizan líneas de generalización y especialización para conectar las entidades padre e hijas, muy similares a las que se emplean para representar la herencia en los diagramas de clases de UML.
+
+#### Modificaciones gráficas del modelo E/R
+
+Existen diversas formas de incluir los datos de cardinalidad en los diagramas E/R, aunque la más común es la notación de Chen, que incluye los datos de cardinalidad en los extremos de las líneas de relación.
+
+Una variante de esta notación es la notación de Crow's Foot, que utiliza símbolos en forma de "pata de cuervo" para representar la cardinalidad y la participación en las relaciones.
 
 ## MySQL
 
@@ -424,6 +593,10 @@ Seguridad
 - Sistema de contraseñas y privilegios muy flexible y segura (se encriptan cuando se conectan a un servidor).
 - Todas la palabras de paso viajan encriptadas en la red
 
+#### Aprendizaje del Lenguaje SQL
+
+[sqlBolt](https://sqlbolt.com/)
+
 ### Instalación
 
 [mysql/downloads/](https://www.mysql.com/downloads/)
@@ -444,10 +617,6 @@ Seguridad
   - puerto: 3306 (default)
   - cuenta root: password
   - añadir otra cuenta: All Hosts / Role: User Admin
-
-### Aprendizaje del Lenguaje SQL
-
-[sqlBolt](https://sqlbolt.com/)
 
 ### Tipos de tablas en MySQL
 
@@ -764,26 +933,45 @@ CREATE TABLE **IF NOT EXISTS** tableName ...
 - si la tabla existe se anula el proceso de intentar crearla y no se produce ningún error
 - Como consecuencia el mensaje devuelto es “Query OK”, tanto si se crea la tabla como si ya existía
 
-**CLAVE PRIMARIA (PRIMARY KEY)** es un campo o campos en una tabla que identifican unívocamente a cada registro. Este atributo es usado para definir el nombre del campo para crear una clave primaria.
+#### Clave primaria o Primary Key
+
+**CLAVE PRIMARIA (PRIMARY KEY)** es un campo o campos en una tabla que identifican unívocamente a cada registro. Este atributo es usado para definir el nombre del campo para crear una clave primaria
 
 Puede indicarse al final del comando para crear la tabla o, si es única, al definir el campo
 
+```sql
 CREATE TABLE tableName
 (
-fieldName1 dataType(size) [NULL | NOT NULL],
-fieldName2 dataType(size) [NULL | NOT NULL]
-PRIMARY KEY (fieldName_1, fieldName_2,…)
+  fieldName1 dataType(size) [NULL | NOT NULL],
+  fieldName2 dataType(size) [NULL | NOT NULL]
+  PRIMARY KEY (fieldName_1, fieldName_2,…)
 );
 
 CREATE TABLE tableName
 (
-fieldName1 dataType(size) INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-fieldName2 dataType(size) [NULL | NOT NULL]
+  fieldName1 dataType(size) INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  fieldName2 dataType(size) [NULL | NOT NULL]
 );
+```
 
-### Algunos ejemplos
+Los formatos de las claves primarias pueden ser
 
-Tablas users
+- `INT UNSIGNED AUTO_INCREMENT PRIMARY KEY`
+- `BINARY(16) DEFAULT (UUID_TO_BIN(UUID()))`
+- `VARCHAR(36) DEFAULT (UUID())`
+
+En los dos últimos casos, se está creando un campo que almacena un UUID (Universal Unique Identifier) en formato binario o en formato texto
+
+#### Restricciones a los campos
+
+Entre las restricciones que podemos añadir a un campo,
+
+- `NOT NULL` para que el campo no pueda quedar vacío
+- `UNIQUE` para que el campo no pueda tener valores repetidos
+- `DEFAULT` para que el campo tenga un valor por defecto
+- `AUTO_INCREMENT` para que el campo se incremente automáticamente
+
+Por ejemplo, tablas users
 id, user_alias, email, first_name, surname, phone, created_at, modified_at
 
 ```shell
@@ -805,11 +993,28 @@ Alternativamente, para el user_Id
   id BINARY(16) DEFAULT (UUID_TO_BIN(UUID()))
 ```
 
-Relación con tabla de notas:
+#### Foreign Key
+
+Relación 1:N con tabla de notas:
 
 id, title, is_important, content, autor, created_at
 
-Una tabla releja las relaciones de unos usuarios con otros, como amigos o enemigos
+```shell
+  CREATE TABLE notes (
+    id BINARY(16) DEFAULT (UUID_TO_BIN(UUID()))
+    title VARCHAR(255) NOT NULL,
+    is_important BOOLEAN DEFAULT FALSE,
+    content TEXT,
+    author BINARY(16) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT (NOW())
+    PRIMARY KEY (id)
+    FOREIGN KEY (author) REFERENCES users(id)
+  )
+```
+
+En otro ejemplo vemos una relación N:N, de una tabla consigo misma
+
+Por ejemplo, una tabla releja las relaciones de unos usuarios con otros, como amigos o enemigos
 
 ```shell
   CREATE TABLE user_others (
@@ -822,7 +1027,11 @@ Una tabla releja las relaciones de unos usuarios con otros, como amigos o enemig
   )
 ```
 
+#### Restricciones posteriores
+
 A posteriori, podemos decidir que un usuario no puede tener una relación consigo mismo, y para evitar que la tabla pueda reflejar esa situación, le añadimos una **CONSTRAIN**
+
+Por ejemplo, en el caso anterior, podemos evitar que un usuario tenga una relación de amigo o enemigo consigo mismo
 
 ```shell
   ALTER TABLE user_others
@@ -830,7 +1039,29 @@ A posteriori, podemos decidir que un usuario no puede tener una relación consig
   CHECK (first_user_id != second_user_id);
 ```
 
-Un ejemplo más habitual, con relación n:m entre dos tablas
+Un ejemplo similar sería una tabla de seguidores
+
+```shell
+  CREATE TABLE followers (
+    follower_id INT NOT NULL
+    followed_id INT NOT NULL
+    FOREIGN KEY(follower_id) REFERENCES users(user_id)
+    FOREIGN KEY(followed_id) REFERENCES users(user_id)
+    PRIMARY KEY (follower_id, followed_id)
+  )
+```
+
+COn su restricción
+
+```shell
+  ALTER TABLE followers
+  ADD CONSTRAIN check_follower_id
+  CHECK (follower_id != followed_id);
+```
+
+#### Tablas de relación
+
+Un ejemplo más habitual, con relación n:m entre dos tablas, movies y genres, creando una tabla de relación entre ambas movies_genres
 
 ```shell
 
@@ -849,7 +1080,7 @@ CREATE TABLE genres {
   name VARCHAR(255) NOT NULL UNIQUE
 }
 
-create TABLE movie_genere {
+create TABLE movies_generes {
   movie_id BINARY(16)
   genere_id INT
   FOREIGN KEY(movie_id) REFERENCES movies(id)
@@ -1044,6 +1275,8 @@ Ejemplo
   OFFSET 5;
 ```
 
+#### JOIN
+
 JOIN: FROM t1 JOIN t2 ON t1.key = t2.key
 
 - INNER JOIN
@@ -1058,7 +1291,67 @@ JOIN: FROM t1 JOIN t2 ON t1.key = t2.key
 - SELF JOIN: se utiliza para unir una tabla consigo misma, como si en realidad fueran dos tablas.
 - CARTESIAN JOIN: devuelve el producto cartesiano de un conlunto de registros de dos o mas tablas unidas
 
-Expresiones de comparación
+```shell
+  SELECT
+    u.id AS user_id,
+    u.user_alias,
+    u.email,
+    u.first_name,
+    u.surname,
+    u.phone,
+    u.created_at,
+    u.modified_at
+  FROM
+    users AS u
+  INNER JOIN
+    user_others AS uo
+  ON
+    u.id = uo.first_user_id
+  WHERE
+    uo.relation_type = 'friend';
+```
+
+En MySQL no existe como tal el FULL JOIN pero se consigue con la unión de un LEFT y un RIGHT JOIN
+
+```shell
+  SELECT
+    u.id AS user_id,
+    u.user_alias,
+    u.email,
+    u.first_name,
+    u.surname,
+    u.phone,
+    u.created_at,
+    u.modified_at
+  FROM
+    users AS u
+  LEFT JOIN
+    user_others AS uo
+  ON
+    u.id = uo.first_user_id
+  WHERE
+    uo.relation_type = 'friend'
+  UNION
+  SELECT
+    u.id AS user_id,
+    u.user_alias,
+    u.email,
+    u.first_name,
+    u.surname,
+    u.phone,
+    u.created_at,
+    u.modified_at
+  FROM
+    users AS u
+  RIGHT JOIN
+    user_others AS uo
+  ON
+    u.id = uo.first_user_id
+  WHERE
+    uo.relation_type = 'friend';
+```
+
+#### Expresiones de comparación
 
 - =, <>, !=, >, <, >=, <=
 - BETWEEN .. AND
@@ -1093,14 +1386,14 @@ Expresiones de comparación
   OFFSET 5;
 ```
 
-Funciones nativas del lenguaje
+### Funciones nativas del lenguaje
 
 - Funciones matemáticas
 - Funciones de agregación
 - Funciones de cadena
 - Funciones de fecha y hora
 
-Funciones de agregación
+#### Funciones de agregación
 
 - GROUP BY
 - COUNT()
@@ -1186,9 +1479,388 @@ Papel de las subqueries
 - Incorporar el resultado de funciones a las condiciones de una sentencia SQL
 - Usado en aplicaciones, eliminar múltiples queries en los bucles
 
+### Índices
+
+Un índice es una estructura de datos que mejora la velocidad de las operaciones de búsqueda en una tabla de una base de datos.
+
+- **Índices simples**: se crean en una sola columna
+- **Índices compuestos**: se crean en varias columnas
+- **Índices únicos**: no permiten duplicados
+
+Para la PK y la FK se crean índices automáticamente
+
+Desventajas
+
+- Ocupan espacio en disco
+- Ralentizan las operaciones de escritura
+- Manteniendo más complejo al tener en cuenta de los índices
+
+### Views
+
+Una vista es una tabla virtual basada en el resultado de una consulta SQL.
+
+- **Vistas simples**: se crean a partir de una sola tabla
+- **Vistas complejas**: se crean a partir de varias tablas
+- **Vistas actualizables**: se pueden modificar
+- **Vistas no actualizables**: no se pueden modificar
+
+Por ejemplo, para crear una vista de la tabla de usuarios
+
+```shell
+  CREATE VIEW user_view AS
+  SELECT
+    u.id AS user_id,
+    u.user_alias,
+    u.email,
+    u.first_name,
+    u.surname,
+    u.phone,
+    u.created_at,
+    u.modified_at
+  FROM
+    users AS u;
+```
+
+Se utilizan como si fueran tables
+
+```shell
+  SELECT * FROM user_view;
+```
+
+Ventajas
+
+- Simplifican las consultas
+- Mejoran la seguridad
+- Simplifican la gestión de permisos
+- Simplifican la gestión de cambios en la estructura de la base de datos
+
+Desventajas
+
+- Rendimiento (en realidad se ejecuta una consulta)
+- Complejidad y dificultad de mantenimiento
+
+### Bloqueos y transactions
+
+#### Bloqueos en Bases de Datos SQL
+
+Los bloqueos son mecanismos esenciales utilizados por los sistemas de gestión de bases de datos (DBMS) para controlar el acceso a los datos, especialmente en entornos con accesos concurrentes. Los bloqueos ayudan a mantener la integridad y consistencia de los datos al gestionar cómo y cuándo los usuarios pueden leer o modificar la información.
+
+En el caso de la escritura, se pueden producir problemas de concurrencia si dos o más usuarios intentan modificar los mismos datos al mismo tiempo. Para evitar estos problemas, se utilizan los bloqueos, que la base de datos realiza de forma automática.
+
+En el caso de la lectura, no existe problema de concurrencia, pero si de consistencia. Si un usuario está leyendo un dato que otro usuario está modificando, el primero puede obtener un valor incorrecto. Para evitar este problema, se utilizan los bloqueos de lectura.
+
+##### Problemas de Concurrencia
+
+En un entorno concurrente, donde múltiples usuarios o procesos acceden a la base de datos simultáneamente, pueden surgir varios problemas:
+
+1. **Lecturas sucias**: Un usuario lee datos que están siendo modificados por otro usuario, obteniendo así valores incorrectos o incompletos.
+2. **Lecturas no repetibles**: Un usuario lee el mismo dato dos veces y obtiene diferentes valores porque otro usuario lo ha modificado entre las lecturas.
+3. **Lecturas fantasma**: Un usuario realiza una consulta y obtiene un conjunto de resultados, pero si repite la consulta, obtiene un conjunto diferente debido a inserciones o eliminaciones realizadas por otros usuarios.
+
+##### Tipos de Bloqueos
+
+Para abordar estos problemas, los DBMS utilizan diferentes tipos de bloqueos. A continuación, se describen los más comunes:
+
+1. **Bloqueo de Lectura (Shared Lock)**: Permite a múltiples usuarios leer los mismos datos simultáneamente, pero impide que cualquier usuario modifique los datos mientras están siendo leídos. Se utiliza para evitar lecturas sucias. Mientras un usuario tiene un bloqueo de lectura, otros usuarios pueden obtener bloqueos de lectura, pero no bloqueos de escritura.
+
+2. **Bloqueo de Escritura (Exclusive Lock)**: Impide que otros usuarios lean o modifiquen los datos mientras se están escribiendo. Se utiliza para asegurar que solo un usuario puede modificar los datos en un momento dado, evitando así conflictos de escritura.
+
+3. **Bloqueo de Actualización (Update Lock)**: Se utiliza cuando un usuario tiene la intención de modificar los datos, pero aún no ha realizado la modificación. Permite a otros usuarios leer los datos, pero impide que otros usuarios obtengan bloqueos de escritura. Es una forma de preparar el camino para un bloqueo de escritura.
+
+4. **Bloqueo de Exclusión (Exclusion Lock)** Similar al bloqueo de escritura, pero se utiliza en contextos específicos donde se necesita un control más estricto sobre el acceso a los datos. Puede ser utilizado en operaciones críticas donde es esencial que ningún otro usuario pueda acceder a los datos, ni siquiera para lectura.
+
+##### Niveles de Bloqueo
+
+Los bloqueos pueden aplicarse a diferentes niveles de granularidad:
+
+1. **Bloqueo de Fila (Row-Level Locking)**: Aplica el bloqueo a nivel de fila individual.
+
+   - **Ventajas**: Permite un alto nivel de concurrencia, ya que solo las filas afectadas están bloqueadas.
+   - **Desventajas**: Puede requerir más recursos del sistema para gestionar los bloqueos.
+
+2. **Bloqueo de Página (Page-Level Locking)**: Aplica el bloqueo a nivel de página de datos, que puede contener múltiples filas.
+
+   - **Ventajas**: Menos recursos del sistema en comparación con el bloqueo de fila.
+   - **Desventajas**: Menor concurrencia, ya que más datos están bloqueados.
+
+3. **Bloqueo de Tabla (Table-Level Locking)**: Aplica el bloqueo a nivel de tabla completa.
+
+   - **Ventajas**: Fácil de implementar y gestionar.
+   - **Desventajas**: Baja concurrencia, ya que toda la tabla está bloqueada.
+
+##### Consideraciones Adicionales
+
+- **Deadlocks (Interbloqueos)**: Situaciones donde dos o más transacciones están esperando indefinidamente por recursos que están siendo utilizados por las otras. Los DBMS suelen tener mecanismos para detectar y resolver deadlocks.
+- **Timeouts**: Los bloqueos suelen tener tiempos de espera (timeouts) para evitar que las transacciones queden bloqueadas indefinidamente.
+- **Aislamiento de Transacciones**: Los niveles de aislamiento de transacciones (como "Read Uncommitted", "Read Committed", "Repeatable Read", y "Serializable") determinan cómo se manejan los bloqueos y la visibilidad de los datos entre transacciones concurrentes.
+
+En resumen, los bloqueos son fundamentales para garantizar la integridad y consistencia de los datos en entornos concurrentes. Aunque no todos los motores de bases de datos soportan todos los tipos de bloqueos, la mayoría ofrece mecanismos para gestionar el acceso concurrente de manera eficiente.
+
+#### Transactions en MySQL
+
+Las transacciones en MySQL son una secuencia de operaciones realizadas como una sola unidad lógica de trabajo. Una transacción puede incluir una o más consultas SQL que modifican los datos en la base de datos. Las transacciones son fundamentales para garantizar la integridad y consistencia de los datos, especialmente en entornos concurrentes donde múltiples usuarios o procesos acceden a la base de datos simultáneamente. Al seguir las propiedades ACID y utilizar los comandos adecuados para gestionar transacciones, se puede asegurar que las operaciones críticas se realicen de manera segura y eficiente.
+
+##### Propiedades ACID de las Transacciones
+
+Las transacciones en MySQL siguen las propiedades ACID, que son:
+
+1. **Atomicidad**: Asegura que todas las operaciones dentro de una transacción se completen con éxito. Si alguna operación falla, toda la transacción se deshace, y la base de datos vuelve a su estado anterior.
+2. **Consistencia**: Garantiza que una transacción lleva a la base de datos de un estado válido a otro estado válido, manteniendo todas las reglas y restricciones definidas.
+3. **Aislamiento**: Asegura que las operaciones dentro de una transacción no interfieran con otras transacciones concurrentes. Esto se logra mediante diferentes niveles de aislamiento.
+4. **Durabilidad**: Una vez que una transacción se ha confirmado (committed), los cambios son permanentes y no se perderán, incluso en caso de fallos del sistema.
+
+##### Gestión de Transacciones en MySQL
+
+MySQL soporta transacciones a través de los motores de almacenamiento InnoDB y NDB. Aquí se describen los comandos básicos para gestionar transacciones:
+
+1. **Iniciar una Transacción**:
+
+   - `BEGIN;`: Inicia una nueva transacción.
+   - `START TRANSACTION;` es la versión antiguamente utilizada, exclusiva de MySQL.
+
+   ```sql
+   BEGIN;
+   ```
+
+1. **Confirmar una Transacción**:
+
+   - `COMMIT;`: Confirma la transacción, haciendo permanentes todos los cambios realizados durante la transacción.
+
+   ```sql
+   COMMIT;
+   ```
+
+1. **Deshacer una Transacción**:
+
+   - `ROLLBACK;`: Deshace todos los cambios realizados durante la transacción, devolviendo la base de datos a su estado anterior.
+
+   ```sql
+   ROLLBACK;
+   ```
+
+1. **Puntos de Salvaguarda**:
+
+   - `SAVEPOINT nombre_savepoint;`: Establece un punto de salvaguarda dentro de una transacción.
+   - `ROLLBACK TO nombre_savepoint;`: Deshace los cambios realizados desde el punto de salvaguarda especificado.
+
+   ```sql
+   SAVEPOINT punto1;
+   -- Realizar algunas operaciones
+   ROLLBACK TO punto1;
+   ```
+
+##### Niveles de Aislamiento
+
+MySQL ofrece diferentes niveles de aislamiento para controlar cómo las transacciones interactúan entre sí:
+
+1. **READ UNCOMMITTED**: Permite leer datos no confirmados de otras transacciones. Puede causar lecturas sucias.
+2. **READ COMMITTED**: Solo permite leer datos que han sido confirmados. Evita lecturas sucias pero no lecturas no repetibles.
+3. **REPEATABLE READ**: Asegura que si se lee el mismo dato dos veces dentro de la misma transacción, se obtendrá el mismo valor. Evita lecturas no repetibles pero no lecturas fantasma.
+4. **SERIALIZABLE**: El nivel más estricto, asegura que las transacciones se ejecuten de manera secuencial. Evita todos los problemas de concurrencia pero puede reducir el rendimiento.
+
+Para establecer el nivel de aislamiento, se utiliza el comando:
+
+```sql
+SET TRANSACTION ISOLATION LEVEL nombre_nivel;
+```
+
+##### Ejemplo de Transacción
+
+Aquí tienes un ejemplo simple de una transacción en MySQL:
+
+```sql
+START TRANSACTION;
+
+-- Operación 1
+UPDATE cuenta SET saldo = saldo - 100 WHERE id_cuenta = 1;
+
+-- Operación 2
+UPDATE cuenta SET saldo = saldo + 100 WHERE id_cuenta = 2;
+
+-- Si todo está bien, confirmamos la transacción
+COMMIT;
+
+-- Si algo falla, deshacemos la transacción
+-- ROLLBACK;
+```
+
+En este ejemplo, se transfiere dinero de una cuenta a otra. Si ambas operaciones se completan con éxito, se confirma la transacción con `COMMIT`. Si algo falla, se puede deshacer la transacción con `ROLLBACK`. Este código cobrará más sentido si podemos incluir cierto codigo que evalue el resultado de las operaciones y decida si se confirma o se deshace la transacción. Ahí es donde entra en juego el código de programación que se conecta a la base de datos, como applicaciones externas o el propio código de la base de datos del que hablaremos a continuación.
+
+### Procedimientos almacenados (Stored Procedures) y funciones (Functions) en MySQL
+
+Los procedimientos almacenados y las funciones son bloques de código SQL que se almacenan en la base de datos y se pueden ejecutar de manera repetitiva. Ambos son herramientas poderosas en MySQL que permiten encapsular lógica compleja, mejorar la modularidad y reutilización del código y optimizar el rendimiento.
+
+#### Procedimientos Almacenados
+
+Un procedimiento almacenado es un conjunto de instrucciones SQL que se ejecutan como una unidad. Los procedimientos almacenados pueden aceptar parámetros de entrada y salida, y pueden realizar operaciones complejas en la base de datos.
+
+##### Características de los Procedimientos Almacenados
+
+- **Reutilización**: Permiten reutilizar código SQL en múltiples partes de una aplicación.
+- **Rendimiento**: Al estar precompilados, pueden ejecutarse más rápidamente que las consultas SQL dinámicas.
+- **Seguridad**: Pueden restringir el acceso directo a las tablas, permitiendo solo la ejecución de procedimientos específicos.
+- **Mantenimiento**: Facilitan el mantenimiento del código al centralizar la lógica en un solo lugar.
+
+##### Sintaxis Básica
+
+```sql
+DELIMITER //
+
+CREATE PROCEDURE nombre_procedimiento ([parametros])
+BEGIN
+    -- Cuerpo del procedimiento
+END //
+
+DELIMITER ;
+```
+
+##### Ejemplo de Procedimiento Almacenado
+
+```sql
+DELIMITER //
+
+CREATE PROCEDURE actualizar_salario (IN empleado_id INT, IN nuevo_salario DECIMAL(10, 2))
+BEGIN
+    UPDATE empleados
+    SET salario = nuevo_salario
+    WHERE id = empleado_id;
+END //
+
+DELIMITER ;
+```
+
+Para ejecutar el procedimiento:
+
+```sql
+CALL actualizar_salario(1, 50000.00);
+```
+
+#### Funciones
+
+Una función es similar a un procedimiento almacenado, pero siempre devuelve un valor. Las funciones se utilizan principalmente para realizar cálculos o transformaciones de datos y se pueden llamar desde consultas SQL.
+
+##### Características de las Funciones
+
+- **Devolución de Valor**: Siempre devuelven un valor, que puede ser utilizado en consultas SQL.
+- **Reutilización**: Permiten reutilizar lógica de cálculo o transformación en múltiples consultas.
+- **Modularidad**: Facilitan la modularización del código al separar la lógica de cálculo en funciones específicas.
+
+##### Sintaxis Básica de las funciones
+
+```sql
+DELIMITER //
+
+CREATE FUNCTION nombre_funcion ([parametros])
+RETURNS tipo_retorno
+BEGIN
+    -- Cuerpo de la función
+    RETURN valor;
+END //
+
+DELIMITER ;
+```
+
+##### Ejemplo de Función
+
+```sql
+DELIMITER //
+
+CREATE FUNCTION calcular_impuesto (precio DECIMAL(10, 2))
+RETURNS DECIMAL(10, 2)
+BEGIN
+    DECLARE impuesto DECIMAL(10, 2);
+    SET impuesto = precio * 0.21;
+    RETURN impuesto;
+END //
+
+DELIMITER ;
+```
+
+Para utilizar la función en una consulta:
+
+```sql
+SELECT producto_id, precio, calcular_impuesto(precio) AS impuesto
+FROM productos;
+```
+
+#### Diferencias entre Procedimientos Almacenados y Funciones
+
+- **Devolución de Valor**: Las funciones siempre devuelven un valor, mientras que los procedimientos almacenados no necesariamente lo hacen.
+- **Uso en Consultas**: Las funciones se pueden utilizar directamente en consultas SQL, mientras que los procedimientos almacenados no.
+- **Parámetros de Salida**: Los procedimientos almacenados pueden tener parámetros de salida (OUT), mientras que las funciones no.
+
+#### Ventajas y Desventajas
+
+##### Ventajas
+
+- **Modularidad**: Permiten dividir el código en módulos reutilizables.
+- **Rendimiento**: Al estar precompilados, pueden ejecutarse más rápidamente.
+- **Seguridad**: Pueden restringir el acceso directo a las tablas.
+
+##### Desventajas
+
+- **Complejidad**: Pueden aumentar la complejidad del código si no se gestionan adecuadamente.
+- **Depuración**: Puede ser más difícil depurar procedimientos almacenados y funciones en comparación con el código SQL dinámico.
+
+### Triggers
+
+Los triggers (disparadores) son bloques de código SQL que se ejecutan automáticamente en respuesta a ciertos eventos en la base de datos. Los triggers son una característica poderosa de MySQL que permite automatizar tareas, mantener la integridad de los datos y aplicar reglas de negocio de manera eficiente.
+
+Un ejemplo habitual es asisignar un valor a un atributo calculado en función de otros atributos de la tabla.
+
+Por ejemplo, para una tabla de empleados, se puede tener un trigger que actualice el salario de un empleado cuando se modifica su nivel de experiencia.
+
+```sql
+
+DELIMITER //
+
+CREATE TRIGGER actualizar_salario
+BEFORE UPDATE ON empleados
+FOR EACH ROW
+BEGIN
+    IF NEW.experiencia > 5 THEN
+        SET NEW.salario = NEW.salario * 1.1;
+    END IF;
+END //
+
+DELIMITER ;
+
+```
+
+En este otro ejemplo, se actualiza el número de likes de un tweet cada vez que se inserta un nuevo like en la tabla `tweet_likes`.
+
+```sql
+DELIMITER $$
+
+CREATE TRIGGER update_num_likes
+AFTER INSERT ON tweet_likes
+FOR EACH ROW
+BEGIN
+  UPDATE tweets
+  SET num_likes = num_likes + 1
+  WHERE tweet_id = NEW.tweet_id;
+END $$
+```
+
+Igualmente habría que crear un trigger para decrementar el número de likes cuando se elimina un like.
+
+```sql
+DELIMITER $$
+CREATE TRIGGER decrease_num_likes
+AFTER DELETE ON tweet_likes
+FOR EACH ROW
+BEGIN
+  UPDATE tweets
+  SET num_likes = num_likes - 1
+  WHERE tweet_id = OLD.tweet_id;
+END $$
+```
+
 ## SQL y ECMAScript (JavaScript)
 
-### Driver nativo para Node
+### Opciones en Node.js para utilizar MySQL
+
+#### Driver nativo para Node
 
 - driver antiguo [mysql](https://www.npmjs.com/package/mysql)
 
@@ -1200,7 +1872,7 @@ It is written in JavaScript, does not require compiling, and is 100% MIT license
 A continuation of MySQL-Native.
 Protocol parser code was rewritten from scratch and api changed to match popular Node MySQL.
 
-### ORM (Object–relational mapping)
+#### ORM (Object–relational mapping)
 
 from [9 Best JavaScript and TypeScript ORMs for 2024](https://www.sitepoint.com/javascript-typescript-orms/)
 
@@ -1211,3 +1883,70 @@ from [9 Best JavaScript and TypeScript ORMs for 2024](https://www.sitepoint.com/
 - [TypeORM](https://typeorm.io/) TypeScript ORM Library on top of reflect-metadata and some native driver
 - [MikroORM](https://mikro-orm.io/) TypeScript ORM Library for SQL and NoSQL inspired by PHP Doctrine
 - [Prisma](https://www.prisma.io/) recent TypeScript ORM
+
+### Driver nativo MySQL con Node.js y TypeScript
+
+Instalación
+
+```shell
+npm install mysql2
+```
+
+Como ya incluye soporte para TypeScript, no es necesario instalar tipos adicionales
+
+Conexión a la base de datos
+
+```typescript
+import mysql from 'mysql2/promise';
+
+const connection = await mysql.createConnection({
+  host: process.env.DB_HOST || 'localhost:3306',
+  // port:  process.env.DB_PORT || 3306,
+  user: process.env.DB_USER || 'root',
+  passwd: process.env.DB_PASSWD,
+  database: process.env.DB_NAME || 'movies_db',
+});
+```
+
+La conexión incluye un método `query` para realizar consultas
+
+```typescript
+const [rows, fields] = await connection.query('SELECT * FROM movies');
+```
+
+En las consultas es crítico el uso correcto de parámetros para evitar inyecciones SQL
+
+```typescript
+const [rows, fields] = await connection.query(
+  'SELECT * FROM movies WHERE id = ?',
+  [movieId]
+);
+```
+
+En ningún caso se deben concatenar los valores directamente en la consulta o incluirlos en un template string
+
+```typescript
+// Incorrecto: permitiría inyecciones SQL
+const [rows, fields] = await connection.query(
+  `SELECT * FROM movies WHERE id = ${movieId}`
+);
+```
+
+Las operaciones de un CRUD se pueden encapsular en funciones o métodos de clase, utizando en cada caso el método `query` de la conexión para realizar las operaciones sql de `SELECT`, `INSERT`, `UPDATE` y `DELETE`.
+
+En el tipado del resultado de la query se pueden usar 2 tipos principalmente, proporcionados por la librería `mysql2`
+
+- `FieldPacket[]` para el resultado de una consulta SELECT de un solo campo
+- `RowDataPacket[]` para el resultado de una consulta SELECT simple de varias columnas
+- `RowDataPacket[][]` para el resultado de una consulta SELECT con varias tablas
+- `ResultSetHeader` para el resultado de una operación de modificación de la base de datos (INSERT, UPDATE, DELETE)
+
+```typescript
+import { FieldPacket, RowDataPacket } from 'mysql2';
+
+const [rows, fields] = await connection.query('SELECT * FROM movies');
+const [rows, fields] = await connection.query(
+  'SELECT * FROM movies WHERE id = ?',
+  [movieId]
+);
+```
