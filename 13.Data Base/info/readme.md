@@ -62,9 +62,18 @@ title: SQL
 - [Lenguaje SQL: manipulación de datos (DML)](#lenguaje-sql-manipulación-de-datos-dml)
   - [SELECT (Read)](#select-read)
     - [JOIN](#join)
+    - [Unions](#unions)
     - [Expresiones de comparación](#expresiones-de-comparación)
   - [Funciones nativas del lenguaje](#funciones-nativas-del-lenguaje)
     - [Funciones de agregación](#funciones-de-agregación)
+    - [Funciones de cadena](#funciones-de-cadena)
+    - [Funciones numéricas](#funciones-numéricas)
+    - [Funciones de fecha y hora](#funciones-de-fecha-y-hora)
+    - [Otras funciones](#otras-funciones)
+      - [Funciones de control de flujo](#funciones-de-control-de-flujo)
+      - [Funciones de conversión](#funciones-de-conversión)
+      - [Funciones de sistema](#funciones-de-sistema)
+      - [Funciones de cifrado](#funciones-de-cifrado)
   - [INSERT (Create)](#insert-create)
   - [UPDATE (Update)](#update-update)
   - [DELETE (Delete)](#delete-delete)
@@ -446,7 +455,7 @@ Durante el desarrollo de un sistema de información, se han de modelar tanto los
 
 ### Modelos gráficos E/R
 
-Los diagramas entidad-relación (ER) son herramientas visuales utilizadas en el diseño y desarrollo de bases de datos. Estos diagramas ayudan a representar la estructura de los datos y las relaciones entre diferentes entidades en un sistema de información. Los diagramas ER se basan en el modelo entidad-relación, que describe cómo los datos se organizan y se relacionan en una base de datos relacional. Se realizán a partir de los plannteamientos presentados por Peter P. Chen en sus artículos de 1976 y 1977.
+Los diagramas entidad-relación (ER) son herramientas visuales utilizadas en el diseño y desarrollo de bases de datos. Estos diagramas ayudan a representar la estructura de los datos y las relaciones entre diferentes entidades en un sistema de información. Los diagramas ER se basan en el modelo entidad-relación, que describe cómo los datos se organizan y se relacionan en una base de datos relacional. Se realizan a partir de los planteamientos presentados por Peter P. Chen en sus artículos de 1976 y 1977.
 
 Originalmente se trataba de **diagramas ER Lógicos**, que no incluye detalles de la implementación real en un sistema de gestión de bases de datos (DBMS). Ni siquiera pueden considerarse exclusivos de las bases de datos relacionales, ya que el concepto de relación en este esquema tiene poco que ver con la idea de relación expuesta por Codd en su modelo relacional. Por tanto los modelos ER se pueden aplicar a otros tipos de bases de datos, como las bases de datos orientadas a objetos o incluso las bases de datos no relacionales.
 
@@ -970,6 +979,7 @@ Entre las restricciones que podemos añadir a un campo,
 - `UNIQUE` para que el campo no pueda tener valores repetidos
 - `DEFAULT` para que el campo tenga un valor por defecto
 - `AUTO_INCREMENT` para que el campo se incremente automáticamente
+- `ZERO_FILL` para que el campo se rellene con ceros a la izquierda
 
 Por ejemplo, tablas users
 id, user_alias, email, first_name, surname, phone, created_at, modified_at
@@ -1051,7 +1061,7 @@ Un ejemplo similar sería una tabla de seguidores
   )
 ```
 
-COn su restricción
+Con su restricción
 
 ```shell
   ALTER TABLE followers
@@ -1351,6 +1361,80 @@ En MySQL no existe como tal el FULL JOIN pero se consigue con la unión de un LE
     uo.relation_type = 'friend';
 ```
 
+#### Unions
+
+Combina rows de multiples tablas, siempre que estas tengan la misma estructura, es decir el mismo número de columnas y el mismo tipo de datos.
+
+El nombre de las columnas en el resultado es el de la primera tabla
+
+- UNION (elimina duplicados)
+- UNION ALL (no elimina duplicados)
+- INTERSECT (devuelve las filas que están en ambas tablas)
+
+```shell
+  SELECT
+    u.id AS user_id,
+    u.user_alias,
+    u.email,
+    u.first_name,
+    u.surname,
+    u.phone,
+    u.created_at,
+    u.modified_at
+  FROM
+    users AS u
+  WHERE
+    u.first_name LIKE 'A%'
+  UNION
+  SELECT
+    u.id AS user_id,
+    u.user_alias,
+    u.email,
+    u.first_name,
+    u.surname,
+    u.phone,
+    u.created_at,
+    u.modified_at
+  FROM
+    users AS u
+  WHERE
+    u.first_name LIKE 'B%';
+```
+
+Se puede usar una union de diferentes consultas a una misma tabla, añadiendo una columna con un seterminado valor para cada una de ellas
+
+```shell
+  SELECT
+    u.id AS user_id,
+    u.user_alias,
+    u.email,
+    u.first_name,
+    u.surname,
+    u.phone,
+    u.created_at,
+    u.modified_at,
+    'A' AS group
+  FROM
+    users AS u
+  WHERE
+    u.first_name LIKE 'A%'
+  UNION
+  SELECT
+    u.id AS user_id,
+    u.user_alias,
+    u.email,
+    u.first_name,
+    u.surname,
+    u.phone,
+    u.created_at,
+    u.modified_at,
+    'B' AS group
+  FROM
+    users AS u
+  WHERE
+    u.first_name LIKE 'B%';
+```
+
 #### Expresiones de comparación
 
 - =, <>, !=, >, <, >=, <=
@@ -1386,6 +1470,31 @@ En MySQL no existe como tal el FULL JOIN pero se consigue con la unión de un LE
   OFFSET 5;
 ```
 
+- Expresiones regulares
+
+  - REGEXP
+  - RLIKE
+
+```shell
+  SELECT
+    u.id AS user_id,
+    u.user_alias,
+    u.email,
+    u.first_name,
+    u.surname,
+    u.phone,
+    u.created_at,
+    u.modified_at
+  FROM
+    users AS u
+  WHERE
+    u.first_name REGEXP 'A.*'
+  ORDER BY
+    u.id DESC
+  LIMIT 10
+  OFFSET 5;
+```
+
 ### Funciones nativas del lenguaje
 
 - Funciones matemáticas
@@ -1396,14 +1505,190 @@ En MySQL no existe como tal el FULL JOIN pero se consigue con la unión de un LE
 #### Funciones de agregación
 
 - GROUP BY
-- COUNT()
-- SUM()
-- AVG()
-- MIN()
-- MAX()
-- FIRST()
-- LAST()
-- HAVING()
+- COUNT(field) devuelve el número de filas que coinciden con la condición
+- SUM(field) devuelve la suma de los valores de un campo
+- AVG(field) devuelve la media de los valores de un campo
+- MIN(field) devuelve el valor mínimo de un campo
+- MAX(field) devuelve el valor máximo de un campo
+- FIRST(field) devuelve el primer valor de un campo
+- LAST(field) devuelve el último valor de un campo
+- HAVING(field) se utiliza para filtrar los resultados de una consulta que contiene una cláusula GROUP BY
+
+#### Funciones de cadena
+
+- CHAR_LENGTH(str) devuelve el número de caracteres en str
+- CHARACTER_LENGTH(str) devuelve el número de caracteres en str
+- LENGTH(srt) devuelve el número de bytes en str
+- CONCAT(str1. str2) devuelve la concatenación de str1 y str2
+- CONCAT_WS(str1, str2, str3) devuelve la concatenación de str2, str3, ... con str1 como separador
+- FORMAT(num) devuelve un número formateado con el número de decimales indicado
+- TRIM(str) elimina los espacios en blanco del principio y del final de una cadena
+- LTRIM(str) elimina los espacios en blanco del principio de una cadena
+- RTRIM(str) elimina los espacios en blanco del final de una cadena
+- RPAD(str, n, char) rellena una cadena con caracteres a la derecha
+- LPAD(str, n, char) rellena una cadena con caracteres a la izquierda
+- LOCATE(substr, str) devuelve la posición de la primera aparición de substr en str
+- POSITION(substr IN str) devuelve la posición de la primera aparición de substr en str
+- SUBSTRING(str, pos, len) devuelve una subcadena de str que empieza en la posición pos y tiene una longitud len
+- SUBSTR(str, pos, len) devuelve una subcadena de str que empieza en la posición pos y tiene una longitud len
+- SUBSTRING_INDEX(str, delim, count) devuelve la subcadena de str antes de la count aparición de delim
+- MID(str, pos, len) devuelve una subcadena de str que empieza en la posición pos y tiene una longitud len
+- REPLACE(str, from, to) reemplaza todas las apariciones de from en str por to
+- LOWER(str) devuelve la cadena str en minúsculas
+- LCASE(str) devuelve la cadena str en minúsculas
+- UPPER(str) devuelve la cadena str en mayúsculas
+- UCASE(str) devuelve la cadena str en mayúsculas
+- REVERSE(str) devuelve la cadena str invertida
+- REPEAT(str, n) devuelve la cadena str repetida n veces
+- INSERT(str, pos, len, newstr) inserta newstr en str en la posición pos y con una longitud len
+- SPACE(n) devuelve una cadena de n espacios en blanco
+- STRCMP(str1, str2) devuelve 0 si str1 = str2, 1 si str1 > str2, -1 si str1 < str2
+- INSTR(str, substr) devuelve la posición de la primera aparición de substr en str
+- CHAR(num) devuelve el carácter ASCII correspondiente al número
+- ASCII(str) devuelve el número ASCII correspondiente al carácter str
+- FIELD(str, str1, str2, ...) devuelve la posición de str en la lista de cadenas
+- FIND_IN_SET(str, strlist) devuelve la posición de str en la lista de cadenas
+
+#### Funciones numéricas
+
+- ABS(num) devuelve el valor absoluto de num
+- SIGN(num) devuelve el signo de num
+- CEIL(num) devuelve el entero más pequeño mayor o igual que num
+- CEILING(num) devuelve el entero más pequeño mayor o igual que num
+- FLOOR(num) devuelve el entero más grande menor o igual que num
+- ROUND(num) devuelve el valor redondeado de num
+- ROUND(num, n) devuelve el valor de num redondeado a n decimales
+- TRUNCATE(num, n) devuelve el valor de num truncado a n decimales
+- DIV(num1, num2) devuelve el cociente de la división de num1 por num2
+- MOD(num1, num2) devuelve el resto de la división de num1 por num2
+- POW(num1, num2) devuelve num1 elevado a la potencia de num2
+- POWER(num1, num2) devuelve num1 elevado a la potencia de num2
+- SQRT(num) devuelve la raíz cuadrada de num
+- EXP(num) devuelve el valor de e elevado a la potencia de num
+- LN(num) devuelve el logaritmo natural de num
+- LOG(num, b) devuelve el logaritmo de num en la base b
+- LOG10(num) devuelve el logaritmo en base 10 de num
+- LOG2(num) devuelve el logaritmo en base 2 de num
+- GREATEST(num1, num2, ...) devuelve el mayor de los números de la lista
+- LEAST(num1, num2, ...) devuelve el menor de los números de la lista
+- SIN(num) devuelve el seno de num
+- COS(num) devuelve el coseno de num
+- TAN(num) devuelve la tangente de num
+- COT(num) devuelve la cotangente de num
+- ASIN(num) devuelve el arco seno de num
+- ACOS(num) devuelve el arco coseno de num
+- ATAN(num) devuelve el arco tangente de num
+- ATAN2(num1, num2) devuelve el arco tangente de num1/num2
+- PI() devuelve el valor de PI
+- DEGREES(num) convierte num de radianes a grados
+- RADIANS(num) convierte num de grados a radianes
+- RAND() devuelve un número aleatorio
+
+#### Funciones de fecha y hora
+
+- NOW() devuelve la fecha y hora actuales
+- CURDATE() devuelve la fecha actual
+- CURRENT_DATE() devuelve la fecha actual
+- CURTIME() devuelve la hora actual
+- CURRENT_TIME() devuelve la hora actual
+- CURRENT_TIMESTAMP() devuelve la fecha y hora actuales
+- DATE_ADD(date, INTERVAL expr unit) añade un intervalo a una fecha
+- DATE_SUB(date, INTERVAL expr unit) resta un intervalo a una fecha
+- DATEDIFF(date1, date2) devuelve el número de días entre dos fechas
+- ADDDATE(date, INTERVAL expr unit) añade un intervalo a una fecha
+- ADDTIME(time, INTERVAL expr unit) añade un intervalo a una hora
+- DATE_FORMAT(date, format) devuelve una fecha formateada
+- DAY(date) devuelve el día de una fecha
+- DAYNAME(date) devuelve el nombre del día de una fecha
+- DAYOFMONTH(date) devuelve el día del mes de una fecha
+- DAYOFWEEK(date) devuelve el día de la semana de una fecha
+- DAYOFYEAR(date) devuelve el día del año de una fecha
+- EXTRACT(unit FROM date) devuelve el valor de una parte de una fecha
+- HOUR(time) devuelve la hora de una hora
+- LAST_DAY(date) devuelve el último día del mes de una fecha
+- LOCALTIME() devuelve la hora local
+- LOCALTIMESTAMP() devuelve la fecha y hora local
+- MICROSECOND(time) devuelve los microsegundos de una hora
+- MINUTE(time) devuelve los minutos de una hora
+- MONTH(date) devuelve el mes de una fecha
+- MONTHNAME(date) devuelve el nombre del mes de una fecha
+- QUARTER(date) devuelve el trimestre de una fecha
+- SECOND(time) devuelve los segundos de una hora
+- SEC_TO_TIME(num) convierte un número de segundos en una hora
+- STR_TO_DATE(str, format) convierte una cadena en una fecha
+- SUBDATE(date, INTERVAL expr unit) resta un intervalo a una fecha
+- SUBTIME(time, INTERVAL expr unit) resta un intervalo a una hora
+- SYSDATE() devuelve la fecha y hora actuales
+- TIME(time) devuelve la hora de una hora
+- TIME_FORMAT(time, format) devuelve una hora formateada
+- TIME_TO_SEC(time) convierte una hora en segundos
+- TIMEDIFF(time1, time2) devuelve la diferencia entre dos horas
+- TIMESTAMP(date) devuelve una fecha y hora
+- TO_DAYS(date) devuelve el número de días desde la fecha 0000-00-00
+- WEEK(date) devuelve el número de la semana de una fecha
+- WEEKDAY(date) devuelve el número del día de la semana de una fecha
+- WEEKOFYEAR(date) devuelve el número de la semana del año de una fecha
+- YEAR(date) devuelve el año de una fecha
+- YEARWEEK(date) devuelve el año y la semana de una fecha
+- PERIOD_ADD(period, n) añade un número de meses a un periodo
+- PERIOD_DIFF(period1, period2) devuelve la diferencia entre dos periodos
+- MAKEDATE(year, day) devuelve una fecha a partir de un año y un número de días
+- MAKETIME(hour, minute, second) devuelve una hora a partir de una hora, minutos y segundos
+- DATE(date) devuelve la fecha de una fecha y hora
+- FROM_DAYS(date) devuelve una fecha a partir de un número de días
+
+#### Otras funciones
+
+##### Funciones de control de flujo
+
+- IF(condition, value1, value2) devuelve value1 si condition es verdadero, de lo contrario devuelve value2
+- IFNULL(value1, value2) devuelve value1 si no es nulo, de lo contrario devuelve value2
+- NULLIF(value1, value2) devuelve NULL si value1 = value2, de lo contrario devuelve value1
+- CASE WHEN condition1 THEN result1 WHEN condition2 THEN result2 ELSE result3 END devuelve result1 si condition1 es verdadero, result2 si condition2 es verdadero, de lo contrario result3
+
+##### Funciones de conversión
+
+- CAST(expr AS type) convierte expr en el tipo de datos type
+- CONV(num, from_base, to_base) convierte num de una base numérica a otra
+- CONVERT(expr, type) convierte expr en el tipo de datos type
+- BIN(expr) convierte expr en una cadena binaria
+- BINARY expr convierte expr en una cadena binaria
+- DECIMAL(expr) convierte expr en un número decimal
+- SIGNED(expr) convierte expr en un número con signo
+- UNSIGNED(expr) convierte expr en un número sin signo
+- HEX(expr) convierte expr en una cadena hexadecimal
+- UNHEX(expr) convierte expr en una cadena binaria
+- OCT(expr) convierte expr en una cadena octal
+- BIN_TO_UUID(expr) convierte expr en un UUID
+- UUID_TO_BIN(expr) convierte expr en un binario
+- COALESCE(value1, value2, ...) devuelve el primer valor no nulo de la lista
+- ISNULL(expr) devuelve 1 si expr es nulo, de lo contrario devuelve 0
+
+##### Funciones de sistema
+
+- BENCHMARK(num, expr) ejecuta expr num veces
+- CONNECTION_ID() devuelve el ID de la conexión actual
+- DATABASE() devuelve el nombre de la base de datos actual
+- LAST_INSERT_ID() devuelve el último valor AUTO_INCREMENT insertado
+- ROW_COUNT() devuelve el número de filas afectadas por la última sentencia
+- SCHEMA() devuelve el nombre de la base de datos actual
+- SESSION_USER() devuelve el nombre de usuario y el host de la conexión actual
+- SYSTEM_USER() devuelve el nombre de usuario y el host de la conexión actual
+- USER() devuelve el nombre de usuario y el host de la conexión actual
+- CURRENT_USER() devuelve el nombre de usuario y el host de la conexión actual
+- VERSION() devuelve la versión actual de MySQL
+
+##### Funciones de cifrado
+
+- AES_DECRYPT(crypt_str, key_str) descifra una cadena cifrada con AES
+- AES_ENCRYPT(str, key_str) cifra una cadena con AES
+- COMPRESS(str) comprime una cadena
+- MD5(str) devuelve el valor MD5 de una cadena
+- SHA1(str) devuelve el valor SHA1 de una cadena
+- SHA(str) devuelve el valor SHA de una cadena
+  -SHA2(str, hash_length) devuelve el valor SHA2 de una cadena
+- UNCOMPRESS(str) descomprime una cadena
+- UNCOMPRESSED_LENGTH(str) devuelve la longitud de una cadena descomprimida
 
 ### INSERT (Create)
 
@@ -1420,7 +1705,15 @@ En MySQL no existe como tal el FULL JOIN pero se consigue con la unión de un LE
 ### DELETE (Delete)
 
 - DELETE FROM
+
   - WHERE
+
+- DELETE FROM users v.s. TRUNCATE TABLE users
+  - DELETE FROM elimina filas de una tabla
+  - TRUNCATE TABLE elimina todas las filas de una tabla
+
+TRUNCATE TABLE es más rápido que DELETE FROM, y actualiza a 0 el AUTO_INCREMENT.
+Sin embargo, no se puede usar si hay claves foráneas
 
 ## Advanced SQL
 
@@ -1598,7 +1891,9 @@ En resumen, los bloqueos son fundamentales para garantizar la integridad y consi
 
 #### Transactions en MySQL
 
-Las transacciones en MySQL son una secuencia de operaciones realizadas como una sola unidad lógica de trabajo. Una transacción puede incluir una o más consultas SQL que modifican los datos en la base de datos. Las transacciones son fundamentales para garantizar la integridad y consistencia de los datos, especialmente en entornos concurrentes donde múltiples usuarios o procesos acceden a la base de datos simultáneamente. Al seguir las propiedades ACID y utilizar los comandos adecuados para gestionar transacciones, se puede asegurar que las operaciones críticas se realicen de manera segura y eficiente.
+Las transacciones en MySQL son una secuencia de operaciones realizadas como una sola unidad lógica de trabajo. Una transacción puede incluir una o más **consultas SQL** que modifican los datos en la base de datos. Las transacciones son fundamentales para garantizar la integridad y consistencia de los datos, especialmente en entornos concurrentes donde múltiples usuarios o procesos acceden a la base de datos simultáneamente. Al seguir las propiedades ACID y utilizar los comandos adecuados para gestionar transacciones, se puede asegurar que las operaciones críticas se realicen de manera segura y eficiente.
+
+AL definir las transacciones nos hemos referido a las consultas, es decir a las operaciones incluidas en el DML (Data Manipulation Language) de SQL. Las transacciones no se aplican a las operaciones de DDL (Data Definition Language) como `CREATE`, `ALTER` o `DROP`, ya que estas operaciones no afectan a los datos en sí, sino a la estructura de la base de datos e incluyen un `COMMIT` automático cuando se ejecutan.
 
 ##### Propiedades ACID de las Transacciones
 
