@@ -7,7 +7,7 @@ title: SQL
     - [SQL (1974)](#sql-1974)
     - [Componentes de SQL](#componentes-de-sql)
     - [Estandarización](#estandarización)
-    - [Sistemas de gestión de bases de datos relacionales (RDBMS)](#sistemas-de-gestión-de-bases-de-datos-relacionales-rdbms)
+    - [Sistemas de gestión de bases de datos relacionales (R-DBMS)](#sistemas-de-gestión-de-bases-de-datos-relacionales-r-dbms)
   - [Base de datos No Relacionales o NoSQL](#base-de-datos-no-relacionales-o-nosql)
     - [Historia de las Bases de Datos NoSQL](#historia-de-las-bases-de-datos-nosql)
     - [Principales Ejemplos de Bases de Datos NoSQL](#principales-ejemplos-de-bases-de-datos-nosql)
@@ -80,6 +80,7 @@ title: SQL
 - [Advanced SQL](#advanced-sql)
   - [Subqueries](#subqueries)
   - [Índices](#índices)
+    - [Índices FULLTEXT](#índices-fulltext)
   - [Views](#views)
   - [Bloqueos y transactions](#bloqueos-y-transactions)
     - [Bloqueos en Bases de Datos SQL](#bloqueos-en-bases-de-datos-sql)
@@ -106,11 +107,6 @@ title: SQL
       - [Ventajas](#ventajas)
       - [Desventajas](#desventajas)
   - [Triggers](#triggers)
-- [SQL y ECMAScript (JavaScript)](#sql-y-ecmascript-javascript)
-  - [Opciones en Node.js para utilizar MySQL](#opciones-en-nodejs-para-utilizar-mysql)
-    - [Driver nativo para Node](#driver-nativo-para-node)
-    - [ORM (Object–relational mapping)](#orm-objectrelational-mapping)
-  - [Driver nativo MySQL con Node.js y TypeScript](#driver-nativo-mysql-con-nodejs-y-typescript)
 
 ## Introducción
 
@@ -142,7 +138,7 @@ Si representamos una tabla como una rejilla, al estilo de las hojas de cálculo
 #### SQL (1974)
 
 - **lenguaje específico de dominio**, a veces se describe como un **lenguaje declarativo**
-- diseñado para administrar, y recuperar información de **sistemas de gestión de bases de datos relacionales** (RDBMS)
+- diseñado para administrar, y recuperar información de **sistemas de gestión de bases de datos relacionales** (R-DBMS)
 - manejo del **álgebra y el cálculo relacional** en base al **modelo relacional** de **Edgar Frank Codd** (1970)
 - realizar todo tipo de operaciones con los datos
   - efectuar consultas con el fin de recuperar, de forma sencilla, información de bases de datos
@@ -161,7 +157,7 @@ Si representamos una tabla como una rejilla, al estilo de las hojas de cálculo
 - Instituto Nacional Estadounidense de Estándares (ANSI) en 1986
 - Organización Internacional de Normalización (ISO) en 1987
 
-#### Sistemas de gestión de bases de datos relacionales (RDBMS)
+#### Sistemas de gestión de bases de datos relacionales (R-DBMS)
 
 Propietarios (Wikipedia)
 
@@ -191,7 +187,7 @@ Públicos (Wikipedia)
 
 La alternativa a las relacionales son las bases de datos no relacionales, también conocidas como bases de datos NoSQL (Not Only SQL), especialmente las **bases de datos documentales (DDB)** como **MongoDB**.
 
-Son sistemas de gestión de bases de datos diseñados para manejar grandes volúmenes de datos no estructurados o semiestructurados. A diferencia de las bases de datos relacionales, que utilizan tablas y relaciones para organizar los datos, las bases de datos NoSQL utilizan diversos modelos de datos para almacenar y gestionar información.
+Son sistemas de gestión de bases de datos diseñados para manejar grandes volúmenes de datos no estructurados o semi estructurados. A diferencia de las bases de datos relacionales, que utilizan tablas y relaciones para organizar los datos, las bases de datos NoSQL utilizan diversos modelos de datos para almacenar y gestionar información.
 
 Es el caso de **MongoDB**.
 
@@ -204,9 +200,9 @@ Es el caso de **MongoDB**.
 
 #### Historia de las Bases de Datos NoSQL
 
-El término "NoSQL" fue acuñado por Carlo Strozzi en 1998 para referirse a su base de datos ligera y open-source que no utilizaba SQL. Sin embargo, el concepto moderno de NoSQL surgió a finales de la década de 2000, impulsado por la necesidad de manejar grandes volúmenes de datos generados por aplicaciones web y servicios en línea. Empresas como Google, Amazon y Facebook necesitaban soluciones escalables y flexibles que las bases de datos relacionales tradicionales no podían proporcionar de manera eficiente.
+El término "NoSQL" fue acuñado por **Carlo Strozzi** en 1998 para referirse a su base de datos ligera y open-source que no utilizaba SQL. Sin embargo, el concepto moderno de NoSQL surgió a finales de la década de 2000, impulsado por la necesidad de manejar grandes volúmenes de datos generados por aplicaciones web y servicios en línea. Empresas como Google, Amazon y Facebook necesitaban soluciones escalables y flexibles que las bases de datos relacionales tradicionales no podían proporcionar de manera eficiente.
 
-En 2009, Johan Oskarsson organizó un evento llamado "NoSQL Meetup" en San Francisco, lo que ayudó a popularizar el término y a consolidar la comunidad alrededor de estas nuevas tecnologías. Desde entonces, las bases de datos NoSQL han ganado popularidad y se han convertido en una opción viable para muchas aplicaciones modernas.
+En 2009, **Johan Oskarsson** organizó un evento llamado "NoSQL Meetup" en San Francisco, lo que ayudó a popularizar el término y a consolidar la comunidad alrededor de estas nuevas tecnologías. Desde entonces, las bases de datos NoSQL han ganado popularidad y se han convertido en una opción viable para muchas aplicaciones modernas.
 
 #### Principales Ejemplos de Bases de Datos NoSQL
 
@@ -661,7 +657,7 @@ Ambos pueden coexistir en una misma DB, las primeras cuando se necesite la máxi
 - Restricciones en claves foráneas
 - Fácil recuperación de datos en caso de error.
 - Alta concurrencia más segura en escritura.
-- Los datos se guardan en un fichero para la definición de la tabla, y un "tablespace" para guardar conjuntamente datos e índices.
+- Los datos se guardan en un fichero para la definición de la tabla, y un "table_space" para guardar conjuntamente datos e índices.
 - Necesita mas espacio en disco y memoria
 - Es una buena elección cuando necesitamos transacciones, restricciones en claves foráneas, o tenemos muchas escrituras simultaneas.
 - Multiversionado: cuando múltiples transacciones modifican registros, InnoDB mantiene aisladas las transacciones guardando para cada una de ellas un versión distinta de un mismo registro, a cada transacción la versión que le corresponde
@@ -879,13 +875,13 @@ En este caso podemos obtener más información con  **SHOW TABLES**
   Database changed
   SHOW TABLES;
   ◀┙
-  +-----------------+
-  | Tables_in_world |
-  +-----------------+
-  | city            |
-  | country         |
-  | countrylanguage |
-  +-----------------+
+  +------------------+
+  | Tables_in_world  |
+  +------------------+
+  | city             |
+  | country          |
+  | country_language |
+  +------------------+
   3 rows in set (0.01 sec)
 ```
 
@@ -922,8 +918,8 @@ La sintaxis de Create es
 
 CREATE TABLE tableName
 (
-fieldName1 dataType(size) [NULL | NOT NULL],
-fieldName2 dataType(size) [NULL | NOT NULL]
+field_name1 dataType(size) [NULL | NOT NULL],
+field_name2 dataType(size) [NULL | NOT NULL]
 );
 
 Para cada campo indicamos
@@ -951,15 +947,15 @@ Puede indicarse al final del comando para crear la tabla o, si es única, al def
 ```sql
 CREATE TABLE tableName
 (
-  fieldName1 dataType(size) [NULL | NOT NULL],
-  fieldName2 dataType(size) [NULL | NOT NULL]
-  PRIMARY KEY (fieldName_1, fieldName_2,…)
+  field_name1 dataType(size) [NULL | NOT NULL],
+  field_name2 dataType(size) [NULL | NOT NULL]
+  PRIMARY KEY (field_name_1, field_name_2,…)
 );
 
 CREATE TABLE tableName
 (
-  fieldName1 dataType(size) INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  fieldName2 dataType(size) [NULL | NOT NULL]
+  field_name1 dataType(size) INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  field_name2 dataType(size) [NULL | NOT NULL]
 );
 ```
 
@@ -981,26 +977,31 @@ Entre las restricciones que podemos añadir a un campo,
 - `AUTO_INCREMENT` para que el campo se incremente automáticamente
 - `ZERO_FILL` para que el campo se rellene con ceros a la izquierda
 
+<!-- -------------------------------- -->
+
 Por ejemplo, tablas users
 id, user_alias, email, first_name, surname, phone, created_at, modified_at
 
-```shell
+<!-- -------------------------------- -->
+
+```sql
   CREATE TABLE users (
-    id INT AUTO_INCREMENT,
+    user_id INT AUTO_INCREMENT,
     user_alias VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(50) NOT NULL UNIQUE,
     first_name VARCHAR(100) NOT NULL,
-    surname VARCHAR(100)
-    phone CHAR(12) UNIQUE
-    created_at TIMESTAMP NOT NULL DEFAULT (NOW())
+    surname VARCHAR(100),
+    phone CHAR(12) UNIQUE,
+    created_at TIMESTAMP NOT NULL DEFAULT (NOW()),
+    updated_at TIMESTAMP NOT NULL DEFAULT (NOW())
     PRIMARY KEY (user_id)
-  );
+    );
 ```
 
 Alternativamente, para el user_Id
 
-```shell
-  id BINARY(16) DEFAULT (UUID_TO_BIN(UUID()))
+```sql
+  user_id BINARY(16) DEFAULT (UUID_TO_BIN(UUID()))
 ```
 
 #### Foreign Key
@@ -1009,13 +1010,13 @@ Relación 1:N con tabla de notas:
 
 id, title, is_important, content, autor, created_at
 
-```shell
+```sql
   CREATE TABLE notes (
-    id BINARY(16) DEFAULT (UUID_TO_BIN(UUID()))
+    note_id BINARY(16) DEFAULT (UUID_TO_BIN(UUID()))
     title VARCHAR(255) NOT NULL,
     is_important BOOLEAN DEFAULT FALSE,
     content TEXT,
-    author BINARY(16) NOT NULL,
+    author_id BINARY(16) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT (NOW())
     PRIMARY KEY (id)
     FOREIGN KEY (author) REFERENCES users(id)
@@ -1024,17 +1025,27 @@ id, title, is_important, content, autor, created_at
 
 En otro ejemplo vemos una relación N:N, de una tabla consigo misma
 
+<!-- -------------------------------- -->
+
 Por ejemplo, una tabla releja las relaciones de unos usuarios con otros, como amigos o enemigos
 
-```shell
+- first_user_id
+- second_user_id
+- relation_type
+
+<!-- -------------------------------- -->
+
+```sql
   CREATE TABLE user_others (
-    first_user_id INT NOT NULL
-    second_user_id INT NOT NULL
-    relation_type ENUM('friend', 'enemy')
-    FOREIGN KEY(first_user_id) REFERENCES(users)
-    FOREIGN KEY(second_user_id) REFERENCES(users)
-    PRIMARY KEY (source_user_id, target_user_id)
-  )
+    source_user_id BINARY(16) NOT NULL,
+    target_user_id BINARY(16) NOT NULL,
+    relation_type ENUM('friend', 'enemy'),
+    created_at TIMESTAMP NOT NULL DEFAULT (NOW()),
+	  updated_at TIMESTAMP NOT NULL DEFAULT (NOW()),
+    PRIMARY KEY (source_user_id, target_user_id),
+    FOREIGN KEY(source_user_id) REFERENCES users(user_id),
+    FOREIGN KEY(target_user_id) REFERENCES users(user_id)
+  );
 ```
 
 #### Restricciones posteriores
@@ -1043,37 +1054,46 @@ A posteriori, podemos decidir que un usuario no puede tener una relación consig
 
 Por ejemplo, en el caso anterior, podemos evitar que un usuario tenga una relación de amigo o enemigo consigo mismo
 
-```shell
+```sql
   ALTER TABLE user_others
   ADD CONSTRAIN check_other_id
   CHECK (first_user_id != second_user_id);
 ```
 
-Un ejemplo similar sería una tabla de seguidores
+Un ejemplo similar sería una tabla de seguidores, en el que añadimos la restricción al crearla
 
-```shell
+```sql
   CREATE TABLE followers (
     follower_id INT NOT NULL
     followed_id INT NOT NULL
+    CONSTRAIN check_follower_id
+      CHECK (follower_id != followed_id);
     FOREIGN KEY(follower_id) REFERENCES users(user_id)
     FOREIGN KEY(followed_id) REFERENCES users(user_id)
     PRIMARY KEY (follower_id, followed_id)
   )
 ```
 
-Con su restricción
-
-```shell
-  ALTER TABLE followers
-  ADD CONSTRAIN check_follower_id
-  CHECK (follower_id != followed_id);
-```
-
 #### Tablas de relación
+
+<!-- -------------------------------- -->
 
 Un ejemplo más habitual, con relación n:m entre dos tablas, movies y genres, creando una tabla de relación entre ambas movies_genres
 
-```shell
+- movies
+  - movie_id
+  - title
+  - year
+  - director
+  - duration
+  - poster
+  - rate
+- genres
+  - movie_id
+  - name
+  <!-- -------------------------------- -->
+
+```sql
 
 CREATE TABLE movies {
   id BINARY(16) PRIMARY KEY DEFAULT (UUID_TO_BIN(UUID()))
@@ -1101,7 +1121,7 @@ create TABLE movies_generes {
 
 Para la tabla de la relación, hay una alternativa para escribirlo de forma más compacta
 
-```shell
+```sql
 
 create TABLE movie_genere {
   movie_id BINARY(16) REFERENCES movies(id)
@@ -1139,15 +1159,15 @@ La sentencia DROP es usada para borrar completamente una o más tablas o la base
 La creación de índices aporta velocidad a las búsquedas,
 sacrificando espacio en disco y rapidez a la hora de realizar modificaciones.
 
-```shell
+```sql
 CREATE ...
-  INDEX index_name ON tablename
+  INDEX index_name ON table_name
     (column1, column2, ..., columnN)
 ```
 
 Por ejemplo
 
-```shell
+```sql
 CREATE TABLE material (
   id INT NOT NULL,
   name CHAR(50) NOT NULL,
@@ -1161,7 +1181,7 @@ CREATE TABLE material (
 
 ALTER TABLE es usado para cambiar la estructura de una tabla existente. Podemos añadir o borrar columnas, cambiar el tipo de las columnas existentes, o renombrar las columnas o la tabla misma. También podemos cambiar el comentario de la tabla y el tipo de tabla.
 
-```shell
+```sql
  ALTER TABLE tbl_name specification [, specification
 ```
 
@@ -1178,49 +1198,46 @@ Las especificaciones corresponden a las distintas operaciones que se pueden llev
 
 DROP COLUMN es usado para borrar una columna de una tabla.
 
-```shell
+```sql
   ALTER TABLE tbl_name DROP col_name;
 ```
 
 Para renombrar una tabla se utiliza ALTER TABLE junto con RENAME.
 Renombra la tabla tbl_name a tbl_name_new
 
-```shell
+```sql
   ALTER TABLE tbl_name RENAME tbl_name_new;
 ```
 
 Añadir una columna usando ALTER TABLE con el modificador ADD COLUMN
 
-```shell
-  ALTER TABLE tbl_name ADD COLUMN fieldname_n INT(10);
-  ◀┙
-  Query OK, 0 rows affected (0.05 sec)
-  Records: 0  Duplicates: 0  Warnings: 0
+```sql
+  ALTER TABLE tbl_name ADD COLUMN field_name_n INT(10);
 ```
 
-Podemos añadir FIRST, para añadir la nueva columna al principio de la tabla o AFTER <fieldname> para añadirla después de un campo concreto
+Podemos añadir FIRST, para añadir la nueva columna al principio de la tabla o AFTER <field_name> para añadirla después de un campo concreto
 
-```shell
-  ALTER TABLE tbl_name ADD COLUMN fieldname_n INT(10) FIRST;
-  ALTER TABLE tbl_name ADD COLUMN fieldname_n INT(10) AFTER fieldname_m;
+```sql
+  ALTER TABLE tbl_name ADD COLUMN field_name_n INT(10) FIRST;
+  ALTER TABLE tbl_name ADD COLUMN field_name_n INT(10) AFTER field_name_m;
 ```
 
 Para renombrar un campo utilizamos CHANGE, recordando que cuando modificamos una columna, tenemos que especificar de nuevo su tipo de datos.
 
-```shell
-  ALTER TABLE tbl_name CHANGE fieldname_n fieldname_new VARCHAR(20);
+```sql
+  ALTER TABLE tbl_name CHANGE field_name_n field_name_new VARCHAR(20);
 ```
 
 Si indicamos como nuevo nombre el mismo que existía podemos usar esta expresión para cambiar el tipo de datos
 
-```shell
-  ALTER TABLE tbl_name CHANGE fieldname_1 fieldname_1 VARCHAR(40);
+```sql
+  ALTER TABLE tbl_name CHANGE field_name_1 field_name_1 VARCHAR(40);
 ```
 
 El mismo resultado se puede conseguir utilizando MODIFY
 
-```shell
-  ALTER TABLE tbl_name MODIFY fieldname_1 VARCHAR(40);
+```sql
+  ALTER TABLE tbl_name MODIFY field_name_1 VARCHAR(40);
 ```
 
 ## Lenguaje SQL: control de datos (DCL)
@@ -1239,7 +1256,7 @@ CRUD (**DML**): SELECT, INSERT, UPDATE, DELETE ...
 
 Alias en tablas y campos
 
-```shell
+```sql
   SELECT
     u.id AS user_id,
     u.user_alias,
@@ -1265,7 +1282,7 @@ Filtrado y ordenación de resultados
 
 Ejemplo
 
-```shell
+```sql
   SELECT
     u.id AS user_id,
     u.user_alias,
@@ -1299,9 +1316,9 @@ JOIN: FROM t1 JOIN t2 ON t1.key = t2.key
 - RIGHT [OUTER] JOIN: devuelve todas las filas de la tabla derecha, incluso cuando no hay coincidencia con la tabla izquierda.
 - FULL JOIN: devuelve las filas en las que hay coincidencia en al menos una de las tablas.
 - SELF JOIN: se utiliza para unir una tabla consigo misma, como si en realidad fueran dos tablas.
-- CARTESIAN JOIN: devuelve el producto cartesiano de un conlunto de registros de dos o mas tablas unidas
+- CARTESIAN JOIN: devuelve el producto cartesiano de un conjunto de registros de dos o mas tablas unidas
 
-```shell
+```sql
   SELECT
     u.id AS user_id,
     u.user_alias,
@@ -1321,9 +1338,28 @@ JOIN: FROM t1 JOIN t2 ON t1.key = t2.key
     uo.relation_type = 'friend';
 ```
 
+La condición de unión se indica con
+
+- ON y la condición
+- ON y el nombre único de la columna usada para la condición en ambas tablas
+- USING y el nombre único de la columna usada para la condición en ambas tablas
+
+```sql
+  SELECT
+    u.user_id,
+    u.user_alias,
+    n.title
+  FROM
+    users AS u
+  INNER JOIN
+    notes AS n
+  USING
+    (user_id);
+```
+
 En MySQL no existe como tal el FULL JOIN pero se consigue con la unión de un LEFT y un RIGHT JOIN
 
-```shell
+```sql
   SELECT
     u.id AS user_id,
     u.user_alias,
@@ -1371,7 +1407,7 @@ El nombre de las columnas en el resultado es el de la primera tabla
 - UNION ALL (no elimina duplicados)
 - INTERSECT (devuelve las filas que están en ambas tablas)
 
-```shell
+```sql
   SELECT
     u.id AS user_id,
     u.user_alias,
@@ -1401,9 +1437,9 @@ El nombre de las columnas en el resultado es el de la primera tabla
     u.first_name LIKE 'B%';
 ```
 
-Se puede usar una union de diferentes consultas a una misma tabla, añadiendo una columna con un seterminado valor para cada una de ellas
+Se puede usar una union de diferentes consultas a una misma tabla, añadiendo una columna con un determinado valor para cada una de ellas
 
-```shell
+```sql
   SELECT
     u.id AS user_id,
     u.user_alias,
@@ -1450,7 +1486,7 @@ Se puede usar una union de diferentes consultas a una misma tabla, añadiendo un
   - % -> cualquier cadena de caracteres
   - \_ -> cualquier carácter
 
-```shell
+```sql
   SELECT
     u.id AS user_id,
     u.user_alias,
@@ -1475,7 +1511,7 @@ Se puede usar una union de diferentes consultas a una misma tabla, añadiendo un
   - REGEXP
   - RLIKE
 
-```shell
+```sql
   SELECT
     u.id AS user_id,
     u.user_alias,
@@ -1540,14 +1576,14 @@ Se puede usar una union de diferentes consultas a una misma tabla, añadiendo un
 - UCASE(str) devuelve la cadena str en mayúsculas
 - REVERSE(str) devuelve la cadena str invertida
 - REPEAT(str, n) devuelve la cadena str repetida n veces
-- INSERT(str, pos, len, newstr) inserta newstr en str en la posición pos y con una longitud len
+- INSERT(str, pos, len, new_str) inserta new_str en str en la posición pos y con una longitud len
 - SPACE(n) devuelve una cadena de n espacios en blanco
 - STRCMP(str1, str2) devuelve 0 si str1 = str2, 1 si str1 > str2, -1 si str1 < str2
 - INSTR(str, substr) devuelve la posición de la primera aparición de substr en str
 - CHAR(num) devuelve el carácter ASCII correspondiente al número
 - ASCII(str) devuelve el número ASCII correspondiente al carácter str
 - FIELD(str, str1, str2, ...) devuelve la posición de str en la lista de cadenas
-- FIND_IN_SET(str, strlist) devuelve la posición de str en la lista de cadenas
+- FIND_IN_SET(str, str_list) devuelve la posición de str en la lista de cadenas
 
 #### Funciones numéricas
 
@@ -1696,17 +1732,48 @@ Se puede usar una union de diferentes consultas a una misma tabla, añadiendo un
   - VALUES
   - SET
 
+```sql
+INSERT INTO users
+  (user_alias, email, first_name, surname, phone)
+  VALUES
+  ('@pepe', 'pepe@sample.com', 'Pepe', 'Pérez', '123456789')
+  ('@juan', 'juan@sample.com', 'Juan', 'Gómez', '987654321');
+
+INSERT INTO users
+  SET
+  user_alias = '@erni',
+  email = 'erni@sample .com',
+  first_name = 'Ernestina',
+  surname = 'Gómez',
+  phone = '987654321';
+```
+
 ### UPDATE (Update)
 
 - UPDATE
   - SET
   - WHERE
 
+```sql
+UPDATE users
+  SET
+    user_alias = '@jose',
+    first_name = 'Jose'
+  WHERE
+    id = 1;
+```
+
 ### DELETE (Delete)
 
 - DELETE FROM
 
   - WHERE
+
+```sql
+DELETE FROM users
+  WHERE
+    id = 1;
+```
 
 - DELETE FROM users v.s. TRUNCATE TABLE users
   - DELETE FROM elimina filas de una tabla
@@ -1735,7 +1802,7 @@ y DO.
 
 Siempre se indican entre paréntesis
 
-````shell
+```sql
   SELECT
     u.id AS user_id,
     u.user_alias,
@@ -1749,8 +1816,9 @@ Siempre se indican entre paréntesis
     users AS u
   WHERE
     u.id IN (SELECT id FROM user_others WHERE relation_type = 'friend');
+```
 
-```shell
+```sql
   SELECT
     u.id AS user_id,
     u.user_alias,
@@ -1764,7 +1832,7 @@ Siempre se indican entre paréntesis
     users AS u
   WHERE
     u.id IN (SELECT id FROM user_others WHERE relation_type = 'friend');
-````
+```
 
 Papel de las subqueries
 
@@ -1788,6 +1856,34 @@ Desventajas
 - Ralentizan las operaciones de escritura
 - Manteniendo más complejo al tener en cuenta de los índices
 
+#### Índices FULLTEXT
+
+Los índices `FULLTEXT` se utilizan para realizar búsquedas de texto completo en columnas de tipo `CHAR`, `VARCHAR`, `TEXT` y similares.
+
+```sql
+  CREATE FULLTEXT INDEX index_name
+  ON table_name (column1, column2, ...);
+```
+
+Para aprovechar estos indices, se utilizan las funciones `MATCH` y `AGAINST` en las clausulas `WHERE`
+
+```sql
+  SELECT
+    u.id AS user_id,
+    u.user_alias,
+    u.email,
+    u.first_name,
+    u.surname,
+    u.phone,
+    u.created_at,
+    u.modified_at
+  FROM
+    users AS u
+  WHERE
+    MATCH (u.first_name, u.surname)
+    AGAINST ('Pepe' IN NATURAL LANGUAGE MODE);
+```
+
 ### Views
 
 Una vista es una tabla virtual basada en el resultado de una consulta SQL.
@@ -1799,7 +1895,7 @@ Una vista es una tabla virtual basada en el resultado de una consulta SQL.
 
 Por ejemplo, para crear una vista de la tabla de usuarios
 
-```shell
+```sql
   CREATE VIEW user_view AS
   SELECT
     u.id AS user_id,
@@ -1816,7 +1912,7 @@ Por ejemplo, para crear una vista de la tabla de usuarios
 
 Se utilizan como si fueran tables
 
-```shell
+```sql
   SELECT * FROM user_view;
 ```
 
@@ -1935,8 +2031,8 @@ MySQL soporta transacciones a través de los motores de almacenamiento InnoDB y 
 
 1. **Puntos de Salvaguarda**:
 
-   - `SAVEPOINT nombre_savepoint;`: Establece un punto de salvaguarda dentro de una transacción.
-   - `ROLLBACK TO nombre_savepoint;`: Deshace los cambios realizados desde el punto de salvaguarda especificado.
+   - `SAVEPOINT nombre_save_point;`: Establece un punto de salvaguarda dentro de una transacción.
+   - `ROLLBACK TO nombre_save_point;`: Deshace los cambios realizados desde el punto de salvaguarda especificado.
 
    ```sql
    SAVEPOINT punto1;
@@ -1979,7 +2075,7 @@ COMMIT;
 -- ROLLBACK;
 ```
 
-En este ejemplo, se transfiere dinero de una cuenta a otra. Si ambas operaciones se completan con éxito, se confirma la transacción con `COMMIT`. Si algo falla, se puede deshacer la transacción con `ROLLBACK`. Este código cobrará más sentido si podemos incluir cierto codigo que evalue el resultado de las operaciones y decida si se confirma o se deshace la transacción. Ahí es donde entra en juego el código de programación que se conecta a la base de datos, como applicaciones externas o el propio código de la base de datos del que hablaremos a continuación.
+En este ejemplo, se transfiere dinero de una cuenta a otra. Si ambas operaciones se completan con éxito, se confirma la transacción con `COMMIT`. Si algo falla, se puede deshacer la transacción con `ROLLBACK`. Este código cobrará más sentido si podemos incluir cierto código que evalúe el resultado de las operaciones y decida si se confirma o se deshace la transacción. Ahí es donde entra en juego el código de programación que se conecta a la base de datos, como aplicaciones externas o el propio código de la base de datos del que hablaremos a continuación.
 
 ### Procedimientos almacenados (Stored Procedures) y funciones (Functions) en MySQL
 
@@ -2001,7 +2097,7 @@ Un procedimiento almacenado es un conjunto de instrucciones SQL que se ejecutan 
 ```sql
 DELIMITER //
 
-CREATE PROCEDURE nombre_procedimiento ([parametros])
+CREATE PROCEDURE nombre_procedimiento ([parámetros])
 BEGIN
     -- Cuerpo del procedimiento
 END //
@@ -2045,7 +2141,7 @@ Una función es similar a un procedimiento almacenado, pero siempre devuelve un 
 ```sql
 DELIMITER //
 
-CREATE FUNCTION nombre_funcion ([parametros])
+CREATE FUNCTION nombre_función ([parámetros])
 RETURNS tipo_retorno
 BEGIN
     -- Cuerpo de la función
@@ -2101,7 +2197,7 @@ FROM productos;
 
 Los triggers (disparadores) son bloques de código SQL que se ejecutan automáticamente en respuesta a ciertos eventos en la base de datos. Los triggers son una característica poderosa de MySQL que permite automatizar tareas, mantener la integridad de los datos y aplicar reglas de negocio de manera eficiente.
 
-Un ejemplo habitual es asisignar un valor a un atributo calculado en función de otros atributos de la tabla.
+Un ejemplo habitual es asignar un valor a un atributo calculado en función de otros atributos de la tabla.
 
 Por ejemplo, para una tabla de empleados, se puede tener un trigger que actualice el salario de un empleado cuando se modifica su nivel de experiencia.
 
@@ -2149,99 +2245,4 @@ BEGIN
   SET num_likes = num_likes - 1
   WHERE tweet_id = OLD.tweet_id;
 END $$
-```
-
-## SQL y ECMAScript (JavaScript)
-
-### Opciones en Node.js para utilizar MySQL
-
-#### Driver nativo para Node
-
-- driver antiguo [mysql](https://www.npmjs.com/package/mysql)
-
-This is a node.js driver for mysql.
-It is written in JavaScript, does not require compiling, and is 100% MIT licensed.
-
-- driver moderno [mysql2](https://www.npmjs.com/package/mysql2)
-
-A continuation of MySQL-Native.
-Protocol parser code was rewritten from scratch and api changed to match popular Node MySQL.
-
-#### ORM (Object–relational mapping)
-
-from [9 Best JavaScript and TypeScript ORMs for 2024](https://www.sitepoint.com/javascript-typescript-orms/)
-
-- [Knex.js](https://knexjs.org/) JavaScript SQL Query builder
-- [Sequelize](https://sequelize.org/) JavaScript ORM Library on top of some native driver
-- [Bookshelf](https://bookshelfjs.org/) JavaScript ORM Library on top of Knex.js SQL Query Builder
-- [Objection.js](https://vincit.github.io/objection.js/) JavaScript ORM Library on top of Knex.js SQL Query Builder and some native driver
-- [TypeORM](https://typeorm.io/) TypeScript ORM Library on top of reflect-metadata and some native driver
-- [MikroORM](https://mikro-orm.io/) TypeScript ORM Library for SQL and NoSQL inspired by PHP Doctrine
-- [Prisma](https://www.prisma.io/) recent TypeScript ORM
-
-### Driver nativo MySQL con Node.js y TypeScript
-
-Instalación
-
-```shell
-npm install mysql2
-```
-
-Como ya incluye soporte para TypeScript, no es necesario instalar tipos adicionales
-
-Conexión a la base de datos
-
-```typescript
-import mysql from 'mysql2/promise';
-
-const connection = await mysql.createConnection({
-  host: process.env.DB_HOST || 'localhost:3306',
-  // port:  process.env.DB_PORT || 3306,
-  user: process.env.DB_USER || 'root',
-  passwd: process.env.DB_PASSWD,
-  database: process.env.DB_NAME || 'movies_db',
-});
-```
-
-La conexión incluye un método `query` para realizar consultas
-
-```typescript
-const [rows, fields] = await connection.query('SELECT * FROM movies');
-```
-
-En las consultas es crítico el uso correcto de parámetros para evitar inyecciones SQL
-
-```typescript
-const [rows, fields] = await connection.query(
-  'SELECT * FROM movies WHERE id = ?',
-  [movieId]
-);
-```
-
-En ningún caso se deben concatenar los valores directamente en la consulta o incluirlos en un template string
-
-```typescript
-// Incorrecto: permitiría inyecciones SQL
-const [rows, fields] = await connection.query(
-  `SELECT * FROM movies WHERE id = ${movieId}`
-);
-```
-
-Las operaciones de un CRUD se pueden encapsular en funciones o métodos de clase, utizando en cada caso el método `query` de la conexión para realizar las operaciones sql de `SELECT`, `INSERT`, `UPDATE` y `DELETE`.
-
-En el tipado del resultado de la query se pueden usar 2 tipos principalmente, proporcionados por la librería `mysql2`
-
-- `FieldPacket[]` para el resultado de una consulta SELECT de un solo campo
-- `RowDataPacket[]` para el resultado de una consulta SELECT simple de varias columnas
-- `RowDataPacket[][]` para el resultado de una consulta SELECT con varias tablas
-- `ResultSetHeader` para el resultado de una operación de modificación de la base de datos (INSERT, UPDATE, DELETE)
-
-```typescript
-import { FieldPacket, RowDataPacket } from 'mysql2';
-
-const [rows, fields] = await connection.query('SELECT * FROM movies');
-const [rows, fields] = await connection.query(
-  'SELECT * FROM movies WHERE id = ?',
-  [movieId]
-);
 ```
