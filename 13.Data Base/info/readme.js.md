@@ -7,6 +7,8 @@ title: SQL y ECMAScript (JavaScript)
     - [Driver nativo para Node](#driver-nativo-para-node)
     - [ORM (Object–relational mapping)](#orm-objectrelational-mapping)
   - [Driver nativo MySQL con Node.js y TypeScript](#driver-nativo-mysql-con-nodejs-y-typescript)
+    - [Consultas: método `query` de la conexión. Tipado de resultados](#consultas-método-query-de-la-conexión-tipado-de-resultados)
+    - [Consultas y placeholders. Problema de la inyección SQL](#consultas-y-placeholders-problema-de-la-inyección-sql)
 - [SQLite y JavaScript / TypeScript](#sqlite-y-javascript--typescript)
   - [Opciones en Node.js para utilizar SQLite](#opciones-en-nodejs-para-utilizar-sqlite)
   - [sqlite3](#sqlite3)
@@ -63,6 +65,8 @@ const connection = await mysql.createConnection({
 });
 ```
 
+#### Consultas: método `query` de la conexión. Tipado de resultados
+
 La conexión incluye un método `query` para realizar consultas
 
 ```typescript
@@ -74,7 +78,7 @@ En las consultas es crítico el uso correcto de parámetros para evitar inyeccio
 ```typescript
 const [rows, fields] = await connection.query(
   'SELECT * FROM movies WHERE id = ?',
-  [movieId]
+  [movieId],
 );
 ```
 
@@ -83,15 +87,19 @@ En ningún caso se deben concatenar los valores directamente en la consulta o in
 ```typescript
 // Incorrecto: permitiría inyecciones SQL
 const [rows, fields] = await connection.query(
-  `SELECT * FROM movies WHERE id = ${movieId}`
+  `SELECT * FROM movies WHERE id = ${movieId}`,
 );
 ```
 
-Las operaciones de un CRUD se pueden encapsular en funciones o métodos de clase, utizando en cada caso el método `query` de la conexión para realizar las operaciones sql de `SELECT`, `INSERT`, `UPDATE` y `DELETE`.
+Las operaciones de un CRUD se pueden encapsular en funciones o métodos de clase, utilizando en cada caso el método `query` de la conexión para realizar las operaciones sql de `SELECT`, `INSERT`, `UPDATE` y `DELETE`.
 
-En el tipado del resultado de la query se pueden usar 2 tipos principalmente, proporcionados por la librería `mysql2`
+El resultado de la consulta es una tupla con 2 elementos,
 
-- `FieldPacket[]` para el resultado de una consulta SELECT de un solo campo
+- el primero es un array con los resultados de la consulta
+- el segundo es un array con los metadatos de los campos de la tabla, `FieldPacket[]` .
+
+En el tipado del primer miembro de la query se pueden encontrar varios tipos, proporcionados por la librería `mysql2` principalmente:
+
 - `RowDataPacket[]` para el resultado de una consulta SELECT simple de varias columnas
 - `RowDataPacket[][]` para el resultado de una consulta SELECT con varias tablas
 - `ResultSetHeader` para el resultado de una operación de modificación de la base de datos (INSERT, UPDATE, DELETE)
@@ -100,9 +108,65 @@ En el tipado del resultado de la query se pueden usar 2 tipos principalmente, pr
 import { FieldPacket, RowDataPacket } from 'mysql2';
 
 const [rows, fields] = await connection.query('SELECT * FROM movies');
+// rows: RowDataPacket[]
+// fields: FieldPacket[]
+```
+
+Dependiendo del tipo de consulta, se pueden usar genéricos para refinar el tipo que obtendremos en `rows`
+
+```typescript
+const [rows] = await connection.query<RowDataPacket[]>('SELECT * FROM movies');
+
+// rows: RowDataPacket[]
+
+const [rows] = await connection.query<ResultSetHeader[]>(
+  'DELETE FROM movies WHERE id = ?',
+  [movieId],
+);
+
+// rows: ResultSetHeader[]
+```
+
+En el caso del SELECT podemos ir más alla, y definir un tipo específico para cada fila de la tabla, que incluya solo los campos que necesitamos en la aplicación
+
+```typescript
+
+interface Movie {
+  id: number;
+  title: string;
+  year: number;
+  director: string;
+} && RowDataPacket;
+
+const [rows] = await connection.query<Movie[]>(
+  'SELECT id, title, year, director FROM movies',
+);
+
+// rows: Movie[]
+```
+
+En el caso de las operaciones de modificación, el tipo de resultado es `ResultSetHeader[]`, que incluye un solo elemento con información sobre la operación realizada, incluyendo el número de filas afectadas. Par los INSERT también ese incluye el id de la fila insertada, siempre que se trate de una PK auto incremental.
+
+```typescript
+const [result] = await connection.query<ResultSetHeader[]>(
+  'DELETE FROM movies WHERE id = ?',
+  [movieId],
+);
+
+// result: ResultSetHeader[]
+
+console.log(result.affectedRows);
+```
+
+#### Consultas y placeholders. Problema de la inyección SQL
+
+```typescript
+import { FieldPacket, RowDataPacket } from 'mysql2';
+
+const [rows, fields] = await connection.query('SELECT * FROM movies');
 const [rows, fields] = await connection.query(
   'SELECT * FROM movies WHERE id = ?',
-  [movieId]
+  [movieId],
 );
 ```
 
