@@ -64,3 +64,8 @@ Una vez tengamos esto debemos crear el fichero INDEX.HTML, que debe estar en la 
 4. **Usar clases abstractas para comportamiento común**: Las clases abstractas pueden ser útiles para definir comportamientos comunes que deben ser implementados por las subclases.
 
 5. **Prefiere la composición sobre la herencia**: Este es un principio de diseño común (conocido como "favor composition over inheritance"). La composición permite crear relaciones "tiene-un" en lugar de "es-un" y es más flexible para cambios en el diseño.
+
+Diferencias entre tipado de tuple y array:
+
+-   const array = string[] (Tipado de array vacio de tipo string)
+-   const tuple = [string, number, 'hola'] (Tipado dentro del array, se denomina tupla)

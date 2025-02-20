@@ -2060,7 +2060,7 @@ SET TRANSACTION ISOLATION LEVEL nombre_nivel;
 Aquí tienes un ejemplo simple de una transacción en MySQL:
 
 ```sql
-START TRANSACTION;
+BEGIN;
 
 -- Operación 1
 UPDATE cuenta SET saldo = saldo - 100 WHERE id_cuenta = 1;
@@ -2158,6 +2158,7 @@ DELIMITER //
 
 CREATE FUNCTION calcular_impuesto (precio DECIMAL(10, 2))
 RETURNS DECIMAL(10, 2)
+DETERMINISTIC
 BEGIN
     DECLARE impuesto DECIMAL(10, 2);
     SET impuesto = precio * 0.21;
@@ -2206,7 +2207,7 @@ Por ejemplo, para una tabla de empleados, se puede tener un trigger que actualic
 DELIMITER //
 
 CREATE TRIGGER actualizar_salario
-BEFORE UPDATE ON empleados
+AFTER UPDATE ON empleados
 FOR EACH ROW
 BEGIN
     IF NEW.experiencia > 5 THEN
@@ -2216,6 +2217,11 @@ END //
 
 DELIMITER ;
 
+-- USO DEL TRIGGER
+
+UPDATE empleados
+SET experiencia = 6
+WHERE id = 1;
 ```
 
 En este otro ejemplo, se actualiza el número de likes de un tweet cada vez que se inserta un nuevo like en la tabla `tweet_likes`.
@@ -2231,6 +2237,8 @@ BEGIN
   SET num_likes = num_likes + 1
   WHERE tweet_id = NEW.tweet_id;
 END $$
+
+DELIMITER ;
 ```
 
 Igualmente habría que crear un trigger para decrementar el número de likes cuando se elimina un like.
@@ -2245,4 +2253,6 @@ BEGIN
   SET num_likes = num_likes - 1
   WHERE tweet_id = OLD.tweet_id;
 END $$
+
+DELIMITER ;
 ```

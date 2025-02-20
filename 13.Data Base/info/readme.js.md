@@ -7,6 +7,9 @@ title: SQL y ECMAScript (JavaScript)
     - [Driver nativo para Node](#driver-nativo-para-node)
     - [ORM (Object–relational mapping)](#orm-objectrelational-mapping)
   - [Driver nativo MySQL con Node.js y TypeScript](#driver-nativo-mysql-con-nodejs-y-typescript)
+- [SQLite y JavaScript / TypeScript](#sqlite-y-javascript--typescript)
+  - [Opciones en Node.js para utilizar SQLite](#opciones-en-nodejs-para-utilizar-sqlite)
+  - [sqlite3](#sqlite3)
 
 ## MySQL y JavaScript / TypeScript
 
@@ -101,4 +104,50 @@ const [rows, fields] = await connection.query(
   'SELECT * FROM movies WHERE id = ?',
   [movieId]
 );
+```
+
+## SQLite y JavaScript / TypeScript
+
+### Opciones en Node.js para utilizar SQLite
+
+Hasta hace poco, existian varias librerías para trabajar con SQLite en Node.js, aunque algunas no soportaban TypeScript o no tenían soporte activo. Entre las mejores opciones estaban:
+
+- `sqlite3`, que es un wrapper de la librería `sqlite3` de C++ y desde su versión 5.0 de `sqlite3` incluye soporte para TypeScript.
+- `better-sqlite3` es una librería que se presenta como una alternativa a `sqlite3` y que también incluye soporte para TypeScript.
+
+Desde su versión 22.5.0 NodeJS incluye un módulo nativo para trabajar con SQLite, aunque de momento en estado experimental.
+Esta adición es similar a lo que ya tenían otros entornos de ejecución de JavaScript como Deno y Bun. Otros lenguajes de programación como Python y PHP también incorporan SQLite, lo que demuestra los beneficios de agregar esta característica a un entorno de ejecución.
+
+En su versión 22.4.0, Node.js añadió soporte experimental para Web Storage (que consiste en almacenamiento local y de sesión). Esta nueva característica sirve como un sistema de clave–valor en Node.js y mejora la compatibilidad de Node.js con las APIs Web. Los desarrolladores de Node.js utilizaron SQLite para manejar esta característica de Web Storage y han decido hacerla utilizable como un nuevo módulo, `node:sqlite`.
+
+Por el momento, para utilizarla es necesario habilitar la bandera `--experimental-vm-modules` al ejecutar Node.js.
+
+```shell
+node --experimental-sqlite index.js
+```
+
+[Using the built-in SQLite module in Node.js](https://blog.logrocket.com/using-built-in-sqlite-module-node-js/)
+
+### sqlite3
+
+La librería [sqlite3](https://www.npmjs.com/package/sqlite3) se puede instalar mediante npm
+
+```shell
+npm install sqlite3
+```
+
+Conexión a la base de datos en memory
+
+```typescript
+import sqlite3 from 'sqlite3';
+
+const db = new sqlite3.Database(':memory:');
+```
+
+Conexión a la base de datos en un archivo
+
+```typescript
+import sqlite3 from 'sqlite3';
+
+const db = new sqlite3.Database('movies.db');
 ```
