@@ -1,6 +1,6 @@
-import mysql from 'mysql/promise'
+import mysql from 'mysql2/promise';
 
-process.loadEnvFile('.env')
+process.loadEnvFile('.env');
 
 const openConnection = async () => {
     const dataConnection = {
@@ -12,35 +12,34 @@ const openConnection = async () => {
     };
     const connection = await mysql.createConnection(dataConnection);
     return connection;
-}
+};
 
 // class ManageMovies {
 //     constructor(private connection: Connection) {}
 
-//     getAllMovies = async () => {
+//     async  getAllMovies() {
 //         const query =  'select title, director, duration from movies';
 //         const [rows] = await this.connection.query(query);
 //         return rows;
 //     };
 
-//     getMovieById = async (id: number) => {
+//     async getMovieById(id: number) {
 //         const q = 'SELECT id, title, director, duration FROM movies WHERE id = ?';
 //         const [rows] = await this.connection.query(q, [id]);
 //         return rows;
 //     }
 
-
-//     createMovie = async (title: string, director: string, duration: number) => {
+//     async createMovie(title: string, director: string, duration: number) {
 //         const query = 'insert into movies (title, director, duration) values (?, ?, ?);';
 //         const [result] = await this.connection.query(query, [title, director, duration]);
 //     };
 
-//     updateMovie = async (id: number, title: string, director: string, duration: number) => {
+//     async updateMovie(id: number, title: string, director: string, duration: number) {
 //         const q = 'UPDATE movies SET title = ?, director = ?, duration = ? WHERE id = ?';
 //         const [result] = await this.connection.query<ResultSetHeader>(q, [
-//             title, 
-//             director, 
-//             duration, 
+//             title,
+//             director,
+//             duration,
 //             id
 //         ]);
 
@@ -52,7 +51,7 @@ const openConnection = async () => {
 //         return result;
 //     }
 
-//     deleteMovie = async (id: number) => {
+//     async deleteMovie(id: number) {
 //         const movieForDelete = await this.getMovieById(id);
 
 //         const q = 'DELETE FROM movies WHERE id = ?';
@@ -68,41 +67,47 @@ const openConnection = async () => {
 // }
 
 const getAllMovies = async () => {
-    const connection = await openConnection();  
+    const connection = await openConnection();
     try {
-        const [rows] = await connection.execute('SELECT title, director, duration FROM movies');
-        console.log('Movies:', rows); 
+        const [rows] = await connection.execute(
+            'SELECT title, director, duration FROM movies',
+        );
+        console.log('Movies:', rows);
     } catch (error) {
         console.error('Error while fetching movies:', error);
-    } 
+    }
 };
 
-
 const updateMovieDuration = async (id: number, newDuration: number) => {
-    const connection = await openConnection();  
+    const connection = await openConnection();
     try {
-        const [result] = await connection.execute('UPDATE movies SET duration = ? WHERE id = ?', [newDuration, id]);
+        const [result] = await connection.execute(
+            'UPDATE movies SET duration = ? WHERE id = ?',
+            [newDuration, id],
+        );
         if (result.affectedRows > 0) {
             console.log(`Movie with id ${id} updated successfully.`);
         } else {
             console.log(`No movie found with id ${id}.`);
         }
     } catch (error) {
-        console.error('Error while updating movie:', error); 
-    }}
-
+        console.error('Error while updating movie:', error);
+    }
+};
 
 const deleteMovie = async (id: number) => {
     const connection = await openConnection();
     try {
-        const [result] = await connection.execute('DELETE FROM movies WHERE id = ?', [id]);
+        const [result] = await connection.execute(
+            'DELETE FROM movies WHERE id = ?',
+            [id],
+        );
         if (result.affectedRows > 0) {
             console.log(`Movie with id ${id} deleted successfully.`);
         } else {
             console.log(`No movie found with id ${id}.`);
         }
     } catch (error) {
-        console.error('Error while deleting movie:', error);  
-    } 
+        console.error('Error while deleting movie:', error);
+    }
 };
-

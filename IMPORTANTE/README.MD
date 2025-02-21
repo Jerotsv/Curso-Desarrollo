@@ -69,3 +69,7 @@ Diferencias entre tipado de tuple y array:
 
 -   const array = string[] (Tipado de array vacio de tipo string)
 -   const tuple = [string, number, 'hola'] (Tipado dentro del array, se denomina tupla)
+
+Que es y como nos protegemos de una inyeccion de sql?
+
+-   Pasarle los datos mediante el placeholder ?,
