@@ -9,6 +9,7 @@ title: SQL y ECMAScript (JavaScript)
   - [Driver nativo MySQL con Node.js y TypeScript](#driver-nativo-mysql-con-nodejs-y-typescript)
     - [Consultas: método `query` de la conexión. Tipado de resultados](#consultas-método-query-de-la-conexión-tipado-de-resultados)
     - [Consultas y placeholders. Problema de la inyección SQL](#consultas-y-placeholders-problema-de-la-inyección-sql)
+    - [Creación de registros y obtención del id](#creación-de-registros-y-obtención-del-id)
 - [SQLite y JavaScript / TypeScript](#sqlite-y-javascript--typescript)
   - [Opciones en Node.js para utilizar SQLite](#opciones-en-nodejs-para-utilizar-sqlite)
   - [sqlite3](#sqlite3)
@@ -170,11 +171,61 @@ const [rows, fields] = await connection.query(
 );
 ```
 
+#### Creación de registros y obtención del id
+
+Cuando el id es auto incremental, se puede obtener el id del registro insertado
+
+```typescript
+const [result] = await connection.query<ResultSetHeader[]>(
+  'INSERT INTO movies (title, year, director) VALUES (?, ?, ?)',
+  [title, year, director],
+);
+
+console.log(result.insertId);
+```
+
+Cuando el id no es auto incremental, existen dos posibilidades:
+
+- el id se genera en la aplicación, por lo que no es necesario obtenerlo
+- el id se genera en la base de datos (como valor por defecto, e.g. UUID()), por lo que se necesita obtener el id del registro insertado
+
+En este caso, se puede realizar una segunda consulta para obtener el id del registro insertado en base a una condición que devuelva un registro único
+
+````typescript
+const [result] = await connection.query<ResultSetHeader[]>(
+  'INSERT INTO movies (title, year, director) VALUES (?, ?, ?)',
+  [title, year, director],
+);
+
+const [rows] = await connection.query<RowDataPacket[]>(
+  'SELECT id FROM movies WHERE title = ? AND year = ? AND director = ?',
+  [title, year, director],
+);
+
+Otra alternativa es disponer de un trigger en la base de datos que devuelva el id del registro insertado, aunque esto no es una práctica recomendada.
+
+```sql
+CREATE TRIGGER `movies_after_insert` AFTER INSERT ON `movies`
+FOR EACH ROW
+BEGIN
+  SELECT NEW.id;
+END;
+````
+
+```typescript
+const [result] = await connection.query<ResultSetHeader[]>(
+  'INSERT INTO movies (title, year, director) VALUES (?, ?, ?)',
+  [title, year, director],
+);
+
+console.log(result.insertId);
+```
+
 ## SQLite y JavaScript / TypeScript
 
 ### Opciones en Node.js para utilizar SQLite
 
-Hasta hace poco, existian varias librerías para trabajar con SQLite en Node.js, aunque algunas no soportaban TypeScript o no tenían soporte activo. Entre las mejores opciones estaban:
+Hasta hace poco, existían varias librerías para trabajar con SQLite en Node.js, aunque algunas no soportaban TypeScript o no tenían soporte activo. Entre las mejores opciones estaban:
 
 - `sqlite3`, que es un wrapper de la librería `sqlite3` de C++ y desde su versión 5.0 de `sqlite3` incluye soporte para TypeScript.
 - `better-sqlite3` es una librería que se presenta como una alternativa a `sqlite3` y que también incluye soporte para TypeScript.
@@ -214,4 +265,41 @@ Conexión a la base de datos en un archivo
 import sqlite3 from 'sqlite3';
 
 const db = new sqlite3.Database('movies.db');
+```
+
+sqlite3 trabaja con callbacks, en lugar de promesas, por lo que es necesario utilizar funciones de callback para realizar las operaciones de consulta.
+
+Existen básicamente los siguientes métodos para realizar consultas:
+
+- `all`: para obtener todos los registros de una consulta
+- `get`: para obtener un solo registro de una consulta
+- `run`: para realizar operaciones de modificación de la base de datos (INSERT, UPDATE, DELETE)
+- `each`: para obtener los registros de una consulta de forma iterativa
+- `exec`: para ejecutar una o varias sentencias SQL
+
+No es difícil crear un wrapper de estos métodos para trabajar con promesas en lugar de callbacks
+
+```typescript
+import util from 'node:util';
+import sqlite3 from 'sqlite3';
+
+SQLite3 = {
+  // run: util.promisify(db.run.bind(db)),
+  run (...args) {
+    return new Promise((resolve, reject) => {
+      db.run(...args, function (err) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(this);
+        }
+      });
+    });
+  }
+  all: util.promisify(db.all.bind(db)),
+  get: util.promisify(db.get.bind(db)),
+  each: util.promisify(db.each.bind(db)),
+  exec: util.promisify(db.exec.bind(db)),
+}
+
 ```
