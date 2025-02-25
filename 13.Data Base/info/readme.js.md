@@ -303,3 +303,5 @@ SQLite3 = {
 }
 
 ```
+
+<https://github.com/TryGhost/node-sqlite3/wiki/API>

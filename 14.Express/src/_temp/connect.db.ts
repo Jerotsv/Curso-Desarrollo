@@ -1,6 +1,6 @@
 import { access, mkdir, writeFile } from 'node:fs/promises';
 import { resolve, dirname } from 'path';
-import { ODMLite } from '../../odm/odm-lite.js';
+import { ODMLite } from '../odm/odm-lite.js';
 import mysql from 'mysql2/promise';
 import sqlite3, { Database } from 'sqlite3';
 import createDebug from 'debug';
