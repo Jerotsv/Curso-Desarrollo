@@ -12,6 +12,12 @@ import {
 
 import { errorManager } from './controllers/errors.controller.js';
 
+import { createFilmsRouter } from './router/films.router.js';
+import { Repository } from './repo/repository.type.js';
+import { Film } from '@prisma/client';
+import { FilmRepo } from './repo/films.repository.js';
+import { FilmsController } from './controllers/films.controller.js';
+
 // import { createProductsRouter } from './routers/products.router.js';
 // import { HomePage } from './views/pages/home-page.js';
 
@@ -39,36 +45,15 @@ export const createApp = () => {
     app.use(debugLogger('debug-logger'));
     app.use(express.static(publicPath));
 
-    // Routes
+    const repoFilms: Repository<Film> = new FilmRepo();
+    const filmsController = new FilmsController(repoFilms);
+    const filmsRouter = createFilmsRouter(filmsController);
 
-    // const homeView = new HomePage();
-    // const homeController = new HomeController(homeView);
-    // app.get('/', homeController.getPage);
+    // Routes registry
+    app.use('/api/films', filmsRouter);
 
-    // let animalModel: Repository<Animal>;
-    // switch (process.env.REPO as 'file' | 'sqlite' | 'mysql' | 'prisma') {
-    //     case 'sqlite':
-    //         animalModel = new AnimalSqliteRepo();
-    //         break;
-    //     case 'mysql':
-    //         animalModel = new AnimalMySqlRepo();
-    //         break;
-    //     case 'prisma':
-    //         animalModel = new AnimalPrismaRepo();
-    //         break;
-    //     case 'file':
-    //         animalModel = new AnimalFileRepo();
-    //         break;
-    //     default:
-    //         throw new Error('Invalid repository');
-    // }
-
-    // const productsController = new ProductsController(animalModel);
-
-    // app.use('/products', createProductsRouter(productsController));
-
-    app.get('*', notFoundController);
-    app.use('*', notMethodController);
+    app.get('*', notFoundController); // 404
+    app.use('*', notMethodController); // 405
 
     app.use(errorManager);
 

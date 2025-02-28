@@ -24,6 +24,40 @@ Debemos tener estos 4 ficheros: readme.md, .gitignore, .package.json y .editorco
 
 Una vez tengamos esto debemos crear el fichero INDEX.HTML, que debe estar en la carpeta raíz para poder usar GitHub como hosting
 
+### Configuracion básica de tu package.json incluyendo node y ts
+
+{
+"name": "16.prisma",
+"version": "1.0.0",
+"main": "index.js",
+"type": "module",
+"scripts": {
+"start": "cross-env NODE_ENV=prod node dist/index.js",
+"start:dev": "cross-env NODE_ENV=dev DEBUG=films\* node --watch --env-file=.env ./dist/index.js",
+"build": "tsc -w",
+"lint": "eslint . --ext .ts"
+},
+"keywords": [],
+"author": "",
+"license": "ISC",
+"description": "",
+"prettier": {
+"singleQuote": true
+},
+"devDependencies": {
+"@eslint/js": "^9.21.0",
+"@types/node": "^22.13.5",
+"eslint": "^9.21.0",
+"globals": "^16.0.0",
+"prettier": "^3.5.2",
+"typescript": "^5.7.3",
+"typescript-eslint": "^8.25.0"
+},
+"dependencies": {
+"cross-env": "^7.0.3"
+}
+}
+
 ## PREGUNTAS EXAMEN MODULO 1
 
 -   Que significa HTML: Lenguaje de marcas de hipertexto (Hypertext Markup Language)
