@@ -107,3 +107,54 @@ Diferencias entre tipado de tuple y array:
 Que es y como nos protegemos de una inyeccion de sql?
 
 -   Pasarle los datos mediante el placeholder ?,
+
+APP.USE quiere decir, registra el middleware, usa este middleware
+
+Orden de ejecución y responsabilidad de cada capa
+Cuando un usuario hace una petición a tu API, el flujo suele seguir este orden:
+
+1️⃣ server.ts (o .js)
+
+Es el punto de entrada principal.
+Arranca el servidor y enlaza la aplicación con Express.
+Escucha las peticiones en un puerto.
+
+2️⃣ app.ts (o .js)
+
+Inicializa Express y configura los middlewares globales.
+Importa los routers para definir las rutas disponibles.
+Se lo pasa al servidor para que comience a escuchar.
+
+3️⃣ router/
+
+Define las rutas de la API.
+Llama al controller correspondiente cuando llega una petición.
+
+4️⃣ middleware/
+
+Son funciones intermedias que se ejecutan antes de llegar al controlador.
+Ejemplos: validación de datos, autenticación, logging, manejo de errores.
+Se pueden ejecutar a nivel global o por ruta específica.
+
+5️⃣ controller/
+
+Se encarga de manejar la lógica de cada endpoint.
+Recibe la petición del router, extrae los datos, y llama al service o repository.
+Retorna la respuesta adecuada.
+
+6️⃣ services/
+
+Contiene la lógica de negocio de la aplicación.
+Se comunica con los repositories si es necesario acceder a la base de datos.
+Realiza cálculos o transformación de datos antes de enviarlos al controller.
+
+7️⃣ repository/
+
+Es la capa encargada de interactuar con la base de datos.
+Encapsula la lógica de acceso a los datos.
+Solo se comunica con la capa de services.
+
+8️⃣ types/
+
+Define interfaces y tipos para TypeScript.
+Se usa para estructurar los datos que pasan entre capas.
