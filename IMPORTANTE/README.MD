@@ -158,3 +158,5 @@ Solo se comunica con la capa de services.
 
 Define interfaces y tipos para TypeScript.
 Se usa para estructurar los datos que pasan entre capas.
+
+QUE LLEVA DENTRO EL BODY DE UNA REQUEST: NAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!

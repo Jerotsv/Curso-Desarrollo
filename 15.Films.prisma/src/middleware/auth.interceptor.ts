@@ -3,8 +3,9 @@ import { AuthService } from '../services/auth.service.js';
 import { HttpError } from '../types/http-error.js';
 import createDebug from 'debug';
 import { Role } from '@prisma/client';
+//  { Role } from '@prisma/client';
 
-const debug = createDebug('films:interceptors:auth');
+const debug = createDebug('movies:interceptor:auth');
 
 export class AuthInterceptor {
     constructor() {
@@ -20,8 +21,8 @@ export class AuthInterceptor {
         if (!authorization || authorization.includes('Bearer') === false) {
             const newError = new HttpError(
                 'Token not found',
-                498,
-                'Token invalid',
+                401,
+                'Unauthorized',
             );
             next(newError);
             return;
@@ -30,23 +31,52 @@ export class AuthInterceptor {
         const token = authorization.split(' ')[1];
         try {
             const payload = await AuthService.verifyToken(token);
-            // req.session.user = payload;
-            _res.locals.user = payload;
+            // Añado datos a req disponibles para siguientes etapas
+            // Previamente he extendido la interfaz Request en express
+            req.user = payload;
+            // Opcionalmente, añado datos a res.locals
+            // para que estén disponibles en las vistas
+            // res.locals.user = payload;
             next();
         } catch (err) {
             const newError = new HttpError(
                 (err as Error).message,
-                498,
-                'Token invalid',
+                401,
+                'Unauthorized',
             );
             next(newError);
         }
     };
 
-    isAdmin = async (req: Request, _res: Response, next: NextFunction) => {
-        debug('isAdmin');
+    hasRole = (role: Role) => {
+        return (req: Request, _res: Response, next: NextFunction) => {
+            debug('hasRole');
 
-        if (!req.session.user || req.session.user.role !== Role.ADMIN) {
+            if (
+                !req.user ||
+                (req.user.role !== role && req.user.role !== Role.ADMIN)
+            ) {
+                const newError = new HttpError(
+                    'You do not have permission',
+                    403,
+                    'Forbidden',
+                );
+                next(newError);
+                return;
+            }
+
+            next();
+        };
+    };
+
+    isOwnerReview = async (
+        req: Request,
+        _res: Response,
+        next: NextFunction,
+    ) => {
+        debug('isOwner');
+
+        if (!req.user) {
             const newError = new HttpError(
                 'You do not have permission',
                 403,
@@ -56,6 +86,10 @@ export class AuthInterceptor {
             return;
         }
 
-        next();
+        // Item -> req.params.id
+        const { id: reviewId } = req.params;
+        // User -> req.user.id
+        const { id: userId } = req.user;
+        // console.log(itemId, userId);
     };
 }

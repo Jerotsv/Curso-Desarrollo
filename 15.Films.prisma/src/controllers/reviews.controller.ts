@@ -1,19 +1,19 @@
 import { NextFunction, Request, Response } from 'express';
-import { Film } from '@prisma/client';
+import { Review } from '@prisma/client';
 import { Repository } from '../repo/repository.type.js';
-import { AppResponse } from '../types/app-response';
+import { AppResponse } from '../types/app-response.js';
 import createDebug from 'debug';
-import { FilmCreateDTO } from '../dto/films.dto.js';
+import { ReviewCreateDTO, ReviewUpdateDTO } from '../dto/reviews.dto.js';
 
-const debug = createDebug('movies:controller:films');
+const debug = createDebug('movies:controller:reviews');
 
-export class FilmsController {
-    constructor(private repoFilms: Repository<Film>) {
+export class ReviewsController {
+    constructor(private repoReviews: Repository<Review>) {
         debug('Instanciando');
     }
 
-    private makeResponse(results: Film[]) {
-        const data: AppResponse<Film> = {
+    private makeResponse(results: Review[]) {
+        const data: AppResponse<Review> = {
             results,
             error: '',
         };
@@ -23,8 +23,8 @@ export class FilmsController {
     getAll = async (req: Request, res: Response, next: NextFunction) => {
         debug('getAll');
         try {
-            const films = await this.repoFilms.read();
-            res.json(this.makeResponse(films));
+            const reviews = await this.repoReviews.read();
+            res.json(this.makeResponse(reviews));
         } catch (error) {
             next(error);
         }
@@ -34,8 +34,8 @@ export class FilmsController {
         debug('getById');
         try {
             const { id } = req.params;
-            const film = await this.repoFilms.readById(id);
-            res.json(this.makeResponse([film]));
+            const review = await this.repoReviews.readById(id);
+            res.json(this.makeResponse([review]));
         } catch (error) {
             next(error);
         }
@@ -44,11 +44,11 @@ export class FilmsController {
     create = async (req: Request, res: Response, next: NextFunction) => {
         debug('create');
         try {
-            FilmCreateDTO.parse(req.body);
+            ReviewCreateDTO.parse(req.body);
 
-            const newData: FilmCreateDTO = req.body;
-            const film = await this.repoFilms.create(newData);
-            res.json(this.makeResponse([film]));
+            const newData: ReviewCreateDTO = req.body;
+            const review = await this.repoReviews.create(newData as Review);
+            res.json(this.makeResponse([review]));
         } catch (error) {
             next(error);
         }
@@ -59,9 +59,9 @@ export class FilmsController {
         try {
             const { id } = req.params;
             const newData = req.body;
-            FilmCreateDTO.partial().parse(req.body);
-            const film = await this.repoFilms.update(id, newData);
-            res.json(this.makeResponse([film]));
+            ReviewUpdateDTO.parse(req.body);
+            const review = await this.repoReviews.update(id, newData);
+            res.json(this.makeResponse([review]));
         } catch (error) {
             next(error);
         }
@@ -71,8 +71,8 @@ export class FilmsController {
         debug('delete');
         try {
             const { id } = req.params;
-            const film = await this.repoFilms.delete(id);
-            res.json(this.makeResponse([film]));
+            const review = await this.repoReviews.delete(id);
+            res.json(this.makeResponse([review]));
         } catch (error) {
             next(error);
         }
