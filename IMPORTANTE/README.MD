@@ -108,7 +108,7 @@ Que es y como nos protegemos de una inyeccion de sql?
 
 -   Pasarle los datos mediante el placeholder ?,
 
-APP.USE quiere decir, registra el middleware, usa este middleware
+APP.USE quiere decir, registra el middleware, usa este middleware. REGISTRA UNA FUNCIÓN QUE SE VA A EJECUTAR CADA VEZ QUE RECIBA UNA REQUEST
 
 Orden de ejecución y responsabilidad de cada capa
 Cuando un usuario hace una petición a tu API, el flujo suele seguir este orden:
