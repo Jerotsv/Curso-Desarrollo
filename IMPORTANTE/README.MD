@@ -160,3 +160,8 @@ Define interfaces y tipos para TypeScript.
 Se usa para estructurar los datos que pasan entre capas.
 
 QUE LLEVA DENTRO EL BODY DE UNA REQUEST: NAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!
+
+Angular es un framework de desarrollo web basado en TypeScript que permite crear aplicaciones dinámicas, escalables y de alto rendimiento mediante el uso de componentes, inyección de dependencias y un potente sistema de templates.
+
+npm (Node Package Manager) se usa para instalar y gestionar paquetes de Node.js en un proyecto, ya sea de forma local o global.
+npx (Node Package Execute) permite ejecutar paquetes sin necesidad de instalarlos, útil para probar herramientas o ejecutar comandos temporales sin afectar el entorno global.

@@ -4,16 +4,14 @@ import { Component } from '@angular/core';
   selector: 'cas-footer',
   imports: [],
   template: `
-    <p>
-      footer works!
-    </p>
+    <p>{{ today.toLocaleDateString() }} - {{ today.toLocaleTimeString() }}</p>
   `,
   styles: `
     :host {
       display: block;
     }
-  `
+  `,
 })
 export class FooterComponent {
-
+  today = new Date();
 }

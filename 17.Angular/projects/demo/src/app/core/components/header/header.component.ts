@@ -4,16 +4,20 @@ import { Component } from '@angular/core';
   selector: 'cas-header',
   imports: [],
   template: `
-    <p>
-      header works!
-    </p>
+    <header>
+      <h1>Welcome {{ title }}!</h1>
+      <ng-content></ng-content>
+    </header>
   `,
   styles: `
     :host {
       display: block;
     }
-  `
+  `,
 })
 export class HeaderComponent {
-
+  title = 'demo';
+  constructor() {
+    console.log(this.title);
+  }
 }
