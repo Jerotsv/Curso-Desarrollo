@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
+import { RegisterComponent } from '../../user/register/register.component';
+import { LoginComponent } from '../../user/login/login.component';
 
 @Component({
   selector: 'cas-home',
-  imports: [],
+  imports: [RegisterComponent, LoginComponent],
   template: `
-    <p>
-      home works!
-    </p>
+    <h1>Home</h1>
+    <p>Esta es la página de inicio</p>
+    <cas-register></cas-register>
+    <cas-login></cas-login>
   `,
-  styles: ``
+  styles: ``,
 })
-export class HomeComponent {
-
-}
+export default class HomeComponent {}

@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CounterComponent } from './counter.component';
+import { CounterSignalComponent } from './counter.signal.component';
 
 describe('CounterComponent', () => {
-  let component: CounterComponent;
-  let fixture: ComponentFixture<CounterComponent>;
+  let component: CounterSignalComponent;
+  let fixture: ComponentFixture<CounterSignalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CounterComponent]
-    })
-    .compileComponents();
+      imports: [CounterSignalComponent],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(CounterComponent);
+    fixture = TestBed.createComponent(CounterSignalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

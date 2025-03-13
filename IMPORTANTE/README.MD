@@ -165,3 +165,9 @@ Angular es un framework de desarrollo web basado en TypeScript que permite crear
 
 npm (Node Package Manager) se usa para instalar y gestionar paquetes de Node.js en un proyecto, ya sea de forma local o global.
 npx (Node Package Execute) permite ejecutar paquetes sin necesidad de instalarlos, útil para probar herramientas o ejecutar comandos temporales sin afectar el entorno global.
+
+Estos son 4 de los eventos mas importantes de Angular: click, input, submit y change
+
+La diferencia principal entre un método y una función radica en dónde y cómo se utilizan:
+🔹 Función → Es un bloque de código independiente que se puede llamar en cualquier parte del programa. No necesita estar dentro de una clase u objeto.
+🔹 Método → Es una función que está asociada a un objeto o una clase y se llama a través de una instancia de esa clase.

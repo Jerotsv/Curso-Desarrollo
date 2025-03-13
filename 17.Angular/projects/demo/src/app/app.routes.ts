@@ -1,12 +1,26 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './feature/home/home.component';
-import { FilmsComponent } from './feature/films/films.component';
-import { AboutComponent } from './feature/about/about.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'home' },
-  { path: '', component: HomeComponent },
-  { path: 'films', component: FilmsComponent },
-  { path: 'about', component: AboutComponent },
+
+  {
+    path: 'home',
+    loadComponent: () => import('./feature/home/home.component'),
+    title: 'Home | Angular Demo',
+    data: { label: 'Home' },
+  },
+
+  {
+    path: 'films',
+    loadComponent: () => import('./feature/films/films.component'),
+    title: 'Films | Angular Demo',
+    data: { label: 'Films' },
+  },
+  {
+    path: 'about',
+    loadComponent: () => import('./feature/about/about.component'),
+    title: 'About | Angular Demo',
+    data: { label: 'About' },
+  },
   { path: '**', redirectTo: 'home' },
 ];

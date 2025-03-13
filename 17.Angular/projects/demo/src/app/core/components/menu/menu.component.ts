@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/consistent-type-definitions */
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { routes } from '../../../app.routes';
 
 type MenuItem = {
   path: string;
@@ -22,17 +22,17 @@ type MenuItem = {
         }
         @if (isLogin) {
           <li>
-            <a [href]="'/profile'">Profile</a>
+            <a [routerLink]="'/profile'">Profile</a>
           </li>
           <li>
-            <a [href]="'/logout'">Logout</a>
+            <a [routerLink]="'/logout'">Logout</a>
           </li>
         } @else {
           <li>
-            <a [href]="'/login'">Login</a>
+            <a [routerLink]="'/login'">Login</a>
           </li>
           <li>
-            <a [href]="'/register'">Register</a>
+            <a [routerLink]="'/register'">Register</a>
           </li>
         }
       </ul>
@@ -64,7 +64,7 @@ type MenuItem = {
     }
     .active {
       font-weight: bold;
-      transform: scale(1.1);
+      transform: scale(1.2);
     }
   `,
 })
@@ -72,19 +72,30 @@ export class MenuComponent {
   items: MenuItem[];
   isLogin = false;
   constructor() {
-    this.items = [
-      {
-        path: '/home',
-        label: 'Home',
-      },
-      {
-        path: '/films',
-        label: 'Films',
-      },
-      {
-        path: '/about',
-        label: 'About',
-      },
-    ];
+    // this.items = [
+    //   {
+    //     path: '/home',
+    //     label: 'Home',
+    //   },
+    //   {
+    //     path: '/films',
+    //     label: 'Films',
+    //   },
+    //   {
+    //     path: '/about',
+    //     label: 'About',
+    //   },
+    // ];
+
+    this.items = this.setRoutes();
+  }
+
+  private setRoutes() {
+    return routes
+      .filter((route) => route.path !== '**' && route.path !== '')
+      .map((route) => ({
+        path: route.path!,
+        label: route.data!['label'] as string,
+      }));
   }
 }
