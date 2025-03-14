@@ -6,7 +6,7 @@ import { LogoComponent } from '../logo/logo.component';
   imports: [LogoComponent],
   template: `
     <header>
-      <!-- <img src="./assets/logo.svg" alt="logo" /> -->
+      <!-- <img src="/logo.svg" alt="logo" /> -->
       <cas-logo></cas-logo>
       <h1>Welcome {{ title }}!</h1>
       <ng-content></ng-content>

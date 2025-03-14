@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 
 @Component({
   selector: 'cas-counter',
@@ -43,8 +43,10 @@ import { Component } from '@angular/core';
 })
 export class CounterComponent {
   count = 0;
+  countEvent = output();
 
   changeCount(value: number) {
     this.count += value;
+    this.countEvent.emit();
   }
 }

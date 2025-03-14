@@ -1,20 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output, signal } from '@angular/core';
 
 @Component({
   selector: 'cas-counter-signal',
   imports: [],
   template: `
-    <h3>Counter-Signal</h3>
+    <h3>Counter Signal</h3>
     <div>
-      <button (click)="changeCount(-1)" [disabled]="count <= -5">➖</button>
+      <button (click)="changeCount(-1)" [disabled]="count() <= -5">➖</button>
       <!-- <output [class]="count < 0 ? 'negative' : ''">{{ count }}</output> -->
-      <output [class]="{ negative: count < 0 }">{{ count }}</output>
-      <button (click)="changeCount(+1)" [disabled]="count >= 5">➕</button>
+      <output [class]="{ negative: count() < 0 }">{{ count() }}</output>
+      <button (click)="changeCount(+1)" [disabled]="count() >= 5">➕</button>
     </div>
-    @if (count === 5) {
+    @if (count() === 5) {
       <p>¡Has llegado al límite superior!</p>
     }
-    @if (count === -5) {
+    @if (count() === -5) {
       <p>¡Has llegado al límite inferior!</p>
     }
   `,
@@ -42,9 +42,12 @@ import { Component } from '@angular/core';
   `,
 })
 export class CounterSignalComponent {
-  count = 0;
+  count = signal(0);
+  @Output() countEvent = new EventEmitter<void>();
 
   changeCount(value: number) {
-    this.count += value;
+    //this.count.set(this.count() + value);
+    this.count.update((prev) => prev + value);
+    this.countEvent.emit();
   }
 }

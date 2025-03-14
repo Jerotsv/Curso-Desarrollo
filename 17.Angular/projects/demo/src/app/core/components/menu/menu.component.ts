@@ -1,11 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { routes } from '../../../app.routes';
 
-type MenuItem = {
-  path: string;
-  label: string;
-};
+import { MenuItem } from '../../../app.component';
 
 @Component({
   selector: 'cas-menu',
@@ -13,7 +9,7 @@ type MenuItem = {
   template: `
     <nav>
       <ul>
-        @for (item of items; track item.path) {
+        @for (item of items(); track item.path) {
           <li>
             <a [routerLink]="item.path" routerLinkActive="active">{{
               item.label
@@ -69,33 +65,7 @@ type MenuItem = {
   `,
 })
 export class MenuComponent {
-  items: MenuItem[];
+  // @Input() items: MenuItem[] = [];
+  items = input<MenuItem[]>();
   isLogin = false;
-  constructor() {
-    // this.items = [
-    //   {
-    //     path: '/home',
-    //     label: 'Home',
-    //   },
-    //   {
-    //     path: '/films',
-    //     label: 'Films',
-    //   },
-    //   {
-    //     path: '/about',
-    //     label: 'About',
-    //   },
-    // ];
-
-    this.items = this.setRoutes();
-  }
-
-  private setRoutes() {
-    return routes
-      .filter((route) => route.path !== '**' && route.path !== '')
-      .map((route) => ({
-        path: route.path!,
-        label: route.data!['label'] as string,
-      }));
-  }
 }

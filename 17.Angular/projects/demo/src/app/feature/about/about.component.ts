@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CounterComponent } from './counter/counter.component';
 import { GreetingComponent } from './greeting/greeting.component';
 import { CounterSignalComponent } from './counter.signal/counter.signal.component';
@@ -10,12 +10,19 @@ import { CounterSignalComponent } from './counter.signal/counter.signal.componen
     <h2>About</h2>
     <p>Esta aplicación es una demo del uso de Angular</p>
     <p>A continuación, un ejemplo de componente contador</p>
-    <cas-counter></cas-counter>
+    <cas-counter (countEvent)="setCounter()"></cas-counter>
+    <p>A continuación, un ejemplo de componente contador con Signals</p>
+    <cas-counter-signal (countEvent)="setCounter()"></cas-counter-signal>
+    <p>Total de clicks: {{ clicks() }}</p>
     <p>A continuación, un ejemplo de un componente que saluda al usuario</p>
     <cas-greeting></cas-greeting>
-    <p>A continuación, un ejemplo de componente contador con Signal</p>
-    <cas-counter-signal></cas-counter-signal>
   `,
   styles: ``,
 })
-export default class AboutComponent {}
+export default class AboutComponent {
+  clicks = signal(0);
+
+  setCounter() {
+    this.clicks.update((prev) => prev + 1);
+  }
+}
