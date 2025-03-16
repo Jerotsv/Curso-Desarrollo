@@ -99,18 +99,19 @@ Una vez tengamos esto debemos crear el fichero INDEX.HTML, que debe estar en la 
 
 5. **Prefiere la composición sobre la herencia**: Este es un principio de diseño común (conocido como "favor composition over inheritance"). La composición permite crear relaciones "tiene-un" en lugar de "es-un" y es más flexible para cambios en el diseño.
 
-Diferencias entre tipado de tuple y array:
+### Diferencias entre tipado de tuple y array:
 
 -   const array = string[] (Tipado de array vacio de tipo string)
 -   const tuple = [string, number, 'hola'] (Tipado dentro del array, se denomina tupla)
 
-Que es y como nos protegemos de una inyeccion de sql?
+### Que es y como nos protegemos de una inyeccion de sql?
 
 -   Pasarle los datos mediante el placeholder ?,
 
-APP.USE quiere decir, registra el middleware, usa este middleware. REGISTRA UNA FUNCIÓN QUE SE VA A EJECUTAR CADA VEZ QUE RECIBA UNA REQUEST
+### APP.USE quiere decir, registra el middleware, usa este middleware. REGISTRA UNA FUNCIÓN QUE SE VA A EJECUTAR CADA VEZ QUE RECIBA UNA REQUEST
 
-Orden de ejecución y responsabilidad de cada capa
+### Orden de ejecución y responsabilidad de cada capa
+
 Cuando un usuario hace una petición a tu API, el flujo suele seguir este orden:
 
 1️⃣ server.ts (o .js)
@@ -159,14 +160,15 @@ Solo se comunica con la capa de services.
 Define interfaces y tipos para TypeScript.
 Se usa para estructurar los datos que pasan entre capas.
 
-QUE LLEVA DENTRO EL BODY DE UNA REQUEST: NAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!
+### QUE LLEVA DENTRO EL BODY DE UNA REQUEST: NAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!
 
-Angular es un framework de desarrollo web basado en TypeScript que permite crear aplicaciones dinámicas, escalables y de alto rendimiento mediante el uso de componentes, inyección de dependencias y un potente sistema de templates.
+### Angular es un framework de desarrollo web basado en TypeScript que permite crear aplicaciones dinámicas, escalables y de alto rendimiento mediante el uso de componentes, inyección de dependencias y un potente sistema de templates.
 
-npm (Node Package Manager) se usa para instalar y gestionar paquetes de Node.js en un proyecto, ya sea de forma local o global.
-npx (Node Package Execute) permite ejecutar paquetes sin necesidad de instalarlos, útil para probar herramientas o ejecutar comandos temporales sin afectar el entorno global.
+### npm (Node Package Manager) se usa para instalar y gestionar paquetes de Node.js en un proyecto, ya sea de forma local o global.
 
-Estos son 4 de los eventos mas importantes de Angular: click, input, submit y change
+### npx (Node Package Execute) permite ejecutar paquetes sin necesidad de instalarlos, útil para probar herramientas o ejecutar comandos temporales sin afectar el entorno global.
+
+### Estos son 4 de los eventos mas importantes de Angular: click, input, submit y change
 
 La diferencia principal entre un método y una función radica en dónde y cómo se utilizan:
 🔹 Función → Es un bloque de código independiente que se puede llamar en cualquier parte del programa. No necesita estar dentro de una clase u objeto.
