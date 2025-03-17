@@ -1,5 +1,6 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { Film } from '../../types/film';
+import { StateService } from '../../services/state.service';
 
 @Component({
   selector: 'cas-film',
@@ -18,12 +19,12 @@ import { Film } from '../../types/film';
 })
 export class FilmComponent {
   film = input.required<Film>();
-  eventDelete = output<string>();
   isEditing = false;
+  filmsState = inject(StateService);
 
   sendDelete() {
     const film = this.film() as Film;
-    this.eventDelete.emit(film.id);
+    this.filmsState.deleteFilm(film.id);
   }
   openEdit() {
     this.isEditing = !this.isEditing;

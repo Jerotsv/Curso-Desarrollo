@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
+// {providedIn: 'root'}
 export class TimeService {
-
-  constructor() { }
+  private time = new Date();
+  getTime(): string {
+    return this.time.toLocaleTimeString();
+  }
 }
