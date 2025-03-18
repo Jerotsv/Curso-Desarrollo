@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Film } from '../../../films/types/film';
+import { Film } from '../../../core/types/film';
 import { RepoService } from './repo.service';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class StateService {
   private films = computed(() => this._films());
   repo = inject(RepoService);
   constructor() {
-    this.repo.loadFilms().then((films) => {
+    this.repo.loadFilms().subscribe((films) => {
       this._films.set(films);
       console.log(this._films());
     });
@@ -21,28 +21,41 @@ export class StateService {
   }
 
   deleteFilm(id: string) {
-    // deleteRepo
-    this._films.set(this._films().filter((film) => film.id !== id));
+    this.repo.deleteFilm(id).subscribe({
+      next: () => {
+        this._films.set(this._films().filter((film) => film.id !== id));
+      },
+      error: (error) => {
+        console.error('Error deleting film', error);
+      },
+    });
   }
 
-  addFilm(film: Film) {
-    try {
-      // addRepo
-      this._films.set([...this._films(), film]);
-    } catch (_) {
-      // feedback al usuario
-      console.log(_);
-    }
+  addFilm(film: Omit<Film, 'id'>) {
+    this.repo.createFilm(film).subscribe({
+      next: (film) => {
+        this._films.set([...this._films(), film]);
+      },
+      error: (error) => {
+        console.error('Error creating film', error);
+      },
+    });
   }
 
   updateFilm(film: Film) {
-    // updateRepo
-    this._films.set(
-      this._films().map((f) =>
-        f.id === film.id
-          ? { ...f, title: film.title, releaseYear: film.releaseYear }
-          : f,
-      ),
-    );
+    this.repo.updateFilm(film).subscribe({
+      next: (film) => {
+        this._films.set(
+          this._films().map((f) =>
+            f.id === film.id
+              ? { ...f, title: film.title, releaseYear: film.releaseYear }
+              : f,
+          ),
+        );
+      },
+      error: (error) => {
+        console.error('Error updating film', error);
+      },
+    });
   }
 }
