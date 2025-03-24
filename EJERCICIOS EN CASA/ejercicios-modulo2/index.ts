@@ -189,3 +189,114 @@
 //   UNIQUE INDEX `teléfono_UNIQUE` (`teléfono` ASC) VISIBLE,
 //   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
 // ENGINE = InnoDB;
+
+// Importamos las dependencias necesarias
+import express, { Request, Response } from 'express';
+
+// Creamos la instancia de la aplicación Express
+const app = express();
+// Definimos el puerto donde se va a escuchar el servidor
+const port = 3000;
+
+// Usamos middleware para poder parsear el cuerpo de las solicitudes en formato JSON
+app.use(express.json());
+
+// Simulamos una "base de datos" en memoria donde almacenamos los productos
+let products: {
+    id: string;
+    name: string;
+    price: number;
+    description: string;
+}[] = [];
+
+// Ruta GET para obtener todos los productos
+app.get('/api/products', (req: Request, res: Response) => {
+    // Enviamos la lista completa de productos como respuesta
+    res.json(products);
+});
+
+// Ruta POST para crear un nuevo producto
+app.post('/api/products', (req: Request, res: Response) => {
+    // Obtenemos los datos del cuerpo de la solicitud
+    const { name, price, description } = req.body;
+
+    // Creamos un nuevo producto con un ID único generado aleatoriamente
+    const newProduct = {
+        id: Math.random().toString(36).substring(2, 9), // Generamos un ID único usando un valor aleatorio
+        name,
+        price,
+        description,
+    };
+
+    // Agregamos el nuevo producto a la lista de productos
+    products.push(newProduct);
+
+    // Respondemos con el nuevo producto creado y el código HTTP 201 (Creado)
+    res.status(201).json(newProduct);
+});
+
+// Ruta GET para obtener un producto por su ID
+app.get('/api/products/:id', (req: Request, res: Response) => {
+    // Obtenemos el ID del producto desde los parámetros de la URL
+    const { id } = req.params;
+
+    // Buscamos el producto por su ID
+    const product = products.find((p) => p.id === id);
+
+    // Si encontramos el producto, lo devolvemos en la respuesta
+    if (product) {
+        res.json(product);
+    } else {
+        // Si no encontramos el producto, respondemos con un error 404
+        res.status(404).send('Producto no encontrado');
+    }
+});
+
+// Ruta PUT para actualizar un producto por su ID
+app.put('/api/products/:id', (req: Request, res: Response) => {
+    // Obtenemos el ID del producto desde los parámetros de la URL
+    const { id } = req.params;
+
+    // Obtenemos los nuevos datos del producto desde el cuerpo de la solicitud
+    const { name, price, description } = req.body;
+
+    // Buscamos el producto por su ID
+    const product = products.find((p) => p.id === id);
+
+    // Si encontramos el producto, lo actualizamos con los nuevos datos
+    if (product) {
+        product.name = name;
+        product.price = price;
+        product.description = description;
+
+        // Respondemos con el producto actualizado
+        res.json(product);
+    } else {
+        // Si no encontramos el producto, respondemos con un error 404
+        res.status(404).send('Producto no encontrado');
+    }
+});
+
+// Ruta DELETE para eliminar un producto por su ID
+app.delete('/api/products/:id', (req: Request, res: Response) => {
+    // Obtenemos el ID del producto desde los parámetros de la URL
+    const { id } = req.params;
+
+    // Buscamos el índice del producto en la lista
+    const index = products.findIndex((p) => p.id === id);
+
+    // Si encontramos el producto, lo eliminamos de la lista
+    if (index !== -1) {
+        products.splice(index, 1);
+        // Respondemos con un código 204 (sin contenido) indicando que la eliminación fue exitosa
+        res.status(204).send();
+    } else {
+        // Si no encontramos el producto, respondemos con un error 404
+        res.status(404).send('Producto no encontrado');
+    }
+});
+
+// Iniciamos el servidor y lo hacemos escuchar en el puerto especificado
+app.listen(port, () => {
+    console.log(`Servidor corriendo en http://localhost:${port}`);
+});
