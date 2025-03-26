@@ -4,7 +4,6 @@ import { resolve } from 'path';
 import morgan from 'morgan';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { Film } from '@prisma/client';
 import { debugLogger } from './middleware/debug-logger.js';
 import {
     notFoundController,
@@ -13,7 +12,6 @@ import {
 import { errorManager } from './controllers/errors.controller.js';
 import { createFilmsRouter } from './router/films.router.js';
 import { createUsersRouter } from './router/users.router.js';
-import type { Repository } from './repo/repository.type.js';
 import { UsersRepo } from './repo/users.repository.js';
 import { FilmRepo } from './repo/films.repository.js';
 import { FilmsController } from './controllers/films.controller.js';
@@ -26,6 +24,8 @@ import { createReviewsRouter } from './router/reviews.router.js';
 import { CategoryRepo } from './repo/categories.repository.js';
 import { CategoriesController } from './controllers/categories.controller.js';
 import { createCategoriesRouter } from './router/categories.router.js';
+import { FileInterceptor } from './middleware/file.interceptor.js';
+import { PrismaClient } from '@prisma/client';
 
 const debug = createDebug('movies:app');
 debug('Loaded module');
@@ -58,20 +58,25 @@ export const createApp = () => {
     app.use(express.static(publicPath));
 
     // Controllers, Repositories... instances
-
-    const filmsRepo: Repository<Film> = new FilmRepo();
+    const prisma = new PrismaClient();
+    const filmsRepo = new FilmRepo(prisma);
     const usersRepo = new UsersRepo();
     const reviewsRepo: ReviewRepo = new ReviewRepo();
     const categoriesRepo = new CategoryRepo();
 
     const authInterceptor = new AuthInterceptor(reviewsRepo);
+    const fileInterceptor = new FileInterceptor();
     const filmsController = new FilmsController(filmsRepo);
     const usersController = new UsersController(usersRepo);
     const reviewsController = new ReviewsController(reviewsRepo);
     const categoriesController = new CategoriesController(categoriesRepo);
 
     const filmsRouter = createFilmsRouter(authInterceptor, filmsController);
-    const usersRouter = createUsersRouter(authInterceptor, usersController);
+    const usersRouter = createUsersRouter(
+        authInterceptor,
+        fileInterceptor,
+        usersController,
+    );
     const reviewsRouter = createReviewsRouter(
         authInterceptor,
         reviewsController,

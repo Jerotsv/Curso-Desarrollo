@@ -7,10 +7,9 @@ import { FilmCreateDTO } from '../dto/films.dto.js';
 const debug = createDebug('movies:repository:films');
 
 export class FilmRepo implements Repository<Film> {
-    prisma: PrismaClient;
-    constructor() {
+    constructor(private prisma: PrismaClient) {
         debug('Instanciando');
-        this.prisma = new PrismaClient();
+        // console.log(this.prisma);
     }
 
     async read(): Promise<Film[]> {
@@ -89,12 +88,38 @@ export class FilmRepo implements Repository<Film> {
 
     async toggleCategory(id: string, name: string): Promise<Film> {
         debug('Toggling category for film with id:', id);
+
+        const { categories } = await this.prisma.film.findUniqueOrThrow({
+            where: { id },
+            select: {
+                categories: {
+                    select: {
+                        name: true,
+                    },
+                },
+            },
+        });
+        const hasCategory = categories.map((item) => item.name).includes(name);
+
         const film = await this.prisma.film.update({
             where: { id },
             data: {
+                categories: hasCategory
+                    ? {
+                          disconnect: {
+                              name,
+                          },
+                      }
+                    : {
+                          connect: {
+                              name,
+                          },
+                      },
+            },
+            include: {
                 categories: {
-                    [name]: {
-                        connect: {},
+                    select: {
+                        name: true,
                     },
                 },
             },
