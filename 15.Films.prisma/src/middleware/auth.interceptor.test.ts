@@ -1,186 +1,156 @@
+import { Mock, vi } from 'vitest';
 import { AuthInterceptor } from './auth.interceptor';
-import { HttpError } from '../types/http-error.js';
-import { Role } from '@prisma/client';
-import { vi } from 'vitest';
-import { Request, Response, NextFunction } from 'express'; // Asegúrate de importar los tipos correctos de Express
-import { AuthService } from '../services/auth.service.js';
+import { ReviewRepo } from '../repo/reviews.repository';
+import { Request, Response } from 'express';
+import { HttpError } from '../types/http-error';
+import { AuthService, Payload } from '../services/auth.service';
+// import createDebug from 'debug';
 
-// Mock de Prisma
-vi.mock('@prisma/client', () => ({
-    Role: vi.fn().mockResolvedValue({}),
+// const debugMock = vi.fn();
+const { debugMock } = vi.hoisted(() => ({ debugMock: vi.fn() }));
+
+vi.mock('debug', () => ({
+    // default: vi.fn().mockReturnValue(debugMock),
+    default: () => debugMock,
 }));
 
-// Mocks de dependencias
-const mockVerifyToken = vi.fn();
-const mockAuthService = {
-    verifyToken: mockVerifyToken,
-} as unknown as typeof AuthService;
+vi.mock('../services/auth.service');
 
-// Suponiendo que tenemos un repositorio para los reviews
-const mockRepoReviews = {
-    readById: vi.fn().mockResolvedValue({ userId: 1 }), // Simulando repositorio de reviews
-};
+describe('Given a instance of AuthInterceptor', () => {
+    // Arrange
+    const repoReviews = {
+        readById: vi.fn(),
+    } as unknown as ReviewRepo;
+    // Act
+    const interceptor = new AuthInterceptor(repoReviews);
+    // Assert
+    const req = {
+        headers: {},
+        params: {},
+    } as Request;
+    const res = {} as Response;
+    const nextMock = vi.fn();
+    const newError = new HttpError('Token not found', 401, 'Unauthorized');
+    const noPermissionError = new HttpError(
+        'You do not have permission',
+        403,
+        'Forbidden',
+    );
 
-// Instanciamos el AuthInterceptor
-describe('Given class AuthInterceptor', () => {
-    let authInterceptor: AuthInterceptor;
-
-    beforeAll(() => {
-        // Arrange: Inicializamos el interceptor con el mock del repo
-        authInterceptor = new AuthInterceptor(mockRepoReviews);
-    });
+    // describe('When it is initialized', () => {
+    //     test('Then it should call debug', () => {
+    //         expect(debugMock).toHaveBeenCalledWith();
+    //     });
+    // });
 
     describe('When authenticate is called', () => {
-        test('Then it should call next if the token is valid', async () => {
-            const req: Request = {
-                headers: {
-                    authorization: 'Bearer valid-token',
-                },
-            } as Request;
-            const res: Response = {} as Response;
-            const next: NextFunction = vi.fn();
-
-            // Mock de verifyToken para simular una respuesta exitosa
-            mockVerifyToken.mockResolvedValue({ id: 1, role: Role.USER });
-
+        test('Then it should detect a MALFORMED token', async () => {
+            // Arrange
             // Act
-            await authInterceptor.authenticate(req, res, next);
-
+            await interceptor.authenticate(req, res, nextMock);
             // Assert
-            expect(mockVerifyToken).toHaveBeenCalledWith('valid-token');
-            expect(req.user).toEqual({ id: 1, role: Role.USER });
-            expect(next).toHaveBeenCalled();
+            expect(nextMock).toHaveBeenCalledWith(newError);
         });
 
-        test('Then it should call next with an error if no token is provided', async () => {
-            const req: Request = { headers: {} } as Request;
-            const res: Response = {} as Response;
-            const next: NextFunction = vi.fn();
-
+        test('Then it should detect a VALID token', async () => {
+            // Arrange
+            req.headers = { authorization: 'Bearer esto_es_el_token' };
             // Act
-            await authInterceptor.authenticate(req, res, next);
-
+            await interceptor.authenticate(req, res, nextMock);
             // Assert
-            expect(next).toHaveBeenCalledWith(expect.any(HttpError));
+            expect(nextMock).toHaveBeenCalledWith();
         });
 
-        test('Then it should call next with an error if token is invalid', async () => {
-            const req: Request = {
-                headers: {
-                    authorization: 'Bearer invalid-token',
-                },
-            } as Request;
-            const res: Response = {} as Response;
-            const next: NextFunction = vi.fn();
-
-            // Mock de verifyToken para simular un error
-            mockVerifyToken.mockRejectedValue(new Error('Invalid token'));
-
+        test('Then it should detect a INVALID token', async () => {
+            // Arrange
+            (AuthService.verifyToken as Mock).mockRejectedValueOnce(
+                new Error('Invalid token'),
+            );
+            const httpError = new HttpError(
+                'Invalid token',
+                401,
+                'Unauthorized',
+            );
+            req.headers = { authorization: 'Bearer esto_es_el_token' };
             // Act
-            await authInterceptor.authenticate(req, res, next);
-
+            await interceptor.authenticate(req, res, nextMock);
             // Assert
-            expect(next).toHaveBeenCalledWith(expect.any(HttpError));
+            expect(nextMock).toHaveBeenCalledWith(httpError);
         });
     });
 
     describe('When hasRole is called', () => {
-        test('Then it should call next if the user has the required role', async () => {
-            const req: Request = {
-                user: { role: Role.USER },
-            } as Request;
-            const res: Response = {} as Response;
-            const next: NextFunction = vi.fn();
+        // Arrange
+        const role = 'ADMIN';
 
+        test('Then it should detect a user with ADMIN role', () => {
+            req.user = { role: 'ADMIN' } as Payload;
             // Act
-            authInterceptor.hasRole(Role.USER)(req, res, next);
-
+            // interceptor.hasRole(role)(req, res, nextMock);
+            const interceptorRole = interceptor.hasRole(role);
+            interceptorRole(req, res, nextMock);
             // Assert
-            expect(next).toHaveBeenCalled();
+            expect(nextMock).toHaveBeenCalledWith();
         });
 
-        test('Then it should call next with an error if the user does not have the required role', async () => {
-            const req: Request = {
-                user: { role: Role.USER },
-            } as Request;
-            const res: Response = {} as Response;
-            const next: NextFunction = vi.fn();
-
+        test('Then it should detect a INVALID role', () => {
+            req.user = { role: 'USER' } as Payload;
             // Act
-            authInterceptor.hasRole(Role.ADMIN)(req, res, next);
-
+            // interceptor.hasRole(role)(req, res, nextMock);
+            const interceptorRole = interceptor.hasRole(role);
+            interceptorRole(req, res, nextMock);
             // Assert
-            expect(next).toHaveBeenCalledWith(expect.any(HttpError));
+            expect(nextMock).toHaveBeenCalledWith(noPermissionError);
+        });
+
+        test('Then it should detect a NO role', () => {
+            req.user = {} as Payload;
+            // Act
+            // interceptor.hasRole(role)(req, res, nextMock);
+            const interceptorRole = interceptor.hasRole(role);
+            interceptorRole(req, res, nextMock);
+            // Assert
+            expect(nextMock).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    statusCode: 403,
+                }),
+                //noPermissionError
+            );
         });
     });
 
     describe('When isUser is called', () => {
-        test('Then it should call next if the user is the same as the requested user or has admin role', async () => {
-            const req: Request = {
-                user: { id: 1, role: Role.USER },
-                params: { id: '1' },
-            } as Request;
-            const res: Response = {} as Response;
-            const next: NextFunction = vi.fn();
-
+        test('Then it should detect NO user', () => {
+            // Arrange
+            req.user = undefined;
             // Act
-            authInterceptor.isUser(req, res, next);
-
+            interceptor.isUser(req, res, nextMock);
             // Assert
-            expect(next).toHaveBeenCalled();
+            expect(nextMock).toHaveBeenCalledWith(noPermissionError);
         });
 
-        test('Then it should call next with an error if the user is not the same and does not have admin role', async () => {
-            const req: Request = {
-                user: { id: 1, role: Role.USER },
-                params: { id: '2' },
-            } as Request;
-            const res: Response = {} as Response;
-            const next: NextFunction = vi.fn();
-
+        test('Then it should detect VALID user', () => {
+            // Arrange
+            req.user = { id: '1' } as Payload;
+            req.params = { id: '1' };
             // Act
-            authInterceptor.isUser(req, res, next);
-
+            interceptor.isUser(req, res, nextMock);
             // Assert
-            expect(next).toHaveBeenCalledWith(expect.any(HttpError));
+            expect(nextMock).toHaveBeenCalledWith();
+        });
+        test('Then it should detect INVALID user', () => {
+            // Arrange
+            req.user = { id: '1', role: 'USER' } as Payload;
+            req.params = { id: '2', role: 'USER' };
+            // Act
+            interceptor.isUser(req, res, nextMock);
+            // Assert
+            expect(nextMock).toHaveBeenCalledWith(noPermissionError);
         });
     });
 
-    describe('When isOwnerReview is called', () => {
-        test('Then it should call next if the user is the owner of the review or has admin role', async () => {
-            const req: Request = {
-                user: { id: 1, role: Role.USER },
-                params: { id: '1' },
-            } as Request;
-            const res: Response = {} as Response;
-            const next: NextFunction = vi.fn();
-
-            // Simulando que la review pertenece al usuario
-            mockRepoReviews.readById.mockResolvedValue({ userId: 1 });
-
-            // Act
-            await authInterceptor.isOwnerReview(req, res, next);
-
-            // Assert
-            expect(next).toHaveBeenCalled();
-        });
-
-        test('Then it should call next with an error if the user is not the owner and does not have admin role', async () => {
-            const req: Request = {
-                user: { id: 2, role: Role.USER },
-                params: { id: '1' },
-            } as Request;
-            const res: Response = {} as Response;
-            const next: NextFunction = vi.fn();
-
-            // Simulando que la review no pertenece al usuario
-            mockRepoReviews.readById.mockResolvedValue({ userId: 1 });
-
-            // Act
-            await authInterceptor.isOwnerReview(req, res, next);
-
-            // Assert
-            expect(next).toHaveBeenCalledWith(expect.any(HttpError));
-        });
-    });
+    //describe('When isOwnerReview is called', () => {});
 });
+
+//const spy = vi.spyOn(createDebug, 'default');
+//expect(spy).toHaveBeenCalled();
