@@ -173,3 +173,17 @@ Se usa para estructurar los datos que pasan entre capas.
 La diferencia principal entre un método y una función radica en dónde y cómo se utilizan:
 🔹 Función → Es un bloque de código independiente que se puede llamar en cualquier parte del programa. No necesita estar dentro de una clase u objeto.
 🔹 Método → Es una función que está asociada a un objeto o una clase y se llama a través de una instancia de esa clase.
+
+## MODULO 3:
+
+Cuando hablamos de pruebas (tests), además del patrón Arrange, Act, Assert (AAA), existen otros términos y enfoques utilizados en el desarrollo de pruebas, entre los que se incluyen:
+
+Given, When, Then: Este es un enfoque comúnmente usado en pruebas basadas en comportamiento (BDD, Behavior Driven Development), que se usa especialmente para describir escenarios de pruebas de manera legible y entendible.
+
+Given (Dado): El estado inicial o contexto en el que empieza la prueba (similar a "Arrange").
+
+When (Cuando): La acción que se realiza (similar a "Act").
+
+Then (Entonces): El resultado esperado después de realizar la acción (similar a "Assert").
+
+En GHERKIN, se usa una sintaxis basada en Given, When, Then para describir las pruebas de manera estructurada y fácil de leer. Gherkin es parte de herramientas como Cucumber, que implementa pruebas BDD.
