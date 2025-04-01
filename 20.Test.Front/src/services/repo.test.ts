@@ -1,16 +1,18 @@
-import test, { describe } from "node:test";
-import { getCharacters } from "./repo";
+import { getCharacters } from './repo';
 
-describe ('Given getCharacter', ()=> {
-    describe('When I run it', ()=> {
-        test('Then it return a data Array', async ()=> {
-            //Arrange
-            //Act
-            const(result).toBeInstanceOf(Array);
-            //Assert
+vi.mock('../data/data.json', () => ({
+    default: [],
+}));
+
+describe('Given getCharacters', () => {
+    describe('When I run it ', () => {
+        test('Then it return a data Array ', async () => {
+            // Arrange
+            // Act
+            const result = await getCharacters();
+            // Assert
             expect(result).toBeInstanceOf(Array);
-            expect(result.lenght).toBeGreaterThan(0);
+            expect(result.length).toBe(0);
         });
     });
 });
-        
