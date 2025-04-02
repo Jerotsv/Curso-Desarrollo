@@ -187,3 +187,5 @@ When (Cuando): La acción que se realiza (similar a "Act").
 Then (Entonces): El resultado esperado después de realizar la acción (similar a "Assert").
 
 En GHERKIN, se usa una sintaxis basada en Given, When, Then para describir las pruebas de manera estructurada y fácil de leer. Gherkin es parte de herramientas como Cucumber, que implementa pruebas BDD.
+
+CAJA NEGRA (comportamiento, lo que se ve por fuera por que no puedo acceder a lo que hay dentro) v. CAJA BLANCA (implementación, puedes acceder a la chicha de los componentes por eso en backend solo existe la caja blanca)
