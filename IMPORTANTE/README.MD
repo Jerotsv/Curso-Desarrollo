@@ -189,3 +189,8 @@ Then (Entonces): El resultado esperado después de realizar la acción (similar 
 En GHERKIN, se usa una sintaxis basada en Given, When, Then para describir las pruebas de manera estructurada y fácil de leer. Gherkin es parte de herramientas como Cucumber, que implementa pruebas BDD.
 
 CAJA NEGRA (comportamiento, lo que se ve por fuera por que no puedo acceder a lo que hay dentro) v. CAJA BLANCA (implementación, puedes acceder a la chicha de los componentes por eso en backend solo existe la caja blanca)
+
+UN REPOSITORIO: Son commits y etiquetas.
+ETIQUETAS (No ramas, no existen las ramas): Main y Head
+Git Reset mueve la flecha de la etiqueta main
+Git Checkout mueve la flecha de la etiqueta head (solo se usa para cambiar de etiqueta(rama), no para apuntar a los commit)
