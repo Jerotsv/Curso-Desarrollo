@@ -196,3 +196,11 @@ Git Reset mueve la flecha de la etiqueta main
 Git Checkout mueve la flecha de la etiqueta head (solo se usa para cambiar de etiqueta(rama), no para apuntar a los commit)
 
 ¿Que es un commit? Es un objeto (estructura de datos) que guarda una serie de información (committer, author, date, id, parent) con una id (hash) que lo vincula o referencia a otros objetos
+
+ORDEN PARA EMPEZAR A TRABAJAR:
+
+-   git clone
+-   cd....
+-   npm i
+-   git fetch (crear la rama)
+-   git checkout (me muevo a la rama)
